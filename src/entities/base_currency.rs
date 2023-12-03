@@ -13,7 +13,7 @@ pub struct BaseCurrency {
 impl BaseCurrency {
     pub fn new(chain_id: u32, decimals: u32, name: Option<String>, symbol: Option<String>) -> Self {
         assert!(chain_id > 0, "CHAIN_ID");
-        assert!(decimals >= 0 && decimals < 255, "DECIMALS");
+        assert!(decimals < 255, "DECIMALS");
 
         Self {
             chain_id,
