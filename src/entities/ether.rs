@@ -1,5 +1,5 @@
-use base_currency::BaseCurrency;
-use token::Token;
+use crate::entities::base_currency::BaseCurrency;
+use crate::entities::token::Token;
 
 pub struct Ether {
     base_currency: BaseCurrency,
@@ -10,7 +10,7 @@ pub struct Ether {
     pub fn new(chain_id: u32) -> Self {
         Self {
             base_currency: BaseCurrency::new(chain_id, 18, Some("ETH".to_string()), Some("Ether".to_string())),
-            wrapped: Token::new(chain_id, "0x".to_string(), 18, Some("WETH".to_string()), Some("Wrapped Ether".to_string()), None, None, None),
+            wrapped: Token::new(chain_id, "0x".to_string(), 18, Some("WETH".to_string()), Some("Wrapped Ether".to_string()), None, None),
         }
     }
   

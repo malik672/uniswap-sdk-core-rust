@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use token::Token;
+use super::token::Token;
 
 pub struct WETH9 {
     tokens: HashMap<u32, Token>,
@@ -17,8 +17,7 @@ impl WETH9 {
                 Some("WETH".to_string()),
                 Some("Wrapped Ether".to_string()),
                 None,
-                None,
-                None,
+                None
             ),
         );
         tokens.insert(
@@ -29,7 +28,6 @@ impl WETH9 {
                 18,
                 Some("WETH".to_string()),
                 Some("Wrapped Ether".to_string()),
-                None,
                 None,
                 None,
             ),
@@ -44,7 +42,7 @@ impl WETH9 {
                 Some("Wrapped Ether".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
         tokens.insert(
@@ -57,7 +55,7 @@ impl WETH9 {
                 Some("Wrapped Ether".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
         tokens.insert(
@@ -70,7 +68,7 @@ impl WETH9 {
                 Some("Wrapped Ether".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
         tokens.insert(
@@ -83,7 +81,7 @@ impl WETH9 {
                 Some("Wrapped Ether".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
         tokens.insert(
@@ -96,7 +94,7 @@ impl WETH9 {
                 Some("Wrapped Ether".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
         tokens.insert(
@@ -109,7 +107,7 @@ impl WETH9 {
                 Some("Wrapped Ether".to_string()),
                 None,
                 None,
-                None,
+            
             ),
         );
         tokens.insert(
@@ -122,7 +120,7 @@ impl WETH9 {
                 Some("Wrapped Ether".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
         tokens.insert(
@@ -135,7 +133,7 @@ impl WETH9 {
                 Some("Wrapped Ether".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
         tokens.insert(
@@ -148,7 +146,7 @@ impl WETH9 {
                 Some("Wrapped BNB".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
         tokens.insert(
@@ -161,7 +159,7 @@ impl WETH9 {
                 Some("Wrapped MATIC".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
         tokens.insert(
@@ -174,7 +172,7 @@ impl WETH9 {
                 Some("Wrapped AVAX".to_string()),
                 None,
                 None,
-                None,
+                
             ),
         );
 
