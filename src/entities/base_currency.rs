@@ -1,7 +1,7 @@
 /**
  * A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
  */
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub struct BaseCurrency {
     pub chain_id: u32,
     pub decimals: u32,
@@ -32,3 +32,4 @@ impl BaseCurrency {
         true
     }
 }
+
