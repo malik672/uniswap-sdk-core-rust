@@ -1,20 +1,17 @@
 /**
  * A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
  */
+#[derive(Clone)]
 pub struct BaseCurrency {
-    chain_id: u32,
-    decimals: u32,
-    name: Option<str>,
-    symbol: Option<str>,
+    pub chain_id: u32,
+    pub decimals: u32,
+    pub name: Option<String>,
+    pub symbol: Option<String>,
+    pub is_native: bool
 }
 
 impl BaseCurrency {
-    pub fn new(
-        chain_id: u32,
-        decimals: u32,
-        name: Option<str>,
-        symbol: Option<str>,
-    ) -> Self {
+    pub fn new(chain_id: u32, decimals: u32, name: Option<String>, symbol: Option<String>) -> Self {
         assert!(chain_id > 0, "CHAIN_ID");
         assert!(decimals >= 0 && decimals < 255, "DECIMALS");
 
@@ -23,13 +20,15 @@ impl BaseCurrency {
             decimals,
             name,
             symbol,
+            is_native: Self::is_native(),
         }
     }
+
+
+    /**
+     * Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
+    */
+    pub fn is_native() -> bool {
+        true
+    }
 }
-
-/**
- * Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
-*/
-pub fn isNative() -> bool {
-
-} 
