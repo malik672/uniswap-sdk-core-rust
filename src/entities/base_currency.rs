@@ -1,7 +1,7 @@
 /**
  * A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
  */
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub struct BaseCurrency {
     pub chain_id: u32,
     pub decimals: u32,
@@ -13,7 +13,7 @@ pub struct BaseCurrency {
 impl BaseCurrency {
     pub fn new(chain_id: u32, decimals: u32, name: Option<String>, symbol: Option<String>) -> Self {
         assert!(chain_id > 0, "CHAIN_ID");
-        assert!(decimals >= 0 && decimals < 255, "DECIMALS");
+        assert!(decimals < 255, "DECIMALS");
 
         Self {
             chain_id,
@@ -32,3 +32,4 @@ impl BaseCurrency {
         true
     }
 }
+

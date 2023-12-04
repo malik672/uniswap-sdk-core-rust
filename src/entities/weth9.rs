@@ -5,6 +5,12 @@ pub struct WETH9 {
     tokens: HashMap<u32, Token>,
 }
 
+impl Default for WETH9 {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl WETH9 {
     pub fn new() -> Self {
         let mut tokens = HashMap::new();

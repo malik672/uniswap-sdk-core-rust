@@ -1,13 +1,13 @@
 use crate::entities::base_currency::BaseCurrency;
 use num_bigint::{BigInt};
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub struct Token {
     pub base_currency: BaseCurrency,
     pub address: String,
     //bypass_checksum: bool,
-    pub buy_fee_bps: BigInt,
-    pub sell_fee_bps: BigInt,
+    pub buy_fee_bps: Option<BigInt>,
+    pub sell_fee_bps: Option<BigInt>,
 }
 
 impl Token {
@@ -34,8 +34,8 @@ impl Token {
         Self {
             base_currency: BaseCurrency::new(chain_id, decimals, symbol, name),
             address,
-            buy_fee_bps: buy_fee_bps.expect("buy_fee_fps"),
-            sell_fee_bps: sell_fee_bps.expect("sell fee_bps")
+            buy_fee_bps: buy_fee_bps,
+            sell_fee_bps: sell_fee_bps
         }
     }
 
@@ -63,4 +63,9 @@ impl Token {
     pub fn wrapped(&self) -> Token {
         self.clone()
     }
+}
+
+#[cfg(test)]
+mod tests {
+
 }
