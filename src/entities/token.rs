@@ -64,3 +64,8 @@ impl Token {
         self.clone()
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+}

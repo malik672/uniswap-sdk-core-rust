@@ -60,4 +60,22 @@ mod tests {
 
         assert!(eth == Ether::on_chain(), "not equal");
     }
+
+    #[test]
+    fn test_wrapped() {
+        let eth = Ether::new(1);
+        let eth2 = Ether::new(1);
+        let weth = Ether::wrapped(&eth);
+        assert!(weth.to_owned() == eth2.wrapped, "NOT WETH");
+    }
+
+
+    #[test]
+    #[should_panic]
+    fn test_expect_revert_wrapped() {
+        let eth = Ether::new(1);
+        let eth2 = Ether::new(2);
+        let weth = Ether::wrapped(&eth);
+        assert!(weth.to_owned() == eth2.wrapped, "NOT WETH");
+    }
 }
