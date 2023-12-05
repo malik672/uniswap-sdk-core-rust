@@ -1,5 +1,4 @@
-use crate::entities::base_currency::BaseCurrency;
-use crate::entities::token::Token;
+use super::{base_currency::BaseCurrency, token::Token};
 
 #[derive(PartialEq)]
 pub struct Ether {
