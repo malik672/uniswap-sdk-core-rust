@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 clippy = "0.0.302"
 num-bigint = "0.4.4"
+num-traits = "0.2.17"
+rust_decimal = "1.33.1"
