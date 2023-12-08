@@ -19,6 +19,25 @@ pub enum ChainId {
     BASE = 8453,
 }
 
+pub const SUPPORTED_CHAINS: [ChainId; 15] = [
+   ChainId::MAINNET,
+   ChainId::OPTIMISM,
+   ChainId::OPTIMISMGOERLI,
+   ChainId::ARBITRUMONE,
+   ChainId::ARBITRUMGOERLI,
+   ChainId::POLYGON,
+   ChainId::POLYGONMUMBAI,
+   ChainId::GOERLI,
+   ChainId::SEPOLIA,
+   ChainId::CELOALFAJORES,
+   ChainId::CELO,
+   ChainId::BNB,
+   ChainId::AVALANCHE,
+   ChainId::BASE,
+   ChainId::BASEGOERLI,
+];
+
+
 pub enum NativeCurrencyName {
     ETHER,
     MATIC,
