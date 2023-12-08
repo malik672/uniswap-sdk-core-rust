@@ -18,7 +18,7 @@ pub struct ChainAddresses {
     v1_mixed_route_quoter_address: Option<String>,
 }
 
-pub const DefaultNetworks: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
+pub const _DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
 
 pub fn construct_same_address_map(address: &str, additional_networks: Vec<u32>) -> AddressMap {
     let mut map = AddressMap::new();
