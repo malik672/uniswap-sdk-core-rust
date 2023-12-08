@@ -85,8 +85,8 @@ mod tests {
             None,
         );
 
-        assert!(token.address == ADDRESS_ONE.to_string());
-        assert!(token_1.address == ADDRESS_TWO.to_string());
+        assert!(token.address == *ADDRESS_ONE);
+        assert!(token_1.address == *ADDRESS_TWO);
     }
 
     #[test]

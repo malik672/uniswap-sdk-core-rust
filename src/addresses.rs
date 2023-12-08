@@ -22,7 +22,7 @@ pub const _DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, 
 
 pub fn construct_same_address_map(address: &str, additional_networks: Vec<u32>) -> AddressMap {
     let mut map = AddressMap::new();
-    let default_networks = vec![1, 2, 3]; // Placeholder for actual default networks
+    let default_networks = [1, 2, 3]; // Placeholder for actual default networks
     for &network in default_networks.iter().chain(additional_networks.iter()) {
         map.insert(network, address.to_string());
     }
@@ -471,14 +471,14 @@ pub fn v1_mixed_route_quoter_address() -> ChainAddress {
 }
 
 pub fn swap_router02_address(chainid: u32) -> ChainAddresses {
-    if (chainid == ChainId::BNB as u32) {
+    if chainid == ChainId::BNB as u32 {
         CHAIN_TO_ADDRESSES_MAP
-            .get(&(chainid as u32))
+            .get(&{ chainid })
             .unwrap()
             .to_owned()
     } else {
         CHAIN_TO_ADDRESSES_MAP
-            .get(&(chainid as u32))
+            .get(&{ chainid })
             .unwrap()
             .to_owned()
     }

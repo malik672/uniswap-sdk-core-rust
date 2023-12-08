@@ -65,7 +65,7 @@ mod tests {
         let eth = Ether::new(1);
         let eth2 = Ether::new(1);
         let weth = Ether::wrapped(&eth);
-        assert!(weth.to_owned() == eth2.wrapped, "NOT WETH");
+        assert!(*weth == eth2.wrapped, "NOT WETH");
     }
 
 
@@ -75,6 +75,6 @@ mod tests {
         let eth = Ether::new(1);
         let eth2 = Ether::new(2);
         let weth = Ether::wrapped(&eth);
-        assert!(weth.to_owned() == eth2.wrapped, "NOT WETH");
+        assert!(*weth == eth2.wrapped, "NOT WETH");
     }
 }
