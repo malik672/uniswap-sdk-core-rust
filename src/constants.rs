@@ -14,5 +14,5 @@ pub enum Rounding {
 }
 
 lazy_static! {
-    pub static ref MaxUint256: BigInt = BigInt::from_str_radix("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16).unwrap();
+    pub static ref MAX_UINT256: BigInt = BigInt::from_str_radix("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16).unwrap();
 }

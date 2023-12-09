@@ -1,9 +1,24 @@
 use num_bigint::BigInt;
+use rust_decimal::prelude::*;
 
 #[derive(Clone, PartialEq)]
 pub struct Fraction {
     pub numerator: BigInt,
     pub denominator: BigInt,
+}
+
+pub enum Rounding {
+    RoundDown,
+    RoundHalfUp,
+    RoundUp,
+}
+
+fn to_rounding_strategy(rounding: Rounding) -> RoundingStrategy {
+    match rounding {
+        Rounding::RoundDown => RoundingStrategy::ToZero,
+        Rounding::RoundHalfUp => RoundingStrategy::MidpointAwayFromZero,
+        Rounding::RoundUp => RoundingStrategy::AwayFromZero,
+    }
 }
 
 impl Fraction {
@@ -78,27 +93,30 @@ impl Fraction {
         )
     }
 
-    pub fn to_significant(&self, significant_digits: u32) -> String {
+    pub fn to_significant(&self, significant_digits: u32, rounding: Rounding) -> String {
         assert!(
             significant_digits > 0,
-            "{} is not positive.",
-            significant_digits
+            "Significant digits must be positive."
         );
 
-        let quotient = self.quotient();
+        let rounding_strategy = to_rounding_strategy(rounding);
 
-        let formatted_quotient = format!("{:.*}", significant_digits as usize, quotient);
+        let quotient = &self.numerator / &self.denominator;
+        let quotient = Decimal::from_str(&quotient.to_str_radix(10)).unwrap();
+        let quotient = quotient.round_dp_with_strategy(significant_digits, rounding_strategy);
 
-        formatted_quotient
+        quotient.to_string()
     }
 
-    pub fn to_fixed(&self, decimal_places: u32) -> String {
-        let quotient = self.quotient();
-        let formatted_quotient = format!("{:.*}", decimal_places as usize, quotient);
+    pub fn to_fixed(&self, decimal_places: u32, rounding: Rounding) -> String {
+        let rounding_strategy = to_rounding_strategy(rounding);
 
-        formatted_quotient
+        let quotient = &self.numerator / &self.denominator;
+        let quotient = Decimal::from_str(&quotient.to_str_radix(10)).unwrap();
+        let quotient = quotient.round_dp_with_strategy(decimal_places, rounding_strategy);
+
+        quotient.to_string()
     }
-
     pub fn as_fraction(&self) -> Fraction {
         Fraction::new(self.numerator.clone(), self.denominator.clone())
     }
