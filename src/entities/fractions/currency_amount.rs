@@ -1,6 +1,6 @@
 
 
-use crate::entities::{currency::Currency, fractions::fraction::Fraction};
+use crate::entities::{currency::Currency, fractions::fraction::{Fraction, Rounding}};
 use num_bigint::{BigInt, BigUint};
 use num_traits::ToPrimitive;
 
@@ -78,12 +78,12 @@ impl CurrencyAmount {
     }
 
     pub fn to_significant(&self) -> String {
-        Fraction::to_significant(&self.fraction.clone().unwrap(), 6)
+        Fraction::to_significant(&self.fraction.clone().unwrap(), 6, Rounding::RoundUp)
     }
 
     pub fn to_fixed(&self, decimals: BigUint) -> String {
         assert!(decimals <= self.decimal_scale.clone().unwrap(), "DECIMALS");
-        Fraction::to_fixed(&self.fraction.clone().unwrap(), decimals.to_u32().unwrap())
+        Fraction::to_fixed(&self.fraction.clone().unwrap(), decimals.to_u32().unwrap(), Rounding::RoundUp)
     }
     
     //Implementation not done yet
