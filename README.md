@@ -3,9 +3,9 @@
 The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange.
 
 ## TBD(To Be Done)
--- Address Validation and Parsing 
--- Unit Testing 
--- Computed Price Inputs (TBD)
+### -- Address Validation and Parsing 
+### -- Unit Testing 
+### -- Computed Price Inputs (TBD)
 
 ## Acknowledgments
 
