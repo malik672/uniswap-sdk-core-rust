@@ -32,13 +32,13 @@ impl Percent {
     }
 
     pub fn to_significant(&self, other: &Fraction) -> String {
-       let hundred = Fraction::new(BigInt::from(100) , BigInt::from(1));
-       let mult = Fraction::multiply(&hundred, other);
-       Fraction::to_significant(&mult, 5, Rounding::RoundUp)
+        let hundred = Fraction::new(BigInt::from(100), BigInt::from(1));
+        let mult = Fraction::multiply(&hundred, other);
+        Fraction::to_significant(&mult, 5, Rounding::RoundUp)
     }
 
     pub fn to_fixed(&self, other: &Fraction) -> String {
-        let hundred = Fraction::new(BigInt::from(100) , BigInt::from(1));
+        let hundred = Fraction::new(BigInt::from(100), BigInt::from(1));
         let mult = Fraction::multiply(&hundred, other);
         Fraction::to_fixed(&mult, 2, Rounding::RoundUp)
     }

@@ -1,7 +1,7 @@
 use super::base_currency::BaseCurrency;
 use num_bigint::BigUint;
 
-#[derive(Clone, PartialEq)] 
+#[derive(Clone, PartialEq)]
 pub struct Token {
     pub base_currency: BaseCurrency,
     pub address: String,

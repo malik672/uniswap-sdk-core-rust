@@ -7,7 +7,7 @@ pub struct BaseCurrency {
     pub decimals: u32,
     pub name: Option<String>,
     pub symbol: Option<String>,
-    pub is_native: bool
+    pub is_native: bool,
 }
 
 impl BaseCurrency {
@@ -24,12 +24,10 @@ impl BaseCurrency {
         }
     }
 
-
     /**
      * Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
-    */
+     */
     pub fn is_native() -> bool {
         true
     }
 }
-

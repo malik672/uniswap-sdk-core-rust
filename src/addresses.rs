@@ -472,14 +472,8 @@ pub fn v1_mixed_route_quoter_address() -> ChainAddress {
 
 pub fn swap_router02_address(chainid: u32) -> ChainAddresses {
     if chainid == ChainId::BNB as u32 {
-        CHAIN_TO_ADDRESSES_MAP
-            .get(&{ chainid })
-            .unwrap()
-            .to_owned()
+        CHAIN_TO_ADDRESSES_MAP.get(&{ chainid }).unwrap().to_owned()
     } else {
-        CHAIN_TO_ADDRESSES_MAP
-            .get(&{ chainid })
-            .unwrap()
-            .to_owned()
+        CHAIN_TO_ADDRESSES_MAP.get(&{ chainid }).unwrap().to_owned()
     }
 }

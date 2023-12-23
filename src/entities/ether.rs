@@ -31,7 +31,7 @@ impl Ether {
         &self.wrapped
     }
 
-    pub fn on_chain() ->  Ether{
+    pub fn on_chain() -> Ether {
         Ether::new(1)
     }
 
@@ -46,12 +46,11 @@ mod tests {
 
     #[test]
     fn test_ethers() {
-
         let eth = Ether::new(1);
 
         assert!(eth == Ether::on_chain(), "not equal");
     }
-    
+
     #[test]
     #[should_panic]
     fn test_expect_revert() {
@@ -67,7 +66,6 @@ mod tests {
         let weth = Ether::wrapped(&eth);
         assert!(*weth == eth2.wrapped, "NOT WETH");
     }
-
 
     #[test]
     #[should_panic]

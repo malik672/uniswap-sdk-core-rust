@@ -1,6 +1,6 @@
+use lazy_static::lazy_static;
 use num_bigint::BigInt;
 use num_traits::Num;
-use lazy_static::lazy_static;
 
 pub enum TradeType {
     ExactInput,
@@ -14,5 +14,9 @@ pub enum Rounding {
 }
 
 lazy_static! {
-    pub static ref MAX_UINT256: BigInt = BigInt::from_str_radix("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16).unwrap();
+    pub static ref MAX_UINT256: BigInt = BigInt::from_str_radix(
+        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        16
+    )
+    .unwrap();
 }
