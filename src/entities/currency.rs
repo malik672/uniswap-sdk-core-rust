@@ -1,7 +1,7 @@
 use super::{native_currency::NativeCurrency, token::Token};
 
-#[derive(Clone, PartialEq)]
-pub enum Currency {
-    NativeCurrency(NativeCurrency),
+#[derive(Clone)]
+pub enum Currency<'a> {
+    NativeCurrency(&'a dyn NativeCurrency),
     Token(Token),
 }
