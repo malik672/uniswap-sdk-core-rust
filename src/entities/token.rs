@@ -1,11 +1,11 @@
 use super::base_currency::BaseCurrency;
 use num_bigint::BigUint;
 
+/// Represents an ERC20 token with a unique address and some metadata.
 #[derive(Clone, PartialEq)]
 pub struct Token {
     pub base_currency: BaseCurrency,
     pub address: String,
-    //bypass_checksum: bool,
     pub buy_fee_bps: Option<BigUint>,
     pub sell_fee_bps: Option<BigUint>,
 }
@@ -30,25 +30,44 @@ impl Token {
         }
     }
 
-    pub fn is_native() -> bool {
+    pub fn is_native(&self) -> bool {
         false
     }
 
-    pub fn is_token() -> bool {
+    pub fn is_token(&self) -> bool {
         true
     }
 
+    /// Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
+    ///
+    /// # Arguments
+    ///
+    /// * `other` - The other token to compare.
+    ///
     pub fn equals(&self, other: &Token) -> bool {
-        self.base_currency.chain_id == other.base_currency.chain_id
+        other.is_token()
+            && self.base_currency.chain_id == other.base_currency.chain_id
+            && self.address.to_lowercase() == other.address.to_lowercase()
     }
 
+    /// Returns true if the address of this token sorts before the address of the other token.
+    /// Panics if the tokens have the same address or if the tokens are on different chains.
+    ///
+    /// # Arguments
+    ///
+    /// * `other` - The other token to compare.
+    ///
     pub fn sorts_before(&self, other: &Token) -> bool {
-        assert!(
-            self.base_currency.chain_id == other.base_currency.chain_id,
+        assert_eq!(
+            self.base_currency.chain_id, other.base_currency.chain_id,
             "CHAIN_IDS"
         );
-        assert!(self.address != other.address, "ADDRESSES");
-        self.address < other.address
+        assert_ne!(
+            self.address.to_lowercase(),
+            other.address.to_lowercase(),
+            "ADDRESSES"
+        );
+        self.address.to_lowercase() < other.address.to_lowercase()
     }
 
     pub fn wrapped(&self) -> Token {
@@ -58,7 +77,7 @@ impl Token {
 
 #[cfg(test)]
 mod tests {
-    //should test for neg chain_id or neg decicals or neg_buyfee or neg sellfee, but the compiler will panic by itself, so no need
+    //should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the compiler will panic by itself, so no need
     use super::Token;
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
     const ADDRESS_TWO: &str = "0x0000000000000000000000000000000000000002";
@@ -85,8 +104,8 @@ mod tests {
             None,
         );
 
-        assert!(token.address == *ADDRESS_ONE);
-        assert!(token_1.address == *ADDRESS_TWO);
+        assert_eq!(token.address, *ADDRESS_ONE);
+        assert_eq!(token_1.address, *ADDRESS_TWO);
     }
 
     #[test]
@@ -127,43 +146,13 @@ mod tests {
         );
 
         assert!(
-            token == token_1,
+            token.equals(&token_1),
             "SHOULD_FAILS_EVEN_THOUGH_CHAIN_ID_IS_DIFFERENT"
         );
     }
 
     #[test]
-    #[should_panic]
-    fn test_expect_revert_diff_name() {
-        let token = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
-
-        let token_1 = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("WETest".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
-
-        assert!(
-            token == token_1,
-            "SHOULD_FAILS_EVEN_THOUGH_NAME_IS_DIFFERENT"
-        );
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_expect_revert_diff_symbol() {
+    fn test_diff_name() {
         let token = Token::new(
             4,
             ADDRESS_ONE.to_string(),
@@ -178,16 +167,38 @@ mod tests {
             4,
             ADDRESS_ONE.to_string(),
             25,
+            Some("Test".to_string()),
+            Some("Te".to_string()),
+            None,
+            None,
+        );
+
+        assert!(token.equals(&token_1), "true even if names differ");
+    }
+
+    #[test]
+    fn test_diff_symbol() {
+        let token = Token::new(
+            4,
+            ADDRESS_ONE.to_string(),
+            25,
+            Some("Test".to_string()),
+            Some("Te".to_string()),
+            None,
+            None,
+        );
+
+        let token_1 = Token::new(
+            4,
+            ADDRESS_ONE.to_string(),
+            25,
             Some("WETest".to_string()),
             Some("Te".to_string()),
             None,
             None,
         );
 
-        assert!(
-            token == token_1,
-            "SHOULD_FAILS_EVEN_THOUGH_SYMBOL_IS_DIFFERENT"
-        );
+        assert!(token.equals(&token_1), "true even if symbols differ");
     }
 
     #[test]
@@ -214,7 +225,7 @@ mod tests {
         );
 
         assert!(
-            token == token_1,
+            token.equals(&token_1),
             "SHOULD_FAILS_EVEN_THOUGH_ADDRESS_IS_DIFFERENT"
         );
     }
@@ -241,6 +252,6 @@ mod tests {
             None,
         );
 
-        assert!(token.equals(&token_1) == token_1.equals(&token), "SHOULD_FAILS_EVEN_THOUGH_ADDRESS_IS_DIFFERENT, SHOULD ONLY REVERT FOR DIFFERENT CHAIN_ID");
+        assert_eq!(token.equals(&token_1), token_1.equals(&token), "SHOULD_FAILS_EVEN_THOUGH_ADDRESS_IS_DIFFERENT, SHOULD ONLY REVERT FOR DIFFERENT CHAIN_ID");
     }
 }
