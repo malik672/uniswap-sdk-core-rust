@@ -1,13 +1,57 @@
-use super::base_currency::BaseCurrency;
+use super::{base_currency::BaseCurrency, currency::Currency};
 use num_bigint::BigUint;
 
 /// Represents an ERC20 token with a unique address and some metadata.
 #[derive(Clone, PartialEq)]
 pub struct Token {
-    pub base_currency: BaseCurrency,
+    pub chain_id: u32,
     pub address: String,
+    pub decimals: u32,
+    pub symbol: Option<String>,
+    pub name: Option<String>,
     pub buy_fee_bps: Option<BigUint>,
     pub sell_fee_bps: Option<BigUint>,
+}
+
+impl BaseCurrency for Token {
+    fn chain_id(&self) -> u32 {
+        self.chain_id
+    }
+
+    fn decimals(&self) -> u32 {
+        self.decimals
+    }
+
+    fn symbol(&self) -> Option<String> {
+        self.symbol.clone()
+    }
+
+    fn name(&self) -> Option<String> {
+        self.name.clone()
+    }
+
+    /// Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
+    ///
+    /// # Arguments
+    ///
+    /// * `other`: other token to compare
+    ///
+    /// returns: bool
+    ///
+    fn equals(&self, other: &Currency) -> bool {
+        match other {
+            Currency::Token(other) => {
+                self.chain_id == other.chain_id
+                    && self.address.to_lowercase() == other.address.to_lowercase()
+            }
+            _ => false,
+        }
+    }
+
+    /// Return this token, which does not need to be wrapped
+    fn wrapped(&self) -> Token {
+        self.clone()
+    }
 }
 
 impl Token {
@@ -23,31 +67,14 @@ impl Token {
         assert!(chain_id > 0, "CHAIN_ID");
         assert!(decimals < 255, "DECIMALS");
         Self {
-            base_currency: BaseCurrency::new(chain_id, decimals, symbol, name),
+            chain_id,
             address,
+            decimals,
+            symbol,
+            name,
             buy_fee_bps,
             sell_fee_bps,
         }
-    }
-
-    pub fn is_native(&self) -> bool {
-        false
-    }
-
-    pub fn is_token(&self) -> bool {
-        true
-    }
-
-    /// Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
-    ///
-    /// # Arguments
-    ///
-    /// * `other` - The other token to compare.
-    ///
-    pub fn equals(&self, other: &Token) -> bool {
-        other.is_token()
-            && self.base_currency.chain_id == other.base_currency.chain_id
-            && self.address.to_lowercase() == other.address.to_lowercase()
     }
 
     /// Returns true if the address of this token sorts before the address of the other token.
@@ -55,13 +82,10 @@ impl Token {
     ///
     /// # Arguments
     ///
-    /// * `other` - The other token to compare.
+    /// * `other`: other token to compare
     ///
     pub fn sorts_before(&self, other: &Token) -> bool {
-        assert_eq!(
-            self.base_currency.chain_id, other.base_currency.chain_id,
-            "CHAIN_IDS"
-        );
+        assert_eq!(self.chain_id, other.chain_id, "CHAIN_IDS");
         assert_ne!(
             self.address.to_lowercase(),
             other.address.to_lowercase(),
@@ -69,16 +93,13 @@ impl Token {
         );
         self.address.to_lowercase() < other.address.to_lowercase()
     }
-
-    pub fn wrapped(&self) -> Token {
-        self.clone()
-    }
 }
 
 #[cfg(test)]
 mod tests {
     //should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the compiler will panic by itself, so no need
-    use super::Token;
+    use super::*;
+
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
     const ADDRESS_TWO: &str = "0x0000000000000000000000000000000000000002";
     const DAI_MAINNET: &str = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
@@ -146,7 +167,7 @@ mod tests {
         );
 
         assert!(
-            token.equals(&token_1),
+            token.equals(&Currency::Token(token_1)),
             "SHOULD_FAILS_EVEN_THOUGH_CHAIN_ID_IS_DIFFERENT"
         );
     }
@@ -173,7 +194,10 @@ mod tests {
             None,
         );
 
-        assert!(token.equals(&token_1), "true even if names differ");
+        assert!(
+            token.equals(&Currency::Token(token_1)),
+            "true even if names differ"
+        );
     }
 
     #[test]
@@ -198,7 +222,10 @@ mod tests {
             None,
         );
 
-        assert!(token.equals(&token_1), "true even if symbols differ");
+        assert!(
+            token.equals(&Currency::Token(token_1)),
+            "true even if symbols differ"
+        );
     }
 
     #[test]
@@ -225,7 +252,7 @@ mod tests {
         );
 
         assert!(
-            token.equals(&token_1),
+            token.equals(&Currency::Token(token_1)),
             "SHOULD_FAILS_EVEN_THOUGH_ADDRESS_IS_DIFFERENT"
         );
     }
@@ -252,6 +279,10 @@ mod tests {
             None,
         );
 
-        assert_eq!(token.equals(&token_1), token_1.equals(&token), "SHOULD_FAILS_EVEN_THOUGH_ADDRESS_IS_DIFFERENT, SHOULD ONLY REVERT FOR DIFFERENT CHAIN_ID");
+        assert_eq!(
+            token.equals(&Currency::Token(token_1.clone())),
+            token_1.equals(&Currency::Token(token)),
+            "SHOULD_FAILS_EVEN_THOUGH_ADDRESS_IS_DIFFERENT, SHOULD ONLY REVERT FOR DIFFERENT CHAIN_ID"
+        );
     }
 }
