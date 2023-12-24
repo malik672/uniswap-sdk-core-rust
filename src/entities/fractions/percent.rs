@@ -1,49 +1,114 @@
-use super::fraction::{Fraction, Rounding};
+use super::fraction::{Fraction, FractionTrait};
+use crate::constants::Rounding;
+use lazy_static::lazy_static;
 use num_bigint::BigInt;
 
+lazy_static! {
+    static ref ONE_HUNDRED: Fraction = Fraction::new(100, 1, ());
+}
+
+#[derive(Clone, PartialEq)]
 pub struct Percent {
-    fraction: Fraction,
+    numerator: BigInt,
+    denominator: BigInt,
 }
 
 impl Percent {
+    /// This boolean prevents a fraction from being interpreted as a Percent
     pub const IS_PERCENT: bool = true;
+}
 
-    pub fn new(fraction: Fraction) -> Self {
-        Self { fraction }
+impl FractionTrait<()> for Percent {
+    fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, _: ()) -> Self {
+        Self {
+            numerator: numerator.into(),
+            denominator: denominator.into(),
+        }
     }
 
-    pub fn add(&self, other: &Fraction) -> Percent {
-        let fraction = self.fraction.add(other);
-        Percent::new(fraction)
+    fn meta(&self) -> () {
+        ()
     }
 
-    pub fn sub(&self, other: &Fraction) -> Percent {
-        let fraction = self.fraction.subtract(other);
-        Percent::new(fraction)
+    fn numerator(&self) -> &BigInt {
+        &self.numerator
     }
 
-    pub fn multiply(&self, other: &Fraction) -> Percent {
-        let fraction = self.fraction.multiply(other);
-        Percent::new(fraction)
-    }
-    pub fn divide(&self, other: &Fraction) -> Percent {
-        let fraction = self.fraction.divide(other);
-        Percent::new(fraction)
+    fn denominator(&self) -> &BigInt {
+        &self.denominator
     }
 
-    pub fn to_significant(&self, other: &Fraction) -> String {
-        let hundred = Fraction::new(BigInt::from(100), BigInt::from(1));
-        let mult = Fraction::multiply(&hundred, other);
-        Fraction::to_significant(&mult, 5, Rounding::RoundUp)
+    fn to_significant(&self, significant_digits: u32, rounding: Rounding) -> String {
+        self.as_fraction()
+            .multiply(&ONE_HUNDRED)
+            .to_significant(significant_digits, rounding)
     }
 
-    pub fn to_fixed(&self, other: &Fraction) -> String {
-        let hundred = Fraction::new(BigInt::from(100), BigInt::from(1));
-        let mult = Fraction::multiply(&hundred, other);
-        Fraction::to_fixed(&mult, 2, Rounding::RoundUp)
+    fn to_fixed(&self, decimal_places: u32, rounding: Rounding) -> String {
+        self.as_fraction()
+            .multiply(&ONE_HUNDRED)
+            .to_fixed(decimal_places, rounding)
     }
 }
 
-pub fn to_percent(fraction: Fraction) -> Percent {
-    Percent::new(fraction)
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::constants::Rounding;
+
+    #[test]
+    fn test_add() {
+        assert!(Percent::new(1, 100, ())
+            .add(&Percent::new(2, 100, ()))
+            .equal_to(&Percent::new(3, 100, ())));
+        assert!(Percent::new(1, 25, ())
+            .add(&Percent::new(2, 100, ()))
+            .equal_to(&Percent::new(150, 2500, ())));
+    }
+
+    #[test]
+    fn test_subtract() {
+        assert!(Percent::new(1, 100, ())
+            .subtract(&Percent::new(2, 100, ()))
+            .equal_to(&Percent::new(-1, 100, ())));
+        assert!(Percent::new(1, 25, ())
+            .subtract(&Percent::new(2, 100, ()))
+            .equal_to(&Percent::new(50, 2500, ())));
+    }
+
+    #[test]
+    fn test_multiply() {
+        assert!(Percent::new(1, 100, ())
+            .multiply(&Percent::new(2, 100, ()))
+            .equal_to(&Percent::new(2, 10000, ())));
+        assert!(Percent::new(1, 25, ())
+            .multiply(&Percent::new(2, 100, ()))
+            .equal_to(&Percent::new(2, 2500, ())));
+    }
+
+    #[test]
+    fn test_divide() {
+        assert!(Percent::new(1, 100, ())
+            .divide(&Percent::new(2, 100, ()))
+            .equal_to(&Percent::new(100, 200, ())));
+        assert!(Percent::new(1, 25, ())
+            .divide(&Percent::new(2, 100, ()))
+            .equal_to(&Percent::new(100, 50, ())));
+    }
+
+    #[test]
+    fn test_to_significant() {
+        assert_eq!(
+            Percent::new(154, 10000, ()).to_significant(3, Rounding::RoundHalfUp),
+            "1.54".to_string()
+        );
+    }
+
+    #[test]
+    fn test_to_fixed() {
+        assert_eq!(
+            Percent::new(154, 10000, ()).to_fixed(2, Rounding::RoundHalfUp),
+            "1.54".to_string()
+        );
+    }
 }
