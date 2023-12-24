@@ -1,5 +1,5 @@
-pub mod entities;
-pub mod utils;
+pub mod addresses;
 pub mod chains;
 pub mod constants;
-pub mod addresses;
+pub mod entities;
+pub mod utils;

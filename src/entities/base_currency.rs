@@ -1,13 +1,11 @@
-/**
- * A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
- */
+/// A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
 #[derive(Clone, PartialEq)]
 pub struct BaseCurrency {
     pub chain_id: u32,
     pub decimals: u32,
     pub name: Option<String>,
     pub symbol: Option<String>,
-    pub is_native: bool
+    pub is_native: bool,
 }
 
 impl BaseCurrency {
@@ -24,12 +22,8 @@ impl BaseCurrency {
         }
     }
 
-
-    /**
-     * Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
-    */
+    /// Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
     pub fn is_native() -> bool {
         true
     }
 }
-

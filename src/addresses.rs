@@ -1,12 +1,12 @@
 use super::chains::{ChainId, SUPPORTED_CHAINS};
 use lazy_static::lazy_static;
 use std::collections::HashMap;
+
 type AddressMap = HashMap<u32, String>;
 type ChainMap = HashMap<u32, ChainAddresses>;
 type ChainAddress = HashMap<u32, String>;
 
 #[derive(Clone)]
-#[allow(dead_code)]
 pub struct ChainAddresses {
     v3_core_factory_address: String,
     multicall_address: String,
@@ -18,29 +18,29 @@ pub struct ChainAddresses {
     v1_mixed_route_quoter_address: Option<String>,
 }
 
-pub const _DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
+pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
 
-pub fn construct_same_address_map(address: &str, additional_networks: Vec<u32>) -> AddressMap {
+pub fn construct_same_address_map(address: &str, additional_networks: &[ChainId]) -> AddressMap {
+    let mut networks = DEFAULT_NETWORKS.to_vec();
+    networks.extend_from_slice(additional_networks);
     let mut map = AddressMap::new();
-    let default_networks = [1, 2, 3]; // Placeholder for actual default networks
-    for &network in default_networks.iter().chain(additional_networks.iter()) {
-        map.insert(network, address.to_string());
+    for chain_id in networks {
+        map.insert(chain_id as u32, String::from(address));
     }
     map
 }
 
 lazy_static! {
     #[derive(Copy, Clone)]
-    pub static ref UNIADDRESSES: AddressMap = construct_same_address_map(
+    pub static ref UNI_ADDRESSES: AddressMap = construct_same_address_map(
         "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
-        [
-            ChainId::OPTIMISM as u32,
-            ChainId::ARBITRUMONE as u32,
-            ChainId::POLYGON as u32,
-            ChainId::POLYGONMUMBAI as u32,
-            ChainId::SEPOLIA as u32,
+        &[
+            ChainId::OPTIMISM,
+            ChainId::ARBITRUMONE,
+            ChainId::POLYGON,
+            ChainId::POLYGONMUMBAI,
+            ChainId::SEPOLIA,
         ]
-        .to_vec()
     );
 }
 
@@ -51,16 +51,15 @@ pub const V2_FACTORY_ADDRESS: &str = "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
 lazy_static! {
     pub static ref V2_FACTORY_ADDRESSES: AddressMap = construct_same_address_map(
         V2_FACTORY_ADDRESS,
-        [
-            ChainId::POLYGON as u32,
-            ChainId::OPTIMISM as u32,
-            ChainId::CELO as u32,
-            ChainId::ARBITRUMONE as u32,
-            ChainId::BNB as u32,
-            ChainId::AVALANCHE as u32,
-            ChainId::BASE as u32,
+        &[
+            ChainId::POLYGON,
+            ChainId::OPTIMISM,
+            ChainId::CELO,
+            ChainId::ARBITRUMONE,
+            ChainId::BNB,
+            ChainId::AVALANCHE,
+            ChainId::BASE,
         ]
-        .to_vec()
     );
 }
 
@@ -68,47 +67,47 @@ pub const V2_ROUTER_ADDRESS: &str = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
 
 lazy_static! {
     pub static ref V2_ROUTER_ADDRESSES: AddressMap =
-        construct_same_address_map(V2_ROUTER_ADDRESS, [].to_vec());
+        construct_same_address_map(V2_ROUTER_ADDRESS, &[]);
 }
 
-pub fn default_addr() -> ChainAddresses {
-    // Networks that share most of the same addresses i.e. Mainnet, Goerli, Optimism, Arbitrum, Polygon
-    let default_addresses: ChainAddresses = ChainAddresses {
-        v3_core_factory_address: "0x1F98431c8aD98523631AE4a59f267346ea31F984".to_string(),
-        multicall_address: "0x1F98415757620B543A52E61c46B32eB19261F984".to_string(),
-        quoter_address: "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6".to_string(),
-        v3_migrator_address: Some("0xA5644E29708357803b5A882D272c41cC0dF92B34".to_string()),
-        nonfungible_position_manager_address: Some(
-            "0xC36442b4a4522E871399CD717aBDD847Ab11FE88".to_string(),
-        ),
-        tick_lens_address: None,
-        swap_router02_address: None,
-        v1_mixed_route_quoter_address: None,
-    };
-    default_addresses
+impl ChainAddresses {
+    /// Networks that share most of the same addresses i.e. Mainnet, Goerli, Optimism, Arbitrum, Polygon
+    pub fn default() -> Self {
+        ChainAddresses {
+            v3_core_factory_address: "0x1F98431c8aD98523631AE4a59f267346ea31F984".to_string(),
+            multicall_address: "0x1F98415757620B543A52E61c46B32eB19261F984".to_string(),
+            quoter_address: "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6".to_string(),
+            v3_migrator_address: Some("0xA5644E29708357803b5A882D272c41cC0dF92B34".to_string()),
+            nonfungible_position_manager_address: Some(
+                "0xC36442b4a4522E871399CD717aBDD847Ab11FE88".to_string(),
+            ),
+            tick_lens_address: None,
+            swap_router02_address: None,
+            v1_mixed_route_quoter_address: None,
+        }
+    }
 }
 
 pub fn mainnet_address() -> ChainAddresses {
-    let mut mainnet_addresses = default_addr().clone();
+    let mut mainnet_addresses = ChainAddresses::default();
     mainnet_addresses.v1_mixed_route_quoter_address =
         Some("0x84E44095eeBfEC7793Cd7d5b57B7e401D7f1cA2E".to_string());
     mainnet_addresses
 }
 
 pub fn goerli_address() -> ChainAddresses {
-    let mut mainnet_addresses = default_addr().clone();
+    let mut mainnet_addresses = ChainAddresses::default();
     mainnet_addresses.v1_mixed_route_quoter_address =
         Some("0xBa60b6e6fF25488308789E6e0A65D838be34194e".to_string());
     mainnet_addresses
 }
 
 pub fn optimism_addresses() -> ChainAddresses {
-    let optimism_addresses: ChainAddresses = default_addr().clone();
-    optimism_addresses
+    ChainAddresses::default()
 }
 
 pub fn arbitum_one_addresses() -> ChainAddresses {
-    let mut mainnet_addresses = default_addr().clone();
+    let mut mainnet_addresses = ChainAddresses::default();
     mainnet_addresses.multicall_address = "0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB".to_string();
     mainnet_addresses.tick_lens_address =
         Some("0xbfd8137f7d1516D3ea5cA83523914859ec47F573".to_string());
@@ -116,13 +115,11 @@ pub fn arbitum_one_addresses() -> ChainAddresses {
 }
 
 pub fn polygon_addresses() -> ChainAddresses {
-    let polygon_addresses: ChainAddresses = default_addr().clone();
-    polygon_addresses
+    ChainAddresses::default()
 }
 
-// celo v3 addresses
+/// celo v3 addresses
 pub fn celo_addresses() -> ChainAddresses {
-    // Networks that share most of the same addresses i.e. Mainnet, Goerli, Optimism, Arbitrum, Polygon
     ChainAddresses {
         v3_core_factory_address: "0xAfE208a311B21f13EF87E33A90049fC17A7acDEc".to_string(),
         multicall_address: "0x633987602DE5C4F337e3DbF265303A1080324204".to_string(),
@@ -137,7 +134,7 @@ pub fn celo_addresses() -> ChainAddresses {
     }
 }
 
-// BNB v3 addresses
+/// BNB v3 addresses
 pub fn bnb_addresses() -> ChainAddresses {
     ChainAddresses {
         v3_core_factory_address: "0xdB1d10011AD0Ff90774D0C6Bb92e5C5c8b4461F7".to_string(),
@@ -153,7 +150,7 @@ pub fn bnb_addresses() -> ChainAddresses {
     }
 }
 
-// Optimism Goerli addresses
+/// Optimism Goerli addresses
 pub fn optimism_goerli_addresses() -> ChainAddresses {
     ChainAddresses {
         v3_core_factory_address: "0xB656dA17129e7EB733A557f4EBc57B76CFbB5d10".to_string(),
@@ -169,7 +166,7 @@ pub fn optimism_goerli_addresses() -> ChainAddresses {
     }
 }
 
-// Arbitrum Goerli v3 addresses
+/// Arbitrum Goerli v3 addresses
 pub fn arbitrum_goerli_addresses() -> ChainAddresses {
     ChainAddresses {
         v3_core_factory_address: "0x4893376342d5D7b3e31d4184c08b265e5aB2A3f6".to_string(),
@@ -185,8 +182,8 @@ pub fn arbitrum_goerli_addresses() -> ChainAddresses {
     }
 }
 
+/// sepolia v3 addresses
 pub fn sepolia_address() -> ChainAddresses {
-    // Sepolia v3 addresses
     ChainAddresses {
         v3_core_factory_address: "0x0227628f3F023bb0B980b67D528571c95c6DaC1c".to_string(),
         multicall_address: "0xD7F33bCdb21b359c8ee6F0251d30E94832baAd07".to_string(),
@@ -201,7 +198,7 @@ pub fn sepolia_address() -> ChainAddresses {
     }
 }
 
-// Avalanche v3 addresses
+/// Avalanche v3 addresses
 pub fn avalanche_addresses() -> ChainAddresses {
     ChainAddresses {
         v3_core_factory_address: "0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD".to_string(),
@@ -217,7 +214,7 @@ pub fn avalanche_addresses() -> ChainAddresses {
     }
 }
 
-// Base v3 addresses
+/// Base v3 addresses
 pub fn base_addresses() -> ChainAddresses {
     ChainAddresses {
         v3_core_factory_address: "0x33128a8fC17869897dcE68Ed026d694621f6FDfD".to_string(),
@@ -233,7 +230,7 @@ pub fn base_addresses() -> ChainAddresses {
     }
 }
 
-// Base Goerli v3 addresses
+/// Base Goerli v3 addresses
 pub fn base_goerli_addresses() -> ChainAddresses {
     ChainAddresses {
         v3_core_factory_address: "0x9323c1d6D800ed51Bd7C6B216cfBec678B7d0BC2".to_string(),
@@ -256,14 +253,11 @@ lazy_static! {
 
         new_map.insert(ChainId::AVALANCHE as u32, avalanche_addresses());
         new_map.insert(ChainId::MAINNET as u32, mainnet_address());
-        new_map.insert(ChainId::SEPOLIA as u32, sepolia_address().clone());
+        new_map.insert(ChainId::SEPOLIA as u32, sepolia_address());
         new_map.insert(ChainId::GOERLI as u32, goerli_address());
         new_map.insert(ChainId::ARBITRUMONE as u32, arbitum_one_addresses());
-        new_map.insert(
-            ChainId::ARBITRUMGOERLI as u32,
-            arbitrum_goerli_addresses().clone(),
-        );
-        new_map.insert(ChainId::CELO as u32, celo_addresses().clone());
+        new_map.insert(ChainId::ARBITRUMGOERLI as u32, arbitrum_goerli_addresses());
+        new_map.insert(ChainId::CELO as u32, celo_addresses());
         new_map.insert(ChainId::CELOALFAJORES as u32, celo_addresses());
 
         new_map.insert(ChainId::POLYGON as u32, polygon_addresses());
@@ -277,7 +271,7 @@ lazy_static! {
     };
 }
 
-/* V3 Contract Addresses */
+/// V3 Contract Addresses
 pub fn v3_factory_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
@@ -293,7 +287,7 @@ pub fn v3_factory_addresses() -> ChainAddress {
     chain_add
 }
 
-/* V3 Contract Addresses */
+/// V3 Contract Addresses
 pub fn v3_migrator_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
@@ -310,7 +304,7 @@ pub fn v3_migrator_addresses() -> ChainAddress {
     chain_add
 }
 
-/* V3 Contract Addresses */
+/// V3 Contract Addresses
 pub fn multicall_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
@@ -327,7 +321,7 @@ pub fn multicall_addresses() -> ChainAddress {
 }
 
 pub fn governance_alpha_v0_addresses() -> AddressMap {
-    construct_same_address_map("0x5e4be8Bc9637f0EAA1A755019e06A68ce081D58F", [].to_vec())
+    construct_same_address_map("0x5e4be8Bc9637f0EAA1A755019e06A68ce081D58F", &[])
 }
 
 pub fn governance_alpha_v1_addresses() -> AddressMap {
@@ -349,7 +343,7 @@ pub fn governance_bravo_addresses() -> AddressMap {
 }
 
 pub fn timelock_addresses() -> AddressMap {
-    construct_same_address_map("0x1a9C8182C09F50C8318d769245beA5", [].to_vec())
+    construct_same_address_map("0x1a9C8182C09F50C8318d769245beA5", &[])
 }
 
 pub fn merkle_distributor_address() -> AddressMap {
@@ -392,7 +386,6 @@ pub fn nonfungible_position_manager_address() -> ChainAddress {
             .get(&(memo as u32))
             .unwrap()
             .nonfungible_position_manager_address
-            .clone()
             .is_some()
         {
             chain_add.insert(
@@ -410,7 +403,7 @@ pub fn nonfungible_position_manager_address() -> ChainAddress {
 }
 
 pub fn ens_resgister_address_map() -> AddressMap {
-    construct_same_address_map("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e", [].to_vec())
+    construct_same_address_map("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e", &[])
 }
 
 pub fn socks_controller_addresses() -> AddressMap {
@@ -429,7 +422,6 @@ pub fn tick_lens_addresses() -> ChainAddress {
             .get(&(memo as u32))
             .unwrap()
             .tick_lens_address
-            .clone()
             .is_some()
         {
             chain_add.insert(
@@ -453,7 +445,6 @@ pub fn v1_mixed_route_quoter_address() -> ChainAddress {
             .get(&(memo as u32))
             .unwrap()
             .v1_mixed_route_quoter_address
-            .clone()
             .is_some()
         {
             chain_add.insert(
@@ -470,16 +461,15 @@ pub fn v1_mixed_route_quoter_address() -> ChainAddress {
     chain_add
 }
 
-pub fn swap_router02_address(chainid: u32) -> ChainAddresses {
-    if chainid == ChainId::BNB as u32 {
+pub fn swap_router02_address(chain_id: u32) -> String {
+    if chain_id == ChainId::BNB as u32 {
         CHAIN_TO_ADDRESSES_MAP
-            .get(&{ chainid })
+            .get(&chain_id)
             .unwrap()
-            .to_owned()
+            .swap_router02_address
+            .clone()
+            .unwrap()
     } else {
-        CHAIN_TO_ADDRESSES_MAP
-            .get(&{ chainid })
-            .unwrap()
-            .to_owned()
+        "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45".into()
     }
 }
