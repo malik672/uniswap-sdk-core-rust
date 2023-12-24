@@ -1,5 +1,3 @@
-#[derive(Clone, PartialEq)]
-pub struct NativeCurrency {
-    pub is_native: bool,
-    pub is_token: bool,
-}
+use super::base_currency::BaseCurrency;
+
+pub trait NativeCurrency: BaseCurrency {}
