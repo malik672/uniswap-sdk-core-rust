@@ -1,4 +1,5 @@
-use super::{base_currency::BaseCurrency, token::Token};
+use super::{base_currency::BaseCurrency, currency::CurrencyTrait, token::Token};
+use crate::entities::weth9::WETH9;
 use lazy_static::lazy_static;
 use std::{collections::HashMap, sync::Mutex};
 
@@ -9,33 +10,30 @@ lazy_static! {
 /// Ether is the main usage of a 'native' currency, i.e. for Ethereum mainnet and all testnets
 #[derive(Clone, PartialEq)]
 pub struct Ether {
-    base_currency: BaseCurrency,
-    wrapped: Token,
+    pub chain_id: u32,
+    pub decimals: u32,
+    pub symbol: Option<String>,
+    pub name: Option<String>,
+}
+
+impl CurrencyTrait for Ether {
+    fn is_native(&self) -> bool {
+        true
+    }
+
+    fn address(&self) -> String {
+        self.wrapped().address()
+    }
 }
 
 impl Ether {
     pub fn new(chain_id: u32) -> Self {
         Self {
-            base_currency: BaseCurrency::new(
-                chain_id,
-                18,
-                Some("Ether".to_string()),
-                Some("ETH".to_string()),
-            ),
-            wrapped: Token::new(
-                chain_id,
-                "0x".to_string(),
-                18,
-                Some("WETH".to_string()),
-                Some("Wrapped Ether".to_string()),
-                None,
-                None,
-            ),
+            chain_id,
+            decimals: 18,
+            symbol: Some("ETH".to_string()),
+            name: Some("Ether".to_string()),
         }
-    }
-
-    pub fn wrapped(&self) -> &Token {
-        &self.wrapped
     }
 
     pub fn on_chain(chain_id: u32) -> Self {
@@ -49,15 +47,44 @@ impl Ether {
             }
         }
     }
+}
 
-    pub fn equals(&self, other: &BaseCurrency) -> bool {
-        other.is_native && other.chain_id == self.base_currency.chain_id
+impl BaseCurrency for Ether {
+    fn chain_id(&self) -> u32 {
+        self.chain_id
+    }
+
+    fn decimals(&self) -> u32 {
+        self.decimals
+    }
+
+    fn symbol(&self) -> Option<String> {
+        self.symbol.clone()
+    }
+
+    fn name(&self) -> Option<String> {
+        self.name.clone()
+    }
+
+    fn equals(&self, other: &impl CurrencyTrait) -> bool {
+        match other.is_native() {
+            true => self.chain_id() == other.chain_id(),
+            _ => false,
+        }
+    }
+
+    fn wrapped(&self) -> Token {
+        match WETH9::default().get(self.chain_id()) {
+            Some(weth9) => weth9.clone(),
+            None => panic!("WRAPPED"),
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::entities::currency::Currency;
 
     #[test]
     fn test_static_constructor_uses_cache() {
@@ -71,11 +98,11 @@ mod tests {
 
     #[test]
     fn test_equals_returns_false_for_different_chains() {
-        assert!(!Ether::on_chain(1).equals(&Ether::on_chain(2).base_currency));
+        assert!(!Ether::on_chain(1).equals(&Currency::NativeCurrency(Ether::on_chain(2))));
     }
 
     #[test]
     fn test_equals_returns_true_for_same_chains() {
-        assert!(Ether::on_chain(1).equals(&Ether::on_chain(1).base_currency));
+        assert!(Ether::on_chain(1).equals(&Currency::NativeCurrency(Ether::on_chain(1))));
     }
 }

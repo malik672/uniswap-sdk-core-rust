@@ -1,29 +1,28 @@
+use super::{currency::CurrencyTrait, token::Token};
+
 /// A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
-#[derive(Clone, PartialEq)]
-pub struct BaseCurrency {
-    pub chain_id: u32,
-    pub decimals: u32,
-    pub name: Option<String>,
-    pub symbol: Option<String>,
-    pub is_native: bool,
-}
+pub trait BaseCurrency: Clone {
+    /// The chain ID on which this currency resides
+    fn chain_id(&self) -> u32;
 
-impl BaseCurrency {
-    pub fn new(chain_id: u32, decimals: u32, name: Option<String>, symbol: Option<String>) -> Self {
-        assert!(chain_id > 0, "CHAIN_ID");
-        assert!(decimals < 255, "DECIMALS");
+    /// The decimals used in representing currency amounts
+    fn decimals(&self) -> u32;
 
-        Self {
-            chain_id,
-            decimals,
-            name,
-            symbol,
-            is_native: Self::is_native(),
-        }
-    }
+    /// The symbol of the currency, i.e. a short textual non-unique identifier
+    fn symbol(&self) -> Option<String>;
 
-    /// Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
-    pub fn is_native() -> bool {
-        true
-    }
+    /// The name of the currency, i.e. a descriptive textual non-unique identifier
+    fn name(&self) -> Option<String>;
+
+    /// Returns whether this currency is functionally equivalent to the other currency
+    ///
+    /// # Arguments
+    ///
+    /// * `other`: the other currency
+    ///
+    fn equals(&self, other: &impl CurrencyTrait) -> bool;
+
+    /// Return the wrapped version of this currency that can be used with the Uniswap contracts.
+    /// Currencies must implement this to be used in Uniswap
+    fn wrapped(&self) -> Token;
 }

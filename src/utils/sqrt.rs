@@ -5,11 +5,11 @@ use num_traits::{ToPrimitive, Zero};
 ///
 /// # Arguments
 ///
-/// * `value`: The value for which to compute the square root, rounded down
+/// * `value`: the value for which to compute the square root, rounded down
 ///
 /// returns: BigInt
 ///
-fn sqrt(value: &BigInt) -> BigInt {
+pub fn sqrt(value: &BigInt) -> BigInt {
     assert!(*value >= Zero::zero(), "NEGATIVE");
 
     // If the value is less than or equal to MAX_SAFE_INTEGER,
