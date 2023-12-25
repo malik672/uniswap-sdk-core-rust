@@ -2,8 +2,9 @@ use crate::{
     constants::{Rounding, MAX_UINT256},
     entities::{
         base_currency::BaseCurrency,
-        currency::{Currency, CurrencyTrait},
+        currency::CurrencyTrait,
         fractions::fraction::{Fraction, FractionTrait},
+        token::Token,
     },
 };
 use num_bigint::{BigInt, BigUint, ToBigInt};
@@ -97,11 +98,11 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     }
 }
 
-impl CurrencyAmount<Currency> {
-    pub fn wrapped(&self) -> CurrencyAmount<Currency> {
+impl CurrencyAmount<Token> {
+    pub fn wrapped(&self) -> CurrencyAmount<Token> {
         match &self.meta.currency.is_native() {
             true => Self::from_fractional_amount(
-                Currency::Token(self.meta.currency.wrapped()),
+                self.meta.currency.wrapped(),
                 self.numerator.clone(),
                 self.denominator.clone(),
             ),
@@ -180,7 +181,9 @@ impl<T: CurrencyTrait> FractionTrait<CurrencyMeta<T>> for CurrencyAmount<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::entities::{ether::Ether, fractions::percent::Percent, token::Token};
+    use crate::entities::{
+        currency::Currency, ether::Ether, fractions::percent::Percent, token::Token,
+    };
     use lazy_static::lazy_static;
 
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";

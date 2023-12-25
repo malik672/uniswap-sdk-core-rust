@@ -16,6 +16,16 @@ pub struct Ether {
     pub name: Option<String>,
 }
 
+impl CurrencyTrait for Ether {
+    fn is_native(&self) -> bool {
+        true
+    }
+
+    fn address(&self) -> String {
+        self.wrapped().address()
+    }
+}
+
 impl Ether {
     pub fn new(chain_id: u32) -> Self {
         Self {

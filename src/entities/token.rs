@@ -13,6 +13,16 @@ pub struct Token {
     pub sell_fee_bps: Option<BigUint>,
 }
 
+impl CurrencyTrait for Token {
+    fn is_native(&self) -> bool {
+        false
+    }
+
+    fn address(&self) -> String {
+        self.address.to_string()
+    }
+}
+
 impl BaseCurrency for Token {
     fn chain_id(&self) -> u32 {
         self.chain_id

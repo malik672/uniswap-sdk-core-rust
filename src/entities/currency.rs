@@ -23,8 +23,8 @@ impl CurrencyTrait for Currency {
 
     fn address(&self) -> String {
         match self {
-            Currency::NativeCurrency(native_currency) => native_currency.wrapped().address,
-            Currency::Token(token) => token.address.to_string(),
+            Currency::NativeCurrency(native_currency) => native_currency.address(),
+            Currency::Token(token) => token.address(),
         }
     }
 }
