@@ -1,44 +1,69 @@
 use regex::Regex;
 
-
-pub fn check_valid_address(address: &str) -> Result<String, String> {
-    if starts_with_0x_len_42_hex(address) {
-        Ok(address.to_string())
+/// Checks if the input string is a valid Ethereum address.
+///
+/// # Arguments
+///
+/// * `ethereum_address` - A string slice that holds the Ethereum address to be validated.
+///
+/// # Returns
+///
+/// * If the input string satisfies the condition of starting with `0x` and being 42 characters long with only hexadecimal characters after `0x`, returns `Ok(ethereum_address.to_string())`.
+/// * Otherwise, returns an error message in the form of `Err(format!("{} is not a valid Ethereum address.", ethereum_address))`.
+pub fn check_valid_ethereum_address(ethereum_address: &str) -> Result<String, String> {
+    let valid_address_regex = Regex::new(r"^0x[0-9a-fA-F]{40}$").unwrap();
+    if valid_address_regex.is_match(ethereum_address) {
+        Ok(ethereum_address.to_string())
     } else {
-        Err(format!("{} is not a valid address.", address))
+        Err(format!("{} is not a valid Ethereum address.", ethereum_address))
     }
 }
 
-// Checks a string starts with 0x, is 42 characters long and contains only hex characters after 0x
-pub fn starts_with_0x_len_42_hex(address: &str) -> bool {
-    lazy_static::lazy_static! {
-        static ref STARTS_WITH_0X_LEN_42_HEX_REGEX: Regex = Regex::new(r"^0x[0-9a-fA-F]{40}$").unwrap();
-    }
-    STARTS_WITH_0X_LEN_42_HEX_REGEX.is_match(address)
+/// Validates the input string as an Ethereum address and returns the checksummed address.
+///
+/// # Arguments
+///
+/// * `ethereum_address` - A string slice that holds the Ethereum address to be validated and checksummed.
+///
+/// # Returns
+///
+/// * If the input string satisfies the condition of starting with `0x` and being 42 characters long with only hexadecimal characters after `0x`, returns the checksummed address.
+/// * Otherwise, returns an error message in the form of `Err(format!("{} is not a valid Ethereum address.", ethereum_address))`.
+pub fn validate_and_parse_address(ethereum_address: &str) -> Result<String, String> {
+    let checksummed_address = eth_checksum::checksum(ethereum_address);
+    check_valid_ethereum_address(&checksummed_address)?;
+    Ok(checksummed_address)
 }
-
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_valid_address() {
+    fn test_valid_ethereum_address() {
         let valid_address = "0x1234567890123456789012345678901234567890";
-        assert!(starts_with_0x_len_42_hex(valid_address));
-        assert_eq!(
-            check_valid_address(valid_address),
-            Ok(valid_address.to_string())
-        );
+        assert!(check_valid_ethereum_address(valid_address).is_ok());
     }
 
     #[test]
-    fn test_invalid_address() {
+    fn test_invalid_ethereum_address() {
         let invalid_address = "0xinvalidaddress";
-        assert!(!starts_with_0x_len_42_hex(invalid_address));
+        assert!(check_valid_ethereum_address(invalid_address).is_err());
+    }
+
+    #[test]
+    fn test_validate_and_parse_address() {
+        let valid_address = "0x1234567890123456789012345678901234567890";
+        let expected_checksummed_address = "0x5a0b54d5dc17e0aadc383d2db43b0a0d3e029c4c";
         assert_eq!(
-            check_valid_address(invalid_address),
-            Err(format!("{} is not a valid address.", invalid_address))
+            validate_and_parse_address(valid_address),
+            Ok(expected_checksummed_address.to_string())
+        );
+
+        let invalid_address = "0xinvalidaddress";
+        assert_eq!(
+            validate_and_parse_address(invalid_address),
+            Err(format!("{} is not a valid Ethereum address.", invalid_address))
         );
     }
 }
