@@ -6,7 +6,7 @@ pub trait BaseCurrency: Clone {
     fn chain_id(&self) -> u32;
 
     /// The decimals used in representing currency amounts
-    fn decimals(&self) -> u32;
+    fn decimals(&self) -> u8;
 
     /// The symbol of the currency, i.e. a short textual non-unique identifier
     fn symbol(&self) -> Option<String>;

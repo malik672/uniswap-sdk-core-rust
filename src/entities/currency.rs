@@ -37,7 +37,7 @@ impl BaseCurrency for Currency {
         }
     }
 
-    fn decimals(&self) -> u32 {
+    fn decimals(&self) -> u8 {
         match self {
             Currency::NativeCurrency(native_currency) => native_currency.decimals(),
             Currency::Token(token) => token.decimals(),

@@ -61,12 +61,12 @@ where
         &self.denominator
     }
 
-    fn to_significant(&self, significant_digits: u32, rounding: Rounding) -> String {
+    fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
         self.adjusted_for_decimals()
             .to_significant(significant_digits, rounding)
     }
 
-    fn to_fixed(&self, decimal_places: u32, rounding: Rounding) -> String {
+    fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         self.adjusted_for_decimals()
             .to_fixed(decimal_places, rounding)
     }
@@ -84,8 +84,8 @@ where
         numerator: impl Into<BigInt>,
     ) -> Self {
         let scalar = Fraction::new(
-            BigInt::from(10).pow(base_currency.decimals()),
-            BigInt::from(10).pow(quote_currency.decimals()),
+            BigInt::from(10).pow(base_currency.decimals() as u32),
+            BigInt::from(10).pow(quote_currency.decimals() as u32),
             (),
         );
         Self {

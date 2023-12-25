@@ -116,7 +116,7 @@ pub trait FractionTrait<M>: Sized {
             .div(Decimal::from_str(&self.denominator().to_str_radix(10)).unwrap())
     }
 
-    fn to_significant(&self, significant_digits: u32, rounding: Rounding) -> String {
+    fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
         assert!(
             significant_digits > 0,
             "Significant digits must be positive."
@@ -125,16 +125,16 @@ pub trait FractionTrait<M>: Sized {
         let rounding_strategy = to_rounding_strategy(rounding);
         let quotient = self
             .to_decimal()
-            .round_sf_with_strategy(significant_digits, rounding_strategy);
+            .round_sf_with_strategy(significant_digits as u32, rounding_strategy);
 
         quotient.unwrap().normalize().to_string()
     }
 
-    fn to_fixed(&self, decimal_places: u32, rounding: Rounding) -> String {
+    fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         let rounding_strategy = to_rounding_strategy(rounding);
         let quotient = self
             .to_decimal()
-            .round_dp_with_strategy(decimal_places, rounding_strategy);
+            .round_dp_with_strategy(decimal_places as u32, rounding_strategy);
 
         format!("{:.1$}", quotient, decimal_places as usize)
     }

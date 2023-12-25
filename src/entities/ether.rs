@@ -1,5 +1,4 @@
-use super::{base_currency::BaseCurrency, currency::CurrencyTrait, token::Token};
-use crate::entities::weth9::WETH9;
+use super::{base_currency::BaseCurrency, currency::CurrencyTrait, token::Token, weth9::WETH9};
 use lazy_static::lazy_static;
 use std::{collections::HashMap, sync::Mutex};
 
@@ -11,7 +10,7 @@ lazy_static! {
 #[derive(Clone, PartialEq)]
 pub struct Ether {
     pub chain_id: u32,
-    pub decimals: u32,
+    pub decimals: u8,
     pub symbol: Option<String>,
     pub name: Option<String>,
 }
@@ -54,7 +53,7 @@ impl BaseCurrency for Ether {
         self.chain_id
     }
 
-    fn decimals(&self) -> u32 {
+    fn decimals(&self) -> u8 {
         self.decimals
     }
 
