@@ -2,7 +2,7 @@ use crate::{
     constants::{Rounding, MAX_UINT256},
     entities::{
         base_currency::BaseCurrency,
-        currency::Currency,
+        currency::{Currency, CurrencyTrait},
         fractions::fraction::{Fraction, FractionTrait},
     },
 };
@@ -12,31 +12,24 @@ use rust_decimal::Decimal;
 use std::{ops::Div, str::FromStr};
 
 #[derive(Clone, PartialEq)]
-pub struct CurrencyAmount {
+pub struct CurrencyAmount<T: CurrencyTrait> {
     numerator: BigInt,
     denominator: BigInt,
-    pub meta: CurrencyMeta,
+    pub meta: CurrencyMeta<T>,
 }
 
 #[derive(Clone, PartialEq)]
-pub struct CurrencyMeta {
-    pub currency: Currency,
+pub struct CurrencyMeta<T: CurrencyTrait> {
+    pub currency: T,
     pub decimal_scale: BigUint,
 }
 
-impl CurrencyAmount {
-    fn new(
-        currency: Currency,
-        numerator: impl Into<BigInt>,
-        denominator: impl Into<BigInt>,
-    ) -> Self {
+impl<T: CurrencyTrait> CurrencyAmount<T> {
+    fn new(currency: T, numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
         let numerator = numerator.into();
         let denominator = denominator.into();
         assert!(numerator.div_floor(&denominator).le(&MAX_UINT256), "AMOUNT");
-        let exponent = match &currency {
-            Currency::Token(currency) => currency.decimals(),
-            Currency::NativeCurrency(currency) => currency.decimals(),
-        };
+        let exponent = currency.decimals();
         Self {
             numerator,
             denominator,
@@ -56,7 +49,7 @@ impl CurrencyAmount {
     ///
     /// returns: CurrencyAmount
     ///
-    pub fn from_raw_amount(currency: Currency, raw_amount: impl Into<BigInt>) -> CurrencyAmount {
+    pub fn from_raw_amount(currency: T, raw_amount: impl Into<BigInt>) -> CurrencyAmount<T> {
         Self::new(currency, raw_amount, 1)
     }
 
@@ -71,14 +64,14 @@ impl CurrencyAmount {
     /// returns: CurrencyAmount
     ///
     pub fn from_fractional_amount(
-        currency: Currency,
+        currency: T,
         numerator: impl Into<BigInt>,
         denominator: impl Into<BigInt>,
-    ) -> CurrencyAmount {
+    ) -> CurrencyAmount<T> {
         Self::new(currency, numerator, denominator)
     }
 
-    pub fn multiply<M>(&self, other: impl FractionTrait<M>) -> Self {
+    pub fn multiply<M>(&self, other: &impl FractionTrait<M>) -> Self {
         let multiplied = self.as_fraction().multiply(&other.as_fraction());
         Self::from_fractional_amount(
             self.meta.currency.clone(),
@@ -87,7 +80,7 @@ impl CurrencyAmount {
         )
     }
 
-    pub fn divide<M>(&self, other: impl FractionTrait<M>) -> Self {
+    pub fn divide<M>(&self, other: &impl FractionTrait<M>) -> Self {
         let divided = self.as_fraction().divide(&other.as_fraction());
         Self::from_fractional_amount(
             self.meta.currency.clone(),
@@ -102,24 +95,26 @@ impl CurrencyAmount {
             .div(Decimal::from_str(&self.meta.decimal_scale.to_str_radix(10)).unwrap())
             .to_string()
     }
+}
 
-    pub fn wrapped(&self) -> CurrencyAmount {
-        match &self.meta.currency {
-            Currency::NativeCurrency(native_currency) => Self::from_fractional_amount(
-                Currency::Token(native_currency.wrapped()),
+impl CurrencyAmount<Currency> {
+    pub fn wrapped(&self) -> CurrencyAmount<Currency> {
+        match &self.meta.currency.is_native() {
+            true => Self::from_fractional_amount(
+                Currency::Token(self.meta.currency.wrapped()),
                 self.numerator.clone(),
                 self.denominator.clone(),
             ),
-            Currency::Token(_) => self.clone(),
+            false => self.clone(),
         }
     }
 }
 
-impl FractionTrait<CurrencyMeta> for CurrencyAmount {
+impl<T: CurrencyTrait> FractionTrait<CurrencyMeta<T>> for CurrencyAmount<T> {
     fn new(
         numerator: impl Into<BigInt>,
         denominator: impl Into<BigInt>,
-        meta: CurrencyMeta,
+        meta: CurrencyMeta<T>,
     ) -> Self {
         Self {
             numerator: numerator.into(),
@@ -128,7 +123,7 @@ impl FractionTrait<CurrencyMeta> for CurrencyAmount {
         }
     }
 
-    fn meta(&self) -> CurrencyMeta {
+    fn meta(&self) -> CurrencyMeta<T> {
         self.meta.clone()
     }
 
@@ -219,7 +214,7 @@ mod tests {
 
     #[test]
     fn test_quotient() {
-        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 100).multiply(Percent::new(
+        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 100).multiply(&Percent::new(
             15,
             100,
             (),
