@@ -1,4 +1,5 @@
 use super::{base_currency::BaseCurrency, currency::CurrencyTrait, token::Token};
+use crate::entities::weth9::WETH9;
 use lazy_static::lazy_static;
 use std::{collections::HashMap, sync::Mutex};
 
@@ -63,7 +64,10 @@ impl BaseCurrency for Ether {
     }
 
     fn wrapped(&self) -> Token {
-        todo!()
+        match WETH9::default().get(self.chain_id()) {
+            Some(weth9) => weth9.clone(),
+            None => panic!("WRAPPED"),
+        }
     }
 }
 
