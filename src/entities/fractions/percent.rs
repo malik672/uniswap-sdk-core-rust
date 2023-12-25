@@ -38,13 +38,13 @@ impl FractionTrait<()> for Percent {
         &self.denominator
     }
 
-    fn to_significant(&self, significant_digits: u32, rounding: Rounding) -> String {
+    fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
         self.as_fraction()
             .multiply(&ONE_HUNDRED)
             .to_significant(significant_digits, rounding)
     }
 
-    fn to_fixed(&self, decimal_places: u32, rounding: Rounding) -> String {
+    fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         self.as_fraction()
             .multiply(&ONE_HUNDRED)
             .to_fixed(decimal_places, rounding)

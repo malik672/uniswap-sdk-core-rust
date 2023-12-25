@@ -1,12 +1,13 @@
 use super::{base_currency::BaseCurrency, currency::CurrencyTrait};
+use alloy_primitives::Address;
 use num_bigint::BigUint;
 
 /// Represents an ERC20 token with a unique address and some metadata.
 #[derive(Clone, PartialEq)]
 pub struct Token {
     pub chain_id: u32,
-    pub address: String,
-    pub decimals: u32,
+    pub address: Address,
+    pub decimals: u8,
     pub symbol: Option<String>,
     pub name: Option<String>,
     pub buy_fee_bps: Option<BigUint>,
@@ -18,8 +19,8 @@ impl CurrencyTrait for Token {
         false
     }
 
-    fn address(&self) -> String {
-        self.address.to_string()
+    fn address(&self) -> Address {
+        self.address
     }
 }
 
@@ -28,7 +29,7 @@ impl BaseCurrency for Token {
         self.chain_id
     }
 
-    fn decimals(&self) -> u32 {
+    fn decimals(&self) -> u8 {
         self.decimals
     }
 
@@ -50,10 +51,7 @@ impl BaseCurrency for Token {
     ///
     fn equals(&self, other: &impl CurrencyTrait) -> bool {
         match other.is_native() {
-            false => {
-                self.chain_id == other.chain_id()
-                    && self.address.to_lowercase() == other.address().to_lowercase()
-            }
+            false => self.chain_id == other.chain_id() && self.address == other.address(),
             _ => false,
         }
     }
@@ -68,7 +66,7 @@ impl Token {
     pub fn new(
         chain_id: u32,
         address: String,
-        decimals: u32,
+        decimals: u8,
         symbol: Option<String>,
         name: Option<String>,
         buy_fee_bps: Option<BigUint>,
@@ -78,7 +76,7 @@ impl Token {
         assert!(decimals < 255, "DECIMALS");
         Self {
             chain_id,
-            address,
+            address: address.parse().unwrap(),
             decimals,
             symbol,
             name,
@@ -96,18 +94,13 @@ impl Token {
     ///
     pub fn sorts_before(&self, other: &Token) -> bool {
         assert_eq!(self.chain_id, other.chain_id, "CHAIN_IDS");
-        assert_ne!(
-            self.address.to_lowercase(),
-            other.address.to_lowercase(),
-            "ADDRESSES"
-        );
-        self.address.to_lowercase() < other.address.to_lowercase()
+        assert_ne!(self.address, other.address, "ADDRESSES");
+        self.address.lt(&other.address)
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::entities::currency::Currency;
     //should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the compiler will panic by itself, so no need
     use super::*;
 
@@ -136,17 +129,17 @@ mod tests {
             None,
         );
 
-        assert_eq!(token.address, *ADDRESS_ONE);
-        assert_eq!(token_1.address, *ADDRESS_TWO);
+        assert!(token.address.eq(&ADDRESS_ONE.parse::<Address>().unwrap()));
+        assert!(token_1.address.eq(&ADDRESS_TWO.parse::<Address>().unwrap()));
     }
 
     #[test]
-    #[should_panic]
+    #[should_panic(expected = "DECIMALS")]
     fn test_expect_revert_overflow_dec() {
         let _token = Token::new(
             4,
             ADDRESS_ONE.to_string(),
-            256,
+            255,
             Some("Test".to_string()),
             Some("Te".to_string()),
             None,
@@ -155,8 +148,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic]
-    fn test_expect_revert_diff_chain_id() {
+    fn test_false_if_diff_chain_id() {
         let token = Token::new(
             4,
             ADDRESS_ONE.to_string(),
@@ -166,7 +158,6 @@ mod tests {
             None,
             None,
         );
-
         let token_1 = Token::new(
             3,
             ADDRESS_ONE.to_string(),
@@ -177,10 +168,7 @@ mod tests {
             None,
         );
 
-        assert!(
-            token.equals(&Currency::Token(token_1)),
-            "SHOULD_FAILS_EVEN_THOUGH_CHAIN_ID_IS_DIFFERENT"
-        );
+        assert!(!token.equals(&token_1));
     }
 
     #[test]
@@ -194,7 +182,6 @@ mod tests {
             None,
             None,
         );
-
         let token_1 = Token::new(
             4,
             ADDRESS_ONE.to_string(),
@@ -205,10 +192,7 @@ mod tests {
             None,
         );
 
-        assert!(
-            token.equals(&Currency::Token(token_1)),
-            "true even if names differ"
-        );
+        assert!(token.equals(&token_1), "true even if names differ");
     }
 
     #[test]
@@ -222,7 +206,6 @@ mod tests {
             None,
             None,
         );
-
         let token_1 = Token::new(
             4,
             ADDRESS_ONE.to_string(),
@@ -233,15 +216,11 @@ mod tests {
             None,
         );
 
-        assert!(
-            token.equals(&Currency::Token(token_1)),
-            "true even if symbols differ"
-        );
+        assert!(token.equals(&token_1), "true even if symbols differ");
     }
 
     #[test]
-    #[should_panic]
-    fn test_expect_revert_diff_address() {
+    fn test_false_if_diff_address() {
         let token = Token::new(
             4,
             ADDRESS_ONE.to_string(),
@@ -251,7 +230,6 @@ mod tests {
             None,
             None,
         );
-
         let token_1 = Token::new(
             4,
             DAI_MAINNET.to_string(),
@@ -262,9 +240,21 @@ mod tests {
             None,
         );
 
+        assert!(!token.equals(&token_1));
+    }
+
+    #[test]
+    fn test_true_if_diff_decimals() {
         assert!(
-            token.equals(&Currency::Token(token_1)),
-            "SHOULD_FAILS_EVEN_THOUGH_ADDRESS_IS_DIFFERENT"
+            Token::new(1, ADDRESS_ONE.to_string(), 9, None, None, None, None,).equals(&Token::new(
+                1,
+                ADDRESS_ONE.to_string(),
+                18,
+                None,
+                None,
+                None,
+                None,
+            ))
         );
     }
 
@@ -290,10 +280,69 @@ mod tests {
             None,
         );
 
-        assert_eq!(
-            token.equals(&Currency::Token(token_1.clone())),
-            token_1.equals(&Currency::Token(token)),
-            "SHOULD_FAILS_EVEN_THOUGH_ADDRESS_IS_DIFFERENT, SHOULD ONLY REVERT FOR DIFFERENT CHAIN_ID"
+        assert_eq!(token.equals(&token_1), token_1.equals(&token));
+    }
+
+    #[test]
+    fn test_true_on_reference_equality() {
+        let token = Token::new(
+            1,
+            ADDRESS_ONE.to_string(),
+            18,
+            Some("Test".to_string()),
+            Some("Te".to_string()),
+            None,
+            None,
         );
+
+        assert!(token.equals(&token));
+    }
+
+    #[test]
+    fn test_true_if_same_address() {
+        let token = Token::new(
+            1,
+            ADDRESS_ONE.to_string(),
+            9,
+            Some("abc".to_string()),
+            Some("def".to_string()),
+            None,
+            None,
+        );
+        let token_1 = Token::new(
+            1,
+            ADDRESS_ONE.to_string(),
+            18,
+            Some("ghi".to_string()),
+            Some("jkl".to_string()),
+            None,
+            None,
+        );
+
+        assert!(token.equals(&token_1));
+    }
+
+    #[test]
+    fn test_true_if_one_token_is_checksummed_and_the_other_is_not() {
+        let token_a = Token::new(
+            1,
+            DAI_MAINNET.to_string(),
+            18,
+            Some("DAI".to_string()),
+            None,
+            None,
+            None,
+        );
+        let token_b = Token::new(
+            1,
+            DAI_MAINNET.to_string().to_lowercase(),
+            18,
+            Some("DAI".to_string()),
+            None,
+            None,
+            None,
+        );
+
+        assert!(token_a.equals(&token_b));
     }
 }

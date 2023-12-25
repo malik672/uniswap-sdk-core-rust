@@ -36,7 +36,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             denominator,
             meta: CurrencyMeta {
                 currency,
-                decimal_scale: BigUint::from(10u64).pow(exponent),
+                decimal_scale: BigUint::from(10u64).pow(exponent as u32),
             },
         }
     }
@@ -156,7 +156,7 @@ impl<T: CurrencyTrait> FractionTrait<CurrencyMeta<T>> for CurrencyAmount<T> {
         )
     }
 
-    fn to_significant(&self, significant_digits: u32, rounding: Rounding) -> String {
+    fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
         self.as_fraction()
             .divide(&Fraction::new(
                 self.meta.decimal_scale.to_bigint().unwrap(),
@@ -166,7 +166,7 @@ impl<T: CurrencyTrait> FractionTrait<CurrencyMeta<T>> for CurrencyAmount<T> {
             .to_significant(significant_digits, rounding)
     }
 
-    fn to_fixed(&self, decimal_places: u32, rounding: Rounding) -> String {
+    fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         assert!(decimal_places <= self.meta.currency.decimals(), "DECIMALS");
         self.as_fraction()
             .divide(&Fraction::new(
