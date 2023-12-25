@@ -54,13 +54,13 @@ mod tests {
     #[test]
     fn test_validate_and_parse_address() {
         let valid_address = "0x1234567890123456789012345678901234567890";
-        let expected_checksummed_address = "0x5a0b54d5dc17e0aadc383d2db43b0a0d3e029c4c";
+        
         assert_eq!(
             validate_and_parse_address(valid_address),
-            Ok(expected_checksummed_address.to_string())
+            Ok(valid_address.to_string())
         );
 
-        let invalid_address = "0xinvalidaddress";
+        let invalid_address = "0xInvAlIdAddrEsS";
         assert_eq!(
             validate_and_parse_address(invalid_address),
             Err(format!("{} is not a valid Ethereum address.", invalid_address))
