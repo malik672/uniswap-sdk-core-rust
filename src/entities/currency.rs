@@ -1,4 +1,5 @@
 use super::{base_currency::BaseCurrency, ether::Ether, token::Token};
+use alloy_primitives::Address;
 
 #[derive(Clone, PartialEq)]
 pub enum Currency {
@@ -10,7 +11,7 @@ pub trait CurrencyTrait: BaseCurrency {
     /// Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
     fn is_native(&self) -> bool;
 
-    fn address(&self) -> String;
+    fn address(&self) -> Address;
 }
 
 impl CurrencyTrait for Currency {
@@ -21,7 +22,7 @@ impl CurrencyTrait for Currency {
         }
     }
 
-    fn address(&self) -> String {
+    fn address(&self) -> Address {
         match self {
             Currency::NativeCurrency(native_currency) => native_currency.address(),
             Currency::Token(token) => token.address(),

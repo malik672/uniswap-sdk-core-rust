@@ -1,4 +1,5 @@
 use super::{base_currency::BaseCurrency, currency::CurrencyTrait, token::Token, weth9::WETH9};
+use alloy_primitives::Address;
 use lazy_static::lazy_static;
 use std::{collections::HashMap, sync::Mutex};
 
@@ -20,7 +21,7 @@ impl CurrencyTrait for Ether {
         true
     }
 
-    fn address(&self) -> String {
+    fn address(&self) -> Address {
         self.wrapped().address()
     }
 }

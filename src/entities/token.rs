@@ -1,11 +1,12 @@
 use super::{base_currency::BaseCurrency, currency::CurrencyTrait};
+use alloy_primitives::Address;
 use num_bigint::BigUint;
 
 /// Represents an ERC20 token with a unique address and some metadata.
 #[derive(Clone, PartialEq)]
 pub struct Token {
     pub chain_id: u32,
-    pub address: String,
+    pub address: Address,
     pub decimals: u8,
     pub symbol: Option<String>,
     pub name: Option<String>,
@@ -18,8 +19,8 @@ impl CurrencyTrait for Token {
         false
     }
 
-    fn address(&self) -> String {
-        self.address.to_string()
+    fn address(&self) -> Address {
+        self.address
     }
 }
 
@@ -50,10 +51,7 @@ impl BaseCurrency for Token {
     ///
     fn equals(&self, other: &impl CurrencyTrait) -> bool {
         match other.is_native() {
-            false => {
-                self.chain_id == other.chain_id()
-                    && self.address.to_lowercase() == other.address().to_lowercase()
-            }
+            false => self.chain_id == other.chain_id() && self.address == other.address(),
             _ => false,
         }
     }
@@ -78,7 +76,7 @@ impl Token {
         assert!(decimals < 255, "DECIMALS");
         Self {
             chain_id,
-            address,
+            address: address.parse().unwrap(),
             decimals,
             symbol,
             name,
@@ -96,12 +94,8 @@ impl Token {
     ///
     pub fn sorts_before(&self, other: &Token) -> bool {
         assert_eq!(self.chain_id, other.chain_id, "CHAIN_IDS");
-        assert_ne!(
-            self.address.to_lowercase(),
-            other.address.to_lowercase(),
-            "ADDRESSES"
-        );
-        self.address.to_lowercase() < other.address.to_lowercase()
+        assert_ne!(self.address, other.address, "ADDRESSES");
+        self.address.lt(&other.address)
     }
 }
 
@@ -135,8 +129,8 @@ mod tests {
             None,
         );
 
-        assert_eq!(token.address, *ADDRESS_ONE);
-        assert_eq!(token_1.address, *ADDRESS_TWO);
+        assert!(token.address.eq(&ADDRESS_ONE.parse::<Address>().unwrap()));
+        assert!(token_1.address.eq(&ADDRESS_TWO.parse::<Address>().unwrap()));
     }
 
     #[test]
