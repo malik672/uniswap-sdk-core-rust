@@ -11,22 +11,22 @@ use num_integer::Integer;
 use rust_decimal::Decimal;
 use std::{ops::Div, str::FromStr};
 
-#[derive(Clone)]
-pub struct CurrencyAmount<'a> {
+#[derive(Clone, PartialEq)]
+pub struct CurrencyAmount {
     numerator: BigInt,
     denominator: BigInt,
-    pub meta: CurrencyMeta<'a>,
+    pub meta: CurrencyMeta,
 }
 
-#[derive(Clone)]
-pub struct CurrencyMeta<'a> {
-    pub currency: Currency<'a>,
+#[derive(Clone, PartialEq)]
+pub struct CurrencyMeta {
+    pub currency: Currency,
     pub decimal_scale: BigUint,
 }
 
-impl<'a> CurrencyAmount<'a> {
+impl CurrencyAmount {
     fn new(
-        currency: Currency<'a>,
+        currency: Currency,
         numerator: impl Into<BigInt>,
         denominator: impl Into<BigInt>,
     ) -> Self {
@@ -56,10 +56,7 @@ impl<'a> CurrencyAmount<'a> {
     ///
     /// returns: CurrencyAmount
     ///
-    pub fn from_raw_amount(
-        currency: Currency<'a>,
-        raw_amount: impl Into<BigInt>,
-    ) -> CurrencyAmount {
+    pub fn from_raw_amount(currency: Currency, raw_amount: impl Into<BigInt>) -> CurrencyAmount {
         Self::new(currency, raw_amount, 1)
     }
 
@@ -74,7 +71,7 @@ impl<'a> CurrencyAmount<'a> {
     /// returns: CurrencyAmount
     ///
     pub fn from_fractional_amount(
-        currency: Currency<'a>,
+        currency: Currency,
         numerator: impl Into<BigInt>,
         denominator: impl Into<BigInt>,
     ) -> CurrencyAmount {
@@ -118,11 +115,11 @@ impl<'a> CurrencyAmount<'a> {
     }
 }
 
-impl<'a> FractionTrait<CurrencyMeta<'a>> for CurrencyAmount<'a> {
+impl FractionTrait<CurrencyMeta> for CurrencyAmount {
     fn new(
         numerator: impl Into<BigInt>,
         denominator: impl Into<BigInt>,
-        meta: CurrencyMeta<'a>,
+        meta: CurrencyMeta,
     ) -> Self {
         Self {
             numerator: numerator.into(),
@@ -131,7 +128,7 @@ impl<'a> FractionTrait<CurrencyMeta<'a>> for CurrencyAmount<'a> {
         }
     }
 
-    fn meta(&self) -> CurrencyMeta<'a> {
+    fn meta(&self) -> CurrencyMeta {
         self.meta.clone()
     }
 
@@ -189,11 +186,12 @@ impl<'a> FractionTrait<CurrencyMeta<'a>> for CurrencyAmount<'a> {
 mod tests {
     use super::*;
     use crate::entities::{ether::Ether, fractions::percent::Percent, token::Token};
+    use lazy_static::lazy_static;
 
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
 
-    fn token18() -> Currency<'static> {
-        Currency::Token(Token::new(
+    lazy_static! {
+        static ref TOKEN18: Currency = Currency::Token(Token::new(
             1,
             ADDRESS_ONE.to_string(),
             18,
@@ -201,11 +199,8 @@ mod tests {
             None,
             None,
             None,
-        ))
-    }
-
-    fn token0() -> Currency<'static> {
-        Currency::Token(Token::new(
+        ));
+        static ref TOKEN0: Currency = Currency::Token(Token::new(
             1,
             ADDRESS_ONE.to_string(),
             0,
@@ -213,111 +208,114 @@ mod tests {
             None,
             None,
             None,
-        ))
+        ));
     }
 
     #[test]
     fn test_constructor() {
-        let amount = CurrencyAmount::from_raw_amount(token18(), 100);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 100);
         assert_eq!(amount.quotient(), 100.into());
     }
 
     #[test]
     fn test_quotient() {
-        let amount =
-            CurrencyAmount::from_raw_amount(token18(), 100).multiply(Percent::new(15, 100, ()));
+        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 100).multiply(Percent::new(
+            15,
+            100,
+            (),
+        ));
         assert_eq!(amount.quotient(), BigInt::from(15));
     }
 
     #[test]
     fn test_ether() {
         let ether = Ether::on_chain(1);
-        let amount = CurrencyAmount::from_raw_amount(Currency::NativeCurrency(&ether), 100);
+        let amount = CurrencyAmount::from_raw_amount(Currency::NativeCurrency(ether.clone()), 100);
         assert_eq!(amount.quotient(), 100.into());
         assert!(amount
             .meta
             .currency
-            .equals(&Currency::NativeCurrency(&ether)));
+            .equals(&Currency::NativeCurrency(ether.clone())));
     }
 
     #[test]
     fn test_token_amount_max_uint256() {
-        let amount = CurrencyAmount::from_raw_amount(token18(), MAX_UINT256.clone());
+        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), MAX_UINT256.clone());
         assert_eq!(amount.quotient(), MAX_UINT256.clone());
     }
 
     #[test]
     #[should_panic(expected = "AMOUNT")]
     fn test_token_amount_exceeds_max_uint256() {
-        let _ = CurrencyAmount::from_raw_amount(token18(), MAX_UINT256.clone() + 1);
+        let _ = CurrencyAmount::from_raw_amount(TOKEN18.clone(), MAX_UINT256.clone() + 1);
     }
 
     #[test]
     #[should_panic(expected = "AMOUNT")]
     fn test_token_amount_quotient_exceeds_max_uint256() {
         let numerator: BigInt = (MAX_UINT256.clone() + 1) * 2;
-        let _ = CurrencyAmount::from_fractional_amount(token18(), numerator, 2);
+        let _ = CurrencyAmount::from_fractional_amount(TOKEN18.clone(), numerator, 2);
     }
 
     #[test]
     fn test_token_amount_numerator_gt_uint256() {
         let numerator: BigInt = MAX_UINT256.clone() + 2;
-        let amount = CurrencyAmount::from_fractional_amount(token18(), numerator.clone(), 2);
+        let amount = CurrencyAmount::from_fractional_amount(TOKEN18.clone(), numerator.clone(), 2);
         assert_eq!(amount.numerator(), &numerator);
     }
 
     #[test]
     #[should_panic(expected = "DECIMALS")]
     fn to_fixed_decimals_exceeds_currency_decimals() {
-        let amount = CurrencyAmount::from_raw_amount(token0(), 1000);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 1000);
         let _ = amount.to_fixed(3, Rounding::RoundDown);
     }
 
     #[test]
     fn to_fixed_0_decimals() {
-        let amount = CurrencyAmount::from_raw_amount(token0(), 123456);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 123456);
         assert_eq!(amount.to_fixed(0, Rounding::RoundDown), "123456");
     }
 
     #[test]
     fn to_fixed_18_decimals() {
-        let amount = CurrencyAmount::from_raw_amount(token18(), 1e15 as i64);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 1e15 as i64);
         assert_eq!(amount.to_fixed(9, Rounding::RoundDown), "0.001000000");
     }
 
     #[test]
     fn to_significant_does_not_throw() {
-        let amount = CurrencyAmount::from_raw_amount(token0(), 1000);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 1000);
         assert_eq!(amount.to_significant(3, Rounding::RoundDown), "1000");
     }
 
     #[test]
     fn to_significant_0_decimals() {
-        let amount = CurrencyAmount::from_raw_amount(token0(), 123456);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 123456);
         assert_eq!(amount.to_significant(4, Rounding::RoundDown), "123400");
     }
 
     #[test]
     fn to_significant_18_decimals() {
-        let amount = CurrencyAmount::from_raw_amount(token18(), 1e15 as i64);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 1e15 as i64);
         assert_eq!(amount.to_significant(9, Rounding::RoundDown), "0.001");
     }
 
     #[test]
     fn to_exact_does_not_throw() {
-        let amount = CurrencyAmount::from_raw_amount(token0(), 1000);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 1000);
         assert_eq!(amount.to_exact(), "1000");
     }
 
     #[test]
     fn to_exact_0_decimals() {
-        let amount = CurrencyAmount::from_raw_amount(token0(), 123456);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 123456);
         assert_eq!(amount.to_exact(), "123456");
     }
 
     #[test]
     fn to_exact_18_decimals() {
-        let amount = CurrencyAmount::from_raw_amount(token18(), 123e13 as i64);
+        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 123e13 as i64);
         assert_eq!(amount.to_exact(), "0.00123");
     }
 }

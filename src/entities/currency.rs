@@ -1,12 +1,35 @@
-use super::{base_currency::BaseCurrency, native_currency::NativeCurrency, token::Token};
+use super::{base_currency::BaseCurrency, ether::Ether, token::Token};
 
-#[derive(Clone)]
-pub enum Currency<'a> {
-    NativeCurrency(&'a dyn NativeCurrency),
+#[derive(Clone, PartialEq)]
+pub enum Currency {
+    NativeCurrency(Ether),
     Token(Token),
 }
 
-impl BaseCurrency for Currency<'_> {
+pub trait CurrencyTrait: BaseCurrency {
+    /// Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
+    fn is_native(&self) -> bool;
+
+    fn address(&self) -> String;
+}
+
+impl CurrencyTrait for Currency {
+    fn is_native(&self) -> bool {
+        match self {
+            Currency::NativeCurrency(_) => true,
+            Currency::Token(_) => false,
+        }
+    }
+
+    fn address(&self) -> String {
+        match self {
+            Currency::NativeCurrency(native_currency) => native_currency.wrapped().address,
+            Currency::Token(token) => token.address.to_string(),
+        }
+    }
+}
+
+impl BaseCurrency for Currency {
     fn chain_id(&self) -> u32 {
         match self {
             Currency::NativeCurrency(native_currency) => native_currency.chain_id(),
@@ -35,7 +58,7 @@ impl BaseCurrency for Currency<'_> {
         }
     }
 
-    fn equals(&self, other: &Currency) -> bool {
+    fn equals(&self, other: &impl CurrencyTrait) -> bool {
         match self {
             Currency::NativeCurrency(native_currency) => native_currency.equals(other),
             Currency::Token(token) => token.equals(other),

@@ -1,6 +1,4 @@
-use super::{
-    base_currency::BaseCurrency, currency::Currency, native_currency::NativeCurrency, token::Token,
-};
+use super::{base_currency::BaseCurrency, currency::CurrencyTrait, token::Token};
 use lazy_static::lazy_static;
 use std::{collections::HashMap, sync::Mutex};
 
@@ -40,8 +38,6 @@ impl Ether {
     }
 }
 
-impl NativeCurrency for Ether {}
-
 impl BaseCurrency for Ether {
     fn chain_id(&self) -> u32 {
         self.chain_id
@@ -59,9 +55,9 @@ impl BaseCurrency for Ether {
         self.name.clone()
     }
 
-    fn equals(&self, other: &Currency) -> bool {
-        match other {
-            Currency::NativeCurrency(other) => self.chain_id() == other.chain_id(),
+    fn equals(&self, other: &impl CurrencyTrait) -> bool {
+        match other.is_native() {
+            true => self.chain_id() == other.chain_id(),
             _ => false,
         }
     }
@@ -74,6 +70,7 @@ impl BaseCurrency for Ether {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::entities::currency::Currency;
 
     #[test]
     fn test_static_constructor_uses_cache() {
@@ -87,11 +84,11 @@ mod tests {
 
     #[test]
     fn test_equals_returns_false_for_different_chains() {
-        assert!(!Ether::on_chain(1).equals(&Currency::NativeCurrency(&Ether::on_chain(2))));
+        assert!(!Ether::on_chain(1).equals(&Currency::NativeCurrency(Ether::on_chain(2))));
     }
 
     #[test]
     fn test_equals_returns_true_for_same_chains() {
-        assert!(Ether::on_chain(1).equals(&Currency::NativeCurrency(&Ether::on_chain(1))));
+        assert!(Ether::on_chain(1).equals(&Currency::NativeCurrency(Ether::on_chain(1))));
     }
 }

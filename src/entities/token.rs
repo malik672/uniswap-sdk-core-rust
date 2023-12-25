@@ -1,4 +1,4 @@
-use super::{base_currency::BaseCurrency, currency::Currency};
+use super::{base_currency::BaseCurrency, currency::CurrencyTrait};
 use num_bigint::BigUint;
 
 /// Represents an ERC20 token with a unique address and some metadata.
@@ -38,11 +38,11 @@ impl BaseCurrency for Token {
     ///
     /// returns: bool
     ///
-    fn equals(&self, other: &Currency) -> bool {
-        match other {
-            Currency::Token(other) => {
-                self.chain_id == other.chain_id
-                    && self.address.to_lowercase() == other.address.to_lowercase()
+    fn equals(&self, other: &impl CurrencyTrait) -> bool {
+        match other.is_native() {
+            false => {
+                self.chain_id == other.chain_id()
+                    && self.address.to_lowercase() == other.address().to_lowercase()
             }
             _ => false,
         }
@@ -97,6 +97,7 @@ impl Token {
 
 #[cfg(test)]
 mod tests {
+    use crate::entities::currency::Currency;
     //should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the compiler will panic by itself, so no need
     use super::*;
 
