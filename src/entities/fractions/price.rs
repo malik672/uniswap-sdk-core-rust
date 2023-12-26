@@ -4,22 +4,13 @@ use crate::{
         currency::CurrencyTrait,
         fractions::{
             currency_amount::CurrencyAmount,
-            fraction::{Fraction, FractionTrait},
+            fraction::{Fraction, FractionLike, FractionTrait},
         },
     },
 };
 use num_bigint::BigInt;
 
-#[derive(Clone)]
-pub struct Price<TBase, TQuote>
-where
-    TBase: CurrencyTrait,
-    TQuote: CurrencyTrait,
-{
-    numerator: BigInt,
-    denominator: BigInt,
-    pub meta: PriceMeta<TBase, TQuote>,
-}
+pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
 
 #[derive(Clone)]
 pub struct PriceMeta<TBase, TQuote>
@@ -30,46 +21,6 @@ where
     pub base_currency: TBase,
     pub quote_currency: TQuote,
     pub scalar: Fraction,
-}
-
-impl<TBase, TQuote> FractionTrait<PriceMeta<TBase, TQuote>> for Price<TBase, TQuote>
-where
-    TBase: CurrencyTrait,
-    TQuote: CurrencyTrait,
-{
-    fn new(
-        numerator: impl Into<BigInt>,
-        denominator: impl Into<BigInt>,
-        meta: PriceMeta<TBase, TQuote>,
-    ) -> Self {
-        Self {
-            numerator: numerator.into(),
-            denominator: denominator.into(),
-            meta,
-        }
-    }
-
-    fn meta(&self) -> PriceMeta<TBase, TQuote> {
-        self.meta.clone()
-    }
-
-    fn numerator(&self) -> &BigInt {
-        &self.numerator
-    }
-
-    fn denominator(&self) -> &BigInt {
-        &self.denominator
-    }
-
-    fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
-        self.adjusted_for_decimals()
-            .to_significant(significant_digits, rounding)
-    }
-
-    fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
-        self.adjusted_for_decimals()
-            .to_fixed(decimal_places, rounding)
-    }
 }
 
 impl<TBase, TQuote> Price<TBase, TQuote>
@@ -86,17 +37,16 @@ where
         let scalar = Fraction::new(
             BigInt::from(10).pow(base_currency.decimals() as u32),
             BigInt::from(10).pow(quote_currency.decimals() as u32),
-            (),
         );
-        Self {
-            numerator: numerator.into(),
-            denominator: denominator.into(),
-            meta: PriceMeta {
+        FractionTrait::new(
+            numerator,
+            denominator,
+            PriceMeta {
                 base_currency,
                 quote_currency,
                 scalar,
             },
-        }
+        )
     }
 
     pub fn from_currency_amounts(
@@ -113,12 +63,12 @@ where
     }
 
     /// Flip the price, switching the base and quote currency
-    pub fn invert(self) -> Price<TQuote, TBase> {
+    pub fn invert(&self) -> Price<TQuote, TBase> {
         Price::new(
-            self.meta.quote_currency,
-            self.meta.base_currency,
-            self.numerator,
-            self.denominator,
+            self.meta.quote_currency.clone(),
+            self.meta.base_currency.clone(),
+            self.numerator().clone(),
+            self.denominator().clone(),
         )
     }
 
@@ -132,7 +82,7 @@ where
     ///
     pub fn multiply<TOtherQuote: CurrencyTrait>(
         &self,
-        other: Price<TQuote, TOtherQuote>,
+        other: &Price<TQuote, TOtherQuote>,
     ) -> Price<TBase, TOtherQuote> {
         assert!(
             self.meta.quote_currency.equals(&other.meta.base_currency),
@@ -175,12 +125,22 @@ where
     pub fn adjusted_for_decimals(&self) -> Fraction {
         self.as_fraction().multiply(&self.meta.scalar)
     }
+
+    pub fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
+        self.adjusted_for_decimals()
+            .to_significant(significant_digits, rounding)
+    }
+
+    pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
+        self.adjusted_for_decimals()
+            .to_fixed(decimal_places, rounding)
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::entities::{base_currency::BaseCurrency, currency::Currency, token::Token};
+    use crate::entities::{currency::Currency, token::Token};
     use lazy_static::lazy_static;
 
     const ADDRESS_ZERO: &str = "0x0000000000000000000000000000000000000000";

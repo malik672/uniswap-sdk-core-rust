@@ -1,4 +1,9 @@
-use super::{base_currency::BaseCurrency, currency::CurrencyTrait, token::Token, weth9::WETH9};
+use super::{
+    base_currency::{BaseCurrency, CurrencyLike},
+    currency::CurrencyTrait,
+    token::Token,
+    weth9::WETH9,
+};
 use alloy_primitives::Address;
 use lazy_static::lazy_static;
 use std::{collections::HashMap, sync::Mutex};
@@ -8,13 +13,7 @@ lazy_static! {
 }
 
 /// Ether is the main usage of a 'native' currency, i.e. for Ethereum mainnet and all testnets
-#[derive(Clone, PartialEq)]
-pub struct Ether {
-    pub chain_id: u32,
-    pub decimals: u8,
-    pub symbol: Option<String>,
-    pub name: Option<String>,
-}
+pub type Ether = CurrencyLike<()>;
 
 impl CurrencyTrait for Ether {
     fn is_native(&self) -> bool {
@@ -23,47 +22,6 @@ impl CurrencyTrait for Ether {
 
     fn address(&self) -> Address {
         self.wrapped().address()
-    }
-}
-
-impl Ether {
-    pub fn new(chain_id: u32) -> Self {
-        Self {
-            chain_id,
-            decimals: 18,
-            symbol: Some("ETH".to_string()),
-            name: Some("Ether".to_string()),
-        }
-    }
-
-    pub fn on_chain(chain_id: u32) -> Self {
-        let mut cache = ETHER_CACHE.lock().unwrap();
-        match cache.get(&chain_id) {
-            Some(ether) => ether.clone(),
-            None => {
-                let ether = Ether::new(chain_id);
-                cache.insert(chain_id, ether.clone());
-                ether
-            }
-        }
-    }
-}
-
-impl BaseCurrency for Ether {
-    fn chain_id(&self) -> u32 {
-        self.chain_id
-    }
-
-    fn decimals(&self) -> u8 {
-        self.decimals
-    }
-
-    fn symbol(&self) -> Option<String> {
-        self.symbol.clone()
-    }
-
-    fn name(&self) -> Option<String> {
-        self.name.clone()
     }
 
     fn equals(&self, other: &impl CurrencyTrait) -> bool {
@@ -77,6 +35,30 @@ impl BaseCurrency for Ether {
         match WETH9::default().get(self.chain_id()) {
             Some(weth9) => weth9.clone(),
             None => panic!("WRAPPED"),
+        }
+    }
+}
+
+impl Ether {
+    pub fn new(chain_id: u32) -> Self {
+        Self {
+            chain_id,
+            decimals: 18,
+            symbol: Some("ETH".to_string()),
+            name: Some("Ether".to_string()),
+            meta: (),
+        }
+    }
+
+    pub fn on_chain(chain_id: u32) -> Self {
+        let mut cache = ETHER_CACHE.lock().unwrap();
+        match cache.get(&chain_id) {
+            Some(ether) => ether.clone(),
+            None => {
+                let ether = Ether::new(chain_id);
+                cache.insert(chain_id, ether.clone());
+                ether
+            }
         }
     }
 }

@@ -1,15 +1,13 @@
-use super::{base_currency::BaseCurrency, currency::CurrencyTrait};
+use super::{base_currency::CurrencyLike, currency::CurrencyTrait};
 use alloy_primitives::Address;
 use num_bigint::BigUint;
 
 /// Represents an ERC20 token with a unique address and some metadata.
+pub type Token = CurrencyLike<TokenMeta>;
+
 #[derive(Clone, PartialEq)]
-pub struct Token {
-    pub chain_id: u32,
+pub struct TokenMeta {
     pub address: Address,
-    pub decimals: u8,
-    pub symbol: Option<String>,
-    pub name: Option<String>,
     pub buy_fee_bps: Option<BigUint>,
     pub sell_fee_bps: Option<BigUint>,
 }
@@ -20,25 +18,7 @@ impl CurrencyTrait for Token {
     }
 
     fn address(&self) -> Address {
-        self.address
-    }
-}
-
-impl BaseCurrency for Token {
-    fn chain_id(&self) -> u32 {
-        self.chain_id
-    }
-
-    fn decimals(&self) -> u8 {
-        self.decimals
-    }
-
-    fn symbol(&self) -> Option<String> {
-        self.symbol.clone()
-    }
-
-    fn name(&self) -> Option<String> {
-        self.name.clone()
+        self.meta.address
     }
 
     /// Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
@@ -51,7 +31,7 @@ impl BaseCurrency for Token {
     ///
     fn equals(&self, other: &impl CurrencyTrait) -> bool {
         match other.is_native() {
-            false => self.chain_id == other.chain_id() && self.address == other.address(),
+            false => self.chain_id == other.chain_id() && self.address() == other.address(),
             _ => false,
         }
     }
@@ -76,12 +56,14 @@ impl Token {
         assert!(decimals < 255, "DECIMALS");
         Self {
             chain_id,
-            address: address.parse().unwrap(),
             decimals,
             symbol,
             name,
-            buy_fee_bps,
-            sell_fee_bps,
+            meta: TokenMeta {
+                address: address.parse().unwrap(),
+                buy_fee_bps,
+                sell_fee_bps,
+            },
         }
     }
 
@@ -94,8 +76,8 @@ impl Token {
     ///
     pub fn sorts_before(&self, other: &Token) -> bool {
         assert_eq!(self.chain_id, other.chain_id, "CHAIN_IDS");
-        assert_ne!(self.address, other.address, "ADDRESSES");
-        self.address.lt(&other.address)
+        assert_ne!(self.address(), other.address(), "ADDRESSES");
+        self.address().lt(&other.address())
     }
 }
 
@@ -129,8 +111,10 @@ mod tests {
             None,
         );
 
-        assert!(token.address.eq(&ADDRESS_ONE.parse::<Address>().unwrap()));
-        assert!(token_1.address.eq(&ADDRESS_TWO.parse::<Address>().unwrap()));
+        assert!(token.address().eq(&ADDRESS_ONE.parse::<Address>().unwrap()));
+        assert!(token_1
+            .address()
+            .eq(&ADDRESS_TWO.parse::<Address>().unwrap()));
     }
 
     #[test]
