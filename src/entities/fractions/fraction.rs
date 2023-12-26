@@ -5,9 +5,18 @@ use rust_decimal::prelude::*;
 use std::ops::Div;
 
 #[derive(Clone, PartialEq)]
-pub struct Fraction {
+pub struct FractionLike<M: Clone> {
     numerator: BigInt,
     denominator: BigInt,
+    pub meta: M,
+}
+
+pub type Fraction = FractionLike<()>;
+
+impl Fraction {
+    pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
+        FractionTrait::new(numerator, denominator, ())
+    }
 }
 
 fn to_rounding_strategy(rounding: Rounding) -> RoundingStrategy {
@@ -141,22 +150,23 @@ pub trait FractionTrait<M>: Sized {
 
     /// Helper method for converting any super class back to a fraction
     fn as_fraction(&self) -> Fraction {
-        Fraction::new(self.numerator().clone(), self.denominator().clone(), ())
+        Fraction::new(self.numerator().clone(), self.denominator().clone())
     }
 }
 
-impl FractionTrait<()> for Fraction {
-    fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, _: ()) -> Self {
+impl<M: Clone> FractionTrait<M> for FractionLike<M> {
+    fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self {
         let denominator = denominator.into();
-        assert_ne!(denominator, 0.into(), "DENOMINATOR CAN'T BE ZERO");
+        assert!(!denominator.is_zero(), "DENOMINATOR CAN'T BE ZERO");
         Self {
             numerator: numerator.into(),
             denominator,
+            meta,
         }
     }
 
-    fn meta(&self) -> () {
-        ()
+    fn meta(&self) -> M {
+        self.meta.clone()
     }
 
     fn numerator(&self) -> &BigInt {
@@ -174,101 +184,101 @@ mod tests {
 
     #[test]
     fn test_quotient() {
-        assert_eq!(Fraction::new(8, 3, ()).quotient(), BigInt::from(2));
-        assert_eq!(Fraction::new(12, 4, ()).quotient(), BigInt::from(3));
-        assert_eq!(Fraction::new(16, 5, ()).quotient(), BigInt::from(3));
+        assert_eq!(Fraction::new(8, 3).quotient(), BigInt::from(2));
+        assert_eq!(Fraction::new(12, 4).quotient(), BigInt::from(3));
+        assert_eq!(Fraction::new(16, 5).quotient(), BigInt::from(3));
     }
 
     #[test]
     fn test_remainder() {
-        assert!(Fraction::new(8, 3, ())
+        assert!(Fraction::new(8, 3)
             .remainder()
-            .equal_to(&Fraction::new(2, 3, ())));
-        assert!(Fraction::new(12, 4, ())
+            .equal_to(&Fraction::new(2, 3)));
+        assert!(Fraction::new(12, 4)
             .remainder()
-            .equal_to(&Fraction::new(0, 4, ())));
-        assert!(Fraction::new(16, 5, ())
+            .equal_to(&Fraction::new(0, 4)));
+        assert!(Fraction::new(16, 5)
             .remainder()
-            .equal_to(&Fraction::new(1, 5, ())));
+            .equal_to(&Fraction::new(1, 5)));
     }
 
     #[test]
     fn test_invert() {
-        let fraction = Fraction::new(5, 10, ()).invert();
+        let fraction = Fraction::new(5, 10).invert();
         assert_eq!(fraction.numerator, BigInt::from(10));
         assert_eq!(fraction.denominator, BigInt::from(5));
     }
 
     #[test]
     fn test_add() {
-        assert!(Fraction::new(1, 10, ())
-            .add(&Fraction::new(4, 12, ()))
-            .equal_to(&Fraction::new(52, 120, ())));
-        assert!(Fraction::new(1, 5, ())
-            .add(&Fraction::new(2, 5, ()))
-            .equal_to(&Fraction::new(3, 5, ())));
+        assert!(Fraction::new(1, 10)
+            .add(&Fraction::new(4, 12))
+            .equal_to(&Fraction::new(52, 120)));
+        assert!(Fraction::new(1, 5)
+            .add(&Fraction::new(2, 5))
+            .equal_to(&Fraction::new(3, 5)));
     }
 
     #[test]
     fn test_subtract() {
-        assert!(Fraction::new(1, 10, ())
-            .subtract(&Fraction::new(4, 12, ()))
-            .equal_to(&Fraction::new(-28, 120, ())));
-        assert!(Fraction::new(3, 5, ())
-            .subtract(&Fraction::new(2, 5, ()))
-            .equal_to(&Fraction::new(1, 5, ())));
+        assert!(Fraction::new(1, 10)
+            .subtract(&Fraction::new(4, 12))
+            .equal_to(&Fraction::new(-28, 120)));
+        assert!(Fraction::new(3, 5)
+            .subtract(&Fraction::new(2, 5))
+            .equal_to(&Fraction::new(1, 5)));
     }
 
     #[test]
     fn test_less_than() {
-        assert!(Fraction::new(1, 10, ()).less_than(&Fraction::new(4, 12, ())));
-        assert!(!Fraction::new(1, 3, ()).less_than(&Fraction::new(4, 12, ())));
-        assert!(!Fraction::new(5, 12, ()).less_than(&Fraction::new(4, 12, ())));
+        assert!(Fraction::new(1, 10).less_than(&Fraction::new(4, 12)));
+        assert!(!Fraction::new(1, 3).less_than(&Fraction::new(4, 12)));
+        assert!(!Fraction::new(5, 12).less_than(&Fraction::new(4, 12)));
     }
 
     #[test]
     fn test_equal_to() {
-        assert!(!Fraction::new(1, 10, ()).equal_to(&Fraction::new(4, 12, ())));
-        assert!(Fraction::new(1, 3, ()).equal_to(&Fraction::new(4, 12, ())));
-        assert!(!Fraction::new(5, 12, ()).equal_to(&Fraction::new(4, 12, ())));
+        assert!(!Fraction::new(1, 10).equal_to(&Fraction::new(4, 12)));
+        assert!(Fraction::new(1, 3).equal_to(&Fraction::new(4, 12)));
+        assert!(!Fraction::new(5, 12).equal_to(&Fraction::new(4, 12)));
     }
 
     #[test]
     fn test_greater_than() {
-        assert!(!Fraction::new(1, 10, ()).greater_than(&Fraction::new(4, 12, ())));
-        assert!(!Fraction::new(1, 3, ()).greater_than(&Fraction::new(4, 12, ())));
-        assert!(Fraction::new(5, 12, ()).greater_than(&Fraction::new(4, 12, ())));
+        assert!(!Fraction::new(1, 10).greater_than(&Fraction::new(4, 12)));
+        assert!(!Fraction::new(1, 3).greater_than(&Fraction::new(4, 12)));
+        assert!(Fraction::new(5, 12).greater_than(&Fraction::new(4, 12)));
     }
 
     #[test]
     fn test_multiply() {
-        assert!(Fraction::new(1, 10, ())
-            .multiply(&Fraction::new(4, 12, ()))
-            .equal_to(&Fraction::new(4, 120, ())));
-        assert!(Fraction::new(1, 3, ())
-            .multiply(&Fraction::new(4, 12, ()))
-            .equal_to(&Fraction::new(4, 36, ())));
-        assert!(Fraction::new(5, 12, ())
-            .multiply(&Fraction::new(4, 12, ()))
-            .equal_to(&Fraction::new(20, 144, ())));
+        assert!(Fraction::new(1, 10)
+            .multiply(&Fraction::new(4, 12))
+            .equal_to(&Fraction::new(4, 120)));
+        assert!(Fraction::new(1, 3)
+            .multiply(&Fraction::new(4, 12))
+            .equal_to(&Fraction::new(4, 36)));
+        assert!(Fraction::new(5, 12)
+            .multiply(&Fraction::new(4, 12))
+            .equal_to(&Fraction::new(20, 144)));
     }
 
     #[test]
     fn test_divide() {
-        assert!(Fraction::new(1, 10, ())
-            .divide(&Fraction::new(4, 12, ()))
-            .equal_to(&Fraction::new(12, 40, ())));
-        assert!(Fraction::new(1, 3, ())
-            .divide(&Fraction::new(4, 12, ()))
-            .equal_to(&Fraction::new(12, 12, ())));
-        assert!(Fraction::new(5, 12, ())
-            .divide(&Fraction::new(4, 12, ()))
-            .equal_to(&Fraction::new(60, 48, ())));
+        assert!(Fraction::new(1, 10)
+            .divide(&Fraction::new(4, 12))
+            .equal_to(&Fraction::new(12, 40)));
+        assert!(Fraction::new(1, 3)
+            .divide(&Fraction::new(4, 12))
+            .equal_to(&Fraction::new(12, 12)));
+        assert!(Fraction::new(5, 12)
+            .divide(&Fraction::new(4, 12))
+            .equal_to(&Fraction::new(60, 48)));
     }
 
     #[test]
     fn test_as_faction() {
-        let f = Fraction::new(1, 2, ());
+        let f = Fraction::new(1, 2);
         // returns an equivalent but not the same reference fraction
         assert!(f.as_fraction().equal_to(&f));
         assert_ne!(&f as *const _, &f.as_fraction() as *const _);

@@ -15,7 +15,10 @@ pub fn check_valid_ethereum_address(ethereum_address: &str) -> Result<String, St
     if valid_address_regex.is_match(ethereum_address) {
         Ok(ethereum_address.to_string())
     } else {
-        Err(format!("{} is not a valid Ethereum address.", ethereum_address))
+        Err(format!(
+            "{} is not a valid Ethereum address.",
+            ethereum_address
+        ))
     }
 }
 
@@ -54,7 +57,7 @@ mod tests {
     #[test]
     fn test_validate_and_parse_address() {
         let valid_address = "0x1234567890123456789012345678901234567890";
-        
+
         assert_eq!(
             validate_and_parse_address(valid_address),
             Ok(valid_address.to_string())
@@ -63,7 +66,10 @@ mod tests {
         let invalid_address = "0xInvAlIdAddrEsS";
         assert_eq!(
             validate_and_parse_address(invalid_address),
-            Err(format!("{} is not a valid Ethereum address.", invalid_address))
+            Err(format!(
+                "{} is not a valid Ethereum address.",
+                invalid_address
+            ))
         );
     }
 }
