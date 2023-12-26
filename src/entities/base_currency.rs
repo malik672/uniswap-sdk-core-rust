@@ -1,4 +1,11 @@
-use super::{currency::CurrencyTrait, token::Token};
+#[derive(Clone, PartialEq)]
+pub struct CurrencyLike<M: Clone> {
+    pub chain_id: u32,
+    pub decimals: u8,
+    pub symbol: Option<String>,
+    pub name: Option<String>,
+    pub meta: M,
+}
 
 /// A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
 pub trait BaseCurrency: Clone {
@@ -13,16 +20,22 @@ pub trait BaseCurrency: Clone {
 
     /// The name of the currency, i.e. a descriptive textual non-unique identifier
     fn name(&self) -> Option<String>;
+}
 
-    /// Returns whether this currency is functionally equivalent to the other currency
-    ///
-    /// # Arguments
-    ///
-    /// * `other`: the other currency
-    ///
-    fn equals(&self, other: &impl CurrencyTrait) -> bool;
+impl<M: Clone> BaseCurrency for CurrencyLike<M> {
+    fn chain_id(&self) -> u32 {
+        self.chain_id
+    }
 
-    /// Return the wrapped version of this currency that can be used with the Uniswap contracts.
-    /// Currencies must implement this to be used in Uniswap
-    fn wrapped(&self) -> Token;
+    fn decimals(&self) -> u8 {
+        self.decimals
+    }
+
+    fn symbol(&self) -> Option<String> {
+        self.symbol.clone()
+    }
+
+    fn name(&self) -> Option<String> {
+        self.name.clone()
+    }
 }

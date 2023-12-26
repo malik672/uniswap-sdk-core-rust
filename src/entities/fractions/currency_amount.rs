@@ -1,7 +1,6 @@
 use crate::{
     constants::{Rounding, MAX_UINT256},
     entities::{
-        base_currency::BaseCurrency,
         currency::CurrencyTrait,
         fractions::fraction::{Fraction, FractionLike, FractionTrait},
         token::Token,

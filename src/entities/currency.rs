@@ -12,6 +12,18 @@ pub trait CurrencyTrait: BaseCurrency {
     fn is_native(&self) -> bool;
 
     fn address(&self) -> Address;
+
+    /// Returns whether this currency is functionally equivalent to the other currency
+    ///
+    /// # Arguments
+    ///
+    /// * `other`: the other currency
+    ///
+    fn equals(&self, other: &impl CurrencyTrait) -> bool;
+
+    /// Return the wrapped version of this currency that can be used with the Uniswap contracts.
+    /// Currencies must implement this to be used in Uniswap
+    fn wrapped(&self) -> Token;
 }
 
 impl CurrencyTrait for Currency {
@@ -26,6 +38,20 @@ impl CurrencyTrait for Currency {
         match self {
             Currency::NativeCurrency(native_currency) => native_currency.address(),
             Currency::Token(token) => token.address(),
+        }
+    }
+
+    fn equals(&self, other: &impl CurrencyTrait) -> bool {
+        match self {
+            Currency::NativeCurrency(native_currency) => native_currency.equals(other),
+            Currency::Token(token) => token.equals(other),
+        }
+    }
+
+    fn wrapped(&self) -> Token {
+        match self {
+            Currency::NativeCurrency(native_currency) => native_currency.wrapped(),
+            Currency::Token(token) => token.clone(),
         }
     }
 }
@@ -56,20 +82,6 @@ impl BaseCurrency for Currency {
         match self {
             Currency::NativeCurrency(native_currency) => native_currency.name(),
             Currency::Token(token) => token.name(),
-        }
-    }
-
-    fn equals(&self, other: &impl CurrencyTrait) -> bool {
-        match self {
-            Currency::NativeCurrency(native_currency) => native_currency.equals(other),
-            Currency::Token(token) => token.equals(other),
-        }
-    }
-
-    fn wrapped(&self) -> Token {
-        match self {
-            Currency::NativeCurrency(native_currency) => native_currency.wrapped(),
-            Currency::Token(token) => token.clone(),
         }
     }
 }
