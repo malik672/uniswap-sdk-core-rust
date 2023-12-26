@@ -85,3 +85,52 @@ impl BaseCurrency for Currency {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use lazy_static::lazy_static;
+
+    const ADDRESS_ZERO: &str = "0x0000000000000000000000000000000000000000";
+    const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
+
+    lazy_static! {
+        static ref TOKEN0: Token =
+            Token::new(1, ADDRESS_ZERO.to_string(), 18, None, None, None, None,);
+        static ref TOKEN1: Token =
+            Token::new(1, ADDRESS_ONE.to_string(), 18, None, None, None, None,);
+    }
+
+    #[test]
+    fn equals_ether_on_same_chains_is_ether() {
+        assert!(Ether::on_chain(1).equals(&Ether::on_chain(1)));
+    }
+
+    #[test]
+    fn equals_ether_is_not_token0() {
+        assert!(!Ether::on_chain(1).equals(&TOKEN0.clone()));
+    }
+
+    #[test]
+    fn equals_token1_is_not_token0() {
+        assert!(!TOKEN1.equals(&TOKEN0.clone()));
+    }
+
+    #[test]
+    fn equals_token0_is_token0() {
+        assert!(TOKEN0.equals(&TOKEN0.clone()));
+    }
+
+    #[test]
+    fn equals_token0_is_equal_to_another_token0() {
+        assert!(TOKEN0.equals(&Token::new(
+            1,
+            ADDRESS_ZERO.to_owned(),
+            18,
+            Some("symbol".to_owned()),
+            Some("name".to_owned()),
+            None,
+            None
+        )));
+    }
+}
