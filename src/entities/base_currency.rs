@@ -22,6 +22,7 @@ pub trait BaseCurrency: Clone {
     fn name(&self) -> Option<String>;
 }
 
+// Implementation of methods for CurrencyLike
 impl<M: Clone> BaseCurrency for CurrencyLike<M> {
     fn chain_id(&self) -> u32 {
         self.chain_id

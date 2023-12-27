@@ -1,3 +1,4 @@
+// External crate dependencies
 use crate::{
     constants::Rounding,
     entities::{
@@ -10,8 +11,10 @@ use crate::{
 };
 use num_bigint::BigInt;
 
+// Type alias for a Price, a Fraction with metadata PriceMeta
 pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
 
+// Struct representing metadata for a Price
 #[derive(Clone)]
 pub struct PriceMeta<TBase, TQuote>
 where
@@ -28,12 +31,14 @@ where
     TBase: CurrencyTrait,
     TQuote: CurrencyTrait,
 {
+    /// Constructor for creating a new Price instance
     pub fn new(
         base_currency: TBase,
         quote_currency: TQuote,
         denominator: impl Into<BigInt>,
         numerator: impl Into<BigInt>,
     ) -> Self {
+        // Calculate scalar based on decimal places of base and quote currencies
         let scalar = Fraction::new(
             BigInt::from(10).pow(base_currency.decimals() as u32),
             BigInt::from(10).pow(quote_currency.decimals() as u32),
@@ -49,10 +54,12 @@ where
         )
     }
 
+    /// Create a Price instance from currency amounts of the base and quote currencies
     pub fn from_currency_amounts(
         base_amount: CurrencyAmount<TBase>,
         quote_amount: CurrencyAmount<TQuote>,
     ) -> Self {
+        // Calculate the price as the ratio of quote amount to base amount
         let res = quote_amount.divide(&base_amount);
         Self::new(
             base_amount.meta.currency,
@@ -72,14 +79,8 @@ where
         )
     }
 
-    /// Multiply the price by another price, returning a new price. The other price must have the same base currency as this price's quote currency
-    ///
-    /// # Arguments
-    ///
-    /// * `other`: the other price
-    ///
-    /// returns: Price<TBase, TOtherQuote>
-    ///
+    /// Multiply the price by another price, returning a new price.
+    /// The other price must have the same base currency as this price's quote currency.
     pub fn multiply<TOtherQuote: CurrencyTrait>(
         &self,
         other: &Price<TQuote, TOtherQuote>,
@@ -98,13 +99,6 @@ where
     }
 
     /// Return the amount of quote currency corresponding to a given amount of the base currency
-    ///
-    /// # Arguments
-    ///
-    /// * `currency_amount`: the amount of base currency to quote against the price
-    ///
-    /// returns: CurrencyAmount
-    ///
     pub fn quote(&self, currency_amount: CurrencyAmount<TBase>) -> CurrencyAmount<TQuote> {
         assert!(
             currency_amount
@@ -126,11 +120,13 @@ where
         self.as_fraction().multiply(&self.meta.scalar)
     }
 
+    /// Converts the adjusted price to a string with a specified number of significant digits and rounding strategy
     pub fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
         self.adjusted_for_decimals()
             .to_significant(significant_digits, rounding)
     }
 
+    /// Converts the adjusted price to a string with a fixed number of decimal places and rounding strategy
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         self.adjusted_for_decimals()
             .to_fixed(decimal_places, rounding)

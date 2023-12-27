@@ -1,9 +1,11 @@
+// External crate dependencies
 use crate::constants::Rounding;
 use num_bigint::BigInt;
 use num_integer::Integer;
 use rust_decimal::prelude::*;
 use std::ops::Div;
 
+// Struct representing a fraction with metadata
 #[derive(Clone, PartialEq)]
 pub struct FractionLike<M: Clone> {
     numerator: BigInt,
@@ -11,14 +13,17 @@ pub struct FractionLike<M: Clone> {
     pub meta: M,
 }
 
+// Type alias for a simple Fraction without metadata
 pub type Fraction = FractionLike<()>;
 
 impl Fraction {
+    // Constructor for creating a new Fraction instance
     pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
         FractionTrait::new(numerator, denominator, ())
     }
 }
 
+// Function to convert the custom Rounding enum to rust_decimal's RoundingStrategy
 fn to_rounding_strategy(rounding: Rounding) -> RoundingStrategy {
     match rounding {
         Rounding::RoundDown => RoundingStrategy::ToZero,
@@ -27,22 +32,26 @@ fn to_rounding_strategy(rounding: Rounding) -> RoundingStrategy {
     }
 }
 
+// Trait defining common operations for fractions with metadata
 pub trait FractionTrait<M>: Sized {
+    // Constructor method for creating a new Fraction with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self;
 
-    /// Additional metadata that can be attached to the fraction
+    // Accessor method for retrieving metadata
     fn meta(&self) -> M;
 
+    // Accessor method for retrieving the numerator
     fn numerator(&self) -> &BigInt;
 
+    // Accessor method for retrieving the denominator
     fn denominator(&self) -> &BigInt;
 
-    /// performs floor division
+    // Returns the floor division quotient of the fraction
     fn quotient(&self) -> BigInt {
         self.numerator().div_floor(self.denominator())
     }
 
-    /// remainder after floor division
+    // Returns the remainder after floor division as a new fraction
     fn remainder(&self) -> Self {
         Self::new(
             self.numerator() % self.denominator(),
@@ -51,6 +60,7 @@ pub trait FractionTrait<M>: Sized {
         )
     }
 
+    // Returns the inverted fraction
     fn invert(&self) -> Self {
         Self::new(
             self.denominator().clone(),
@@ -59,6 +69,7 @@ pub trait FractionTrait<M>: Sized {
         )
     }
 
+    // Adds another fraction to the current fraction
     fn add(&self, other: &Self) -> Self {
         if self.denominator() == other.denominator() {
             Self::new(
@@ -75,6 +86,7 @@ pub trait FractionTrait<M>: Sized {
         }
     }
 
+    // Subtracts another fraction from the current fraction
     fn subtract(&self, other: &Self) -> Self {
         if self.denominator() == other.denominator() {
             Self::new(
@@ -91,6 +103,7 @@ pub trait FractionTrait<M>: Sized {
         }
     }
 
+    // Multiplies the current fraction by another fraction
     fn multiply(&self, other: &Self) -> Self {
         Self::new(
             self.numerator() * other.numerator(),
@@ -99,6 +112,7 @@ pub trait FractionTrait<M>: Sized {
         )
     }
 
+    // Divides the current fraction by another fraction
     fn divide(&self, other: &Self) -> Self {
         Self::new(
             self.numerator() * other.denominator(),
@@ -107,24 +121,29 @@ pub trait FractionTrait<M>: Sized {
         )
     }
 
+    // Checks if the current fraction is less than another fraction
     fn less_than(&self, other: &Self) -> bool {
         self.numerator() * other.denominator() < other.numerator() * self.denominator()
     }
 
+    // Checks if the current fraction is equal to another fraction
     fn equal_to(&self, other: &Self) -> bool {
         self.numerator() * other.denominator() == other.numerator() * self.denominator()
     }
 
+    // Checks if the current fraction is greater than another fraction
     fn greater_than(&self, other: &Self) -> bool {
         self.numerator() * other.denominator() > other.numerator() * self.denominator()
     }
 
+    // Converts the fraction to a rust_decimal::Decimal
     fn to_decimal(&self) -> Decimal {
         Decimal::from_str(&self.numerator().to_str_radix(10))
             .unwrap()
             .div(Decimal::from_str(&self.denominator().to_str_radix(10)).unwrap())
     }
 
+    // Converts the fraction to a string with a specified number of significant digits and rounding strategy
     fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
         assert!(
             significant_digits > 0,
@@ -139,6 +158,7 @@ pub trait FractionTrait<M>: Sized {
         quotient.unwrap().normalize().to_string()
     }
 
+    // Converts the fraction to a string with a fixed number of decimal places and rounding strategy
     fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         let rounding_strategy = to_rounding_strategy(rounding);
         let quotient = self
@@ -148,15 +168,18 @@ pub trait FractionTrait<M>: Sized {
         format!("{:.1$}", quotient, decimal_places as usize)
     }
 
-    /// Helper method for converting any super class back to a fraction
+    // Helper method for converting any superclass back to a simple Fraction
     fn as_fraction(&self) -> Fraction {
         Fraction::new(self.numerator().clone(), self.denominator().clone())
     }
 }
 
+// Implementation of the FractionTrait for FractionLike
 impl<M: Clone> FractionTrait<M> for FractionLike<M> {
+    // Constructor for creating a new Fraction with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self {
         let denominator = denominator.into();
+        // Ensure the denominator is not zero
         assert!(!denominator.is_zero(), "DENOMINATOR CAN'T BE ZERO");
         Self {
             numerator: numerator.into(),
@@ -165,18 +188,22 @@ impl<M: Clone> FractionTrait<M> for FractionLike<M> {
         }
     }
 
+    // Accessor method for retrieving metadata
     fn meta(&self) -> M {
         self.meta.clone()
     }
 
+    // Accessor method for retrieving the numerator
     fn numerator(&self) -> &BigInt {
         &self.numerator
     }
 
+    // Accessor method for retrieving the denominator
     fn denominator(&self) -> &BigInt {
         &self.denominator
     }
 }
+
 
 #[cfg(test)]
 mod tests {

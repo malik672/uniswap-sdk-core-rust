@@ -1,8 +1,10 @@
+// Importing dependencies from the same module
 use super::fraction::{Fraction, FractionLike, FractionTrait};
 use crate::constants::Rounding;
 use lazy_static::lazy_static;
 use num_bigint::BigInt;
 
+// Lazily initialized constant representing the fraction 100/1
 lazy_static! {
     static ref ONE_HUNDRED: Fraction = Fraction::new(100, 1);
 }
@@ -11,20 +13,26 @@ lazy_static! {
 #[derive(Clone)]
 pub struct IsPercent;
 
+// Type alias for a Percent, a Fraction with the IsPercent metadata
 pub type Percent = FractionLike<IsPercent>;
 
 impl Percent {
+    /// Constructor for creating a new Percent instance
     pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
         FractionTrait::new(numerator, denominator, IsPercent)
     }
 
+    /// Converts the Percent to a string with a specified number of significant digits and rounding strategy
     pub fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
+        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_significant on the result
         self.as_fraction()
             .multiply(&ONE_HUNDRED)
             .to_significant(significant_digits, rounding)
     }
 
+    /// Converts the Percent to a string with a fixed number of decimal places and rounding strategy
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
+        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the result
         self.as_fraction()
             .multiply(&ONE_HUNDRED)
             .to_fixed(decimal_places, rounding)

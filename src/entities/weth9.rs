@@ -1,19 +1,26 @@
 use super::token::Token;
 use std::collections::HashMap;
 
+/// `WETH9` represents the WETH9 contract and provides information about WETH tokens on different Ethereum chains.
 pub struct WETH9 {
+    /// A mapping of chain IDs to corresponding WETH tokens.
     tokens: HashMap<u32, Token>,
 }
 
+/// Default implementation for `WETH9`, creating an instance with predefined WETH tokens on various chains.
 impl Default for WETH9 {
     fn default() -> Self {
         Self::new()
     }
 }
 
+ /// Implementation for methods specific to the `WETH9` struct.
 impl WETH9 {
     pub fn new() -> Self {
+      
         let mut tokens = HashMap::new();
+
+        // Insert predefined WETH tokens for different chains.
         tokens.insert(
             1,
             Token::new(
@@ -174,6 +181,13 @@ impl WETH9 {
         Self { tokens }
     }
 
+     /// Retrieves the WETH token for a specific chain ID, if it exists.
+    ///
+    /// # Arguments
+    ///
+    /// * `chain_id`: The chain ID for which to retrieve the WETH token.
+    ///
+    /// Returns: `Some(Token)` if the token exists, `None` otherwise.
     pub fn get(&self, chain_id: u32) -> Option<&Token> {
         self.tokens.get(&chain_id)
     }

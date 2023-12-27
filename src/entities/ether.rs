@@ -8,22 +8,28 @@ use alloy_primitives::Address;
 use lazy_static::lazy_static;
 use std::{collections::HashMap, sync::Mutex};
 
+// Lazy static cache for Ether instances
 lazy_static! {
     static ref ETHER_CACHE: Mutex<HashMap<u32, Ether>> = Mutex::new(HashMap::new());
 }
 
-/// Ether is the main usage of a 'native' currency, i.e. for Ethereum mainnet and all testnets
+/// Ether is the main usage of a 'native' currency, i.e., for Ethereum mainnet and all testnets.
+/// Represents the native currency with additional metadata.
 pub type Ether = CurrencyLike<()>;
 
+/// Implementation of the `CurrencyTrait` for the `Ether` type.
 impl CurrencyTrait for Ether {
+    /// Checks if the currency is native to the blockchain.
     fn is_native(&self) -> bool {
         true
     }
 
+    /// Retrieves the address associated with the currency.
     fn address(&self) -> Address {
         self.wrapped().address()
     }
 
+    /// Checks if the currency is equal to another currency.
     fn equals(&self, other: &impl CurrencyTrait) -> bool {
         match other.is_native() {
             true => self.chain_id() == other.chain_id(),
@@ -31,6 +37,7 @@ impl CurrencyTrait for Ether {
         }
     }
 
+    /// Returns the wrapped token representation of the currency.
     fn wrapped(&self) -> Token {
         match WETH9::default().get(self.chain_id()) {
             Some(weth9) => weth9.clone(),
@@ -39,7 +46,9 @@ impl CurrencyTrait for Ether {
     }
 }
 
+/// Implementation of additional methods for the `Ether` type.
 impl Ether {
+    /// Creates a new instance of `Ether` with the specified chain ID.
     pub fn new(chain_id: u32) -> Self {
         Self {
             chain_id,
@@ -50,6 +59,7 @@ impl Ether {
         }
     }
 
+    /// Retrieves or creates an `Ether` instance for the specified chain ID.
     pub fn on_chain(chain_id: u32) -> Self {
         let mut cache = ETHER_CACHE.lock().unwrap();
         match cache.get(&chain_id) {
@@ -62,6 +72,7 @@ impl Ether {
         }
     }
 }
+
 
 #[cfg(test)]
 mod tests {

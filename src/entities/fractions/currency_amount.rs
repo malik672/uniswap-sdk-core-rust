@@ -1,3 +1,4 @@
+// External crate dependencies
 use crate::{
     constants::{Rounding, MAX_UINT256},
     entities::{
@@ -11,19 +12,27 @@ use num_integer::Integer;
 use rust_decimal::Decimal;
 use std::{ops::Div, str::FromStr};
 
+// Type alias for a currency amount using the FractionLike trait
 pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
 
+// Struct representing metadata about a currency
 #[derive(Clone, PartialEq)]
 pub struct CurrencyMeta<T: CurrencyTrait> {
     pub currency: T,
     pub decimal_scale: BigUint,
 }
 
+// Implementation of methods for CurrencyAmount
 impl<T: CurrencyTrait> CurrencyAmount<T> {
+    // Constructor method for creating a new currency amount
     fn new(currency: T, numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
         let numerator = numerator.into();
         let denominator = denominator.into();
-        assert!(numerator.div_floor(&denominator).le(&MAX_UINT256), "AMOUNT");
+        // Ensure the amount does not exceed MAX_UINT256
+        assert!(
+            numerator.div_floor(&denominator).le(&MAX_UINT256),
+            "AMOUNT"
+        );
         let exponent = currency.decimals();
         FractionTrait::new(
             numerator,
@@ -35,29 +44,12 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    /// Returns a new currency amount instance from the unitless amount of token, i.e. the raw amount
-    ///
-    /// # Arguments
-    ///
-    /// * `currency`: the currency in the amount
-    /// * `raw_amount`: the raw token or ether amount
-    ///
-    /// returns: CurrencyAmount
-    ///
+    // Returns a new currency amount instance from the unitless amount of token (raw amount)
     pub fn from_raw_amount(currency: T, raw_amount: impl Into<BigInt>) -> CurrencyAmount<T> {
         Self::new(currency, raw_amount, 1)
     }
 
-    /// Construct a currency amount with a denominator that is not equal to 1
-    ///
-    /// # Arguments
-    ///
-    /// * `currency`: the currency
-    /// * `numerator`: the numerator of the fractional token amount
-    /// * `denominator`: the denominator of the fractional token amount
-    ///
-    /// returns: CurrencyAmount
-    ///
+    // Construct a currency amount with a denominator that is not equal to 1
     pub fn from_fractional_amount(
         currency: T,
         numerator: impl Into<BigInt>,
@@ -66,6 +58,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         Self::new(currency, numerator, denominator)
     }
 
+    // Multiplication of currency amount by another fractional amount
     pub fn multiply<M>(&self, other: &impl FractionTrait<M>) -> Self {
         let multiplied = self.as_fraction().multiply(&other.as_fraction());
         Self::from_fractional_amount(
@@ -75,6 +68,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
+    // Division of currency amount by another fractional amount
     pub fn divide<M>(&self, other: &impl FractionTrait<M>) -> Self {
         let divided = self.as_fraction().divide(&other.as_fraction());
         Self::from_fractional_amount(
@@ -84,6 +78,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
+    // Convert the currency amount to a string with exact precision
     pub fn to_exact(&self) -> String {
         Decimal::from_str(&self.quotient().to_str_radix(10))
             .unwrap()
@@ -91,8 +86,12 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             .to_string()
     }
 
+    // Addition of another currency amount to the current amount
     pub fn add(&self, other: &Self) -> Self {
-        assert!(self.meta.currency.equals(&other.meta.currency), "CURRENCY");
+        assert!(
+            self.meta.currency.equals(&other.meta.currency),
+            "CURRENCY"
+        );
         let added = self.as_fraction().add(&other.as_fraction());
         Self::from_fractional_amount(
             self.meta.currency.clone(),
@@ -101,8 +100,12 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
+    // Subtraction of another currency amount from the current amount
     pub fn subtract(&self, other: &Self) -> Self {
-        assert!(self.meta.currency.equals(&other.meta.currency), "CURRENCY");
+        assert!(
+            self.meta.currency.equals(&other.meta.currency),
+            "CURRENCY"
+        );
         let subtracted = self.as_fraction().subtract(&other.as_fraction());
         Self::from_fractional_amount(
             self.meta.currency.clone(),
@@ -111,21 +114,28 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
+    // Convert the currency amount to a string with a specified number of significant digits
     pub fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
         self.as_fraction()
             .divide(&Fraction::new(self.meta.decimal_scale.clone(), 1))
             .to_significant(significant_digits, rounding)
     }
 
+    // Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
-        assert!(decimal_places <= self.meta.currency.decimals(), "DECIMALS");
+        assert!(
+            decimal_places <= self.meta.currency.decimals(),
+            "DECIMALS"
+        );
         self.as_fraction()
             .divide(&Fraction::new(self.meta.decimal_scale.clone(), 1))
             .to_fixed(decimal_places, rounding)
     }
 }
 
+// Implementation for a specific type of CurrencyAmount (Token)
 impl CurrencyAmount<Token> {
+    // Wrap the currency amount if the currency is not native
     pub fn wrapped(&self) -> CurrencyAmount<Token> {
         match &self.meta.currency.is_native() {
             true => Self::from_fractional_amount(
@@ -138,6 +148,7 @@ impl CurrencyAmount<Token> {
     }
 }
 
+// Unit tests for the currency module
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -146,8 +157,10 @@ mod tests {
     };
     use lazy_static::lazy_static;
 
+    // Constants for testing
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
 
+    // Lazy static variables for testing currencies
     lazy_static! {
         static ref TOKEN18: Currency = Currency::Token(Token::new(
             1,
@@ -169,6 +182,7 @@ mod tests {
         ));
     }
 
+    // Unit tests
     #[test]
     fn test_constructor() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 100);
