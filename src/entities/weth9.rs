@@ -14,10 +14,9 @@ impl Default for WETH9 {
     }
 }
 
- /// Implementation for methods specific to the `WETH9` struct.
+/// Implementation for methods specific to the `WETH9` struct.
 impl WETH9 {
     pub fn new() -> Self {
-      
         let mut tokens = HashMap::new();
 
         // Insert predefined WETH tokens for different chains.
@@ -181,7 +180,7 @@ impl WETH9 {
         Self { tokens }
     }
 
-     /// Retrieves the WETH token for a specific chain ID, if it exists.
+    /// Retrieves the WETH token for a specific chain ID, if it exists.
     ///
     /// # Arguments
     ///

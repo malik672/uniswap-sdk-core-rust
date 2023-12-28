@@ -29,10 +29,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         let numerator = numerator.into();
         let denominator = denominator.into();
         // Ensure the amount does not exceed MAX_UINT256
-        assert!(
-            numerator.div_floor(&denominator).le(&MAX_UINT256),
-            "AMOUNT"
-        );
+        assert!(numerator.div_floor(&denominator).le(&MAX_UINT256), "AMOUNT");
         let exponent = currency.decimals();
         FractionTrait::new(
             numerator,
@@ -88,10 +85,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Addition of another currency amount to the current amount
     pub fn add(&self, other: &Self) -> Self {
-        assert!(
-            self.meta.currency.equals(&other.meta.currency),
-            "CURRENCY"
-        );
+        assert!(self.meta.currency.equals(&other.meta.currency), "CURRENCY");
         let added = self.as_fraction().add(&other.as_fraction());
         Self::from_fractional_amount(
             self.meta.currency.clone(),
@@ -102,10 +96,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Subtraction of another currency amount from the current amount
     pub fn subtract(&self, other: &Self) -> Self {
-        assert!(
-            self.meta.currency.equals(&other.meta.currency),
-            "CURRENCY"
-        );
+        assert!(self.meta.currency.equals(&other.meta.currency), "CURRENCY");
         let subtracted = self.as_fraction().subtract(&other.as_fraction());
         Self::from_fractional_amount(
             self.meta.currency.clone(),
@@ -123,10 +114,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
-        assert!(
-            decimal_places <= self.meta.currency.decimals(),
-            "DECIMALS"
-        );
+        assert!(decimal_places <= self.meta.currency.decimals(), "DECIMALS");
         self.as_fraction()
             .divide(&Fraction::new(self.meta.decimal_scale.clone(), 1))
             .to_fixed(decimal_places, rounding)

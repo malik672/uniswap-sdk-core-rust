@@ -73,7 +73,6 @@ impl Ether {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
