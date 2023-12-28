@@ -35,6 +35,7 @@ jobs:
         with:
           profile: minimal
           toolchain: nightly
+          override: true
           components: rustfmt, clippy
 
       - name: Check lint
