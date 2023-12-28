@@ -204,7 +204,6 @@ impl<M: Clone> FractionTrait<M> for FractionLike<M> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
