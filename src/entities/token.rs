@@ -1,6 +1,4 @@
-use super::{base_currency::CurrencyLike, currency::CurrencyTrait};
-use alloy_primitives::Address;
-use num_bigint::BigUint;
+use crate::prelude::*;
 
 /// Represents an ERC20 token with a unique address and some metadata.
 pub type Token = CurrencyLike<TokenMeta>;

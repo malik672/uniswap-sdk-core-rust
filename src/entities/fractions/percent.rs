@@ -1,8 +1,5 @@
 // Importing dependencies from the same module
-use super::fraction::{Fraction, FractionLike, FractionTrait};
-use crate::constants::Rounding;
-use lazy_static::lazy_static;
-use num_bigint::BigInt;
+use crate::prelude::*;
 
 // Lazily initialized constant representing the fraction 100/1
 lazy_static! {

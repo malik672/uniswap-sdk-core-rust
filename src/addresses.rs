@@ -1,7 +1,4 @@
-use super::chains::{ChainId, SUPPORTED_CHAINS};
-use lazy_static::lazy_static;
-use std::collections::HashMap;
-
+use crate::prelude::*;
 type AddressMap = HashMap<u32, String>;
 type ChainMap = HashMap<u32, ChainAddresses>;
 type ChainAddress = HashMap<u32, String>;

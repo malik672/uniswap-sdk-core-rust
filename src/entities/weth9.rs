@@ -1,5 +1,4 @@
-use super::token::Token;
-use std::collections::HashMap;
+use crate::prelude::*;
 
 /// `WETH9` represents the WETH9 contract and provides information about WETH tokens on different Ethereum chains.
 pub struct WETH9 {
