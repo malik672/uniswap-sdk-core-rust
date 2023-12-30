@@ -7,9 +7,9 @@ use crate::{
         token::Token,
     },
 };
+use bigdecimal::BigDecimal;
 use num_bigint::{BigInt, BigUint};
 use num_integer::Integer;
-use rust_decimal::Decimal;
 use std::{ops::Div, str::FromStr};
 
 // Type alias for a currency amount using the FractionLike trait
@@ -77,9 +77,9 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Convert the currency amount to a string with exact precision
     pub fn to_exact(&self) -> String {
-        Decimal::from_str(&self.quotient().to_str_radix(10))
+        BigDecimal::from_str(&self.quotient().to_str_radix(10))
             .unwrap()
-            .div(Decimal::from_str(&self.meta.decimal_scale.to_str_radix(10)).unwrap())
+            .div(BigDecimal::from_str(&self.meta.decimal_scale.to_str_radix(10)).unwrap())
             .to_string()
     }
 

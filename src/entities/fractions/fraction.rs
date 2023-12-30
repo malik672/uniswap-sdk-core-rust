@@ -1,9 +1,10 @@
 // External crate dependencies
 use crate::constants::Rounding;
+use bigdecimal::{BigDecimal, RoundingMode};
 use num_bigint::BigInt;
 use num_integer::Integer;
-use rust_decimal::prelude::*;
-use std::ops::Div;
+use num_traits::Zero;
+use std::{num::NonZeroU64, ops::Div, str::FromStr};
 
 // Struct representing a fraction with metadata
 #[derive(Clone, PartialEq)]
@@ -23,12 +24,12 @@ impl Fraction {
     }
 }
 
-// Function to convert the custom Rounding enum to rust_decimal's RoundingStrategy
-fn to_rounding_strategy(rounding: Rounding) -> RoundingStrategy {
+// Function to convert the custom Rounding enum to `bigdecimal`'s `RoundingMode`
+fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
     match rounding {
-        Rounding::RoundDown => RoundingStrategy::ToZero,
-        Rounding::RoundHalfUp => RoundingStrategy::MidpointAwayFromZero,
-        Rounding::RoundUp => RoundingStrategy::AwayFromZero,
+        Rounding::RoundDown => RoundingMode::Down,
+        Rounding::RoundHalfUp => RoundingMode::HalfUp,
+        Rounding::RoundUp => RoundingMode::Up,
     }
 }
 
@@ -136,11 +137,11 @@ pub trait FractionTrait<M>: Sized {
         self.numerator() * other.denominator() > other.numerator() * self.denominator()
     }
 
-    // Converts the fraction to a rust_decimal::Decimal
-    fn to_decimal(&self) -> Decimal {
-        Decimal::from_str(&self.numerator().to_str_radix(10))
+    // Converts the fraction to a `bigdecimal::BigDecimal`
+    fn to_decimal(&self) -> BigDecimal {
+        BigDecimal::from_str(&self.numerator().to_str_radix(10))
             .unwrap()
-            .div(Decimal::from_str(&self.denominator().to_str_radix(10)).unwrap())
+            .div(BigDecimal::from_str(&self.denominator().to_str_radix(10)).unwrap())
     }
 
     // Converts the fraction to a string with a specified number of significant digits and rounding strategy
@@ -151,11 +152,12 @@ pub trait FractionTrait<M>: Sized {
         );
 
         let rounding_strategy = to_rounding_strategy(rounding);
-        let quotient = self
-            .to_decimal()
-            .round_sf_with_strategy(significant_digits as u32, rounding_strategy);
+        let quotient = self.to_decimal().with_precision_round(
+            NonZeroU64::new(significant_digits as u64).unwrap(),
+            rounding_strategy,
+        );
 
-        quotient.unwrap().normalize().to_string()
+        quotient.normalized().to_string()
     }
 
     // Converts the fraction to a string with a fixed number of decimal places and rounding strategy
@@ -163,7 +165,7 @@ pub trait FractionTrait<M>: Sized {
         let rounding_strategy = to_rounding_strategy(rounding);
         let quotient = self
             .to_decimal()
-            .round_dp_with_strategy(decimal_places as u32, rounding_strategy);
+            .with_scale_round(decimal_places as i64, rounding_strategy);
 
         format!("{:.1$}", quotient, decimal_places as usize)
     }
