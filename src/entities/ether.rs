@@ -1,13 +1,4 @@
-use super::{
-    base_currency::{BaseCurrency, CurrencyLike},
-    currency::CurrencyTrait,
-    token::Token,
-    weth9::WETH9,
-};
-use alloy_primitives::Address;
-use lazy_static::lazy_static;
-use std::{collections::HashMap, sync::Mutex};
-
+use crate::prelude::*;
 // Lazy static cache for Ether instances
 lazy_static! {
     static ref ETHER_CACHE: Mutex<HashMap<u32, Ether>> = Mutex::new(HashMap::new());
@@ -72,7 +63,6 @@ impl Ether {
         }
     }
 }
-
 
 #[cfg(test)]
 mod tests {

@@ -1,15 +1,5 @@
 // External crate dependencies
-use crate::{
-    constants::Rounding,
-    entities::{
-        currency::CurrencyTrait,
-        fractions::{
-            currency_amount::CurrencyAmount,
-            fraction::{Fraction, FractionLike, FractionTrait},
-        },
-    },
-};
-use num_bigint::BigInt;
+use  crate::prelude::*;
 
 // Type alias for a Price, a Fraction with metadata PriceMeta
 pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;

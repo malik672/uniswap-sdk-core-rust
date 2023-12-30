@@ -1,5 +1,4 @@
-use num_bigint::{BigInt, ToBigInt};
-use num_traits::{ToPrimitive, Zero};
+use crate::prelude::*;
 
 /// Computes floor(sqrt(value))
 ///

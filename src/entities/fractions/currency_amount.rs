@@ -1,16 +1,5 @@
 // External crate dependencies
-use crate::{
-    constants::{Rounding, MAX_UINT256},
-    entities::{
-        currency::CurrencyTrait,
-        fractions::fraction::{Fraction, FractionLike, FractionTrait},
-        token::Token,
-    },
-};
-use num_bigint::{BigInt, BigUint};
-use num_integer::Integer;
-use rust_decimal::Decimal;
-use std::{ops::Div, str::FromStr};
+use crate::prelude::*;
 
 // Type alias for a currency amount using the FractionLike trait
 pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
@@ -29,10 +18,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         let numerator = numerator.into();
         let denominator = denominator.into();
         // Ensure the amount does not exceed MAX_UINT256
-        assert!(
-            numerator.div_floor(&denominator).le(&MAX_UINT256),
-            "AMOUNT"
-        );
+        assert!(numerator.div_floor(&denominator).le(&MAX_UINT256), "AMOUNT");
         let exponent = currency.decimals();
         FractionTrait::new(
             numerator,
@@ -80,18 +66,15 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Convert the currency amount to a string with exact precision
     pub fn to_exact(&self) -> String {
-        Decimal::from_str(&self.quotient().to_str_radix(10))
+        BigDecimal::from_str(&self.quotient().to_str_radix(10))
             .unwrap()
-            .div(Decimal::from_str(&self.meta.decimal_scale.to_str_radix(10)).unwrap())
+            .div(BigDecimal::from_str(&self.meta.decimal_scale.to_str_radix(10)).unwrap())
             .to_string()
     }
 
     // Addition of another currency amount to the current amount
     pub fn add(&self, other: &Self) -> Self {
-        assert!(
-            self.meta.currency.equals(&other.meta.currency),
-            "CURRENCY"
-        );
+        assert!(self.meta.currency.equals(&other.meta.currency), "CURRENCY");
         let added = self.as_fraction().add(&other.as_fraction());
         Self::from_fractional_amount(
             self.meta.currency.clone(),
@@ -102,10 +85,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Subtraction of another currency amount from the current amount
     pub fn subtract(&self, other: &Self) -> Self {
-        assert!(
-            self.meta.currency.equals(&other.meta.currency),
-            "CURRENCY"
-        );
+        assert!(self.meta.currency.equals(&other.meta.currency), "CURRENCY");
         let subtracted = self.as_fraction().subtract(&other.as_fraction());
         Self::from_fractional_amount(
             self.meta.currency.clone(),
@@ -123,10 +103,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
-        assert!(
-            decimal_places <= self.meta.currency.decimals(),
-            "DECIMALS"
-        );
+        assert!(decimal_places <= self.meta.currency.decimals(), "DECIMALS");
         self.as_fraction()
             .divide(&Fraction::new(self.meta.decimal_scale.clone(), 1))
             .to_fixed(decimal_places, rounding)
