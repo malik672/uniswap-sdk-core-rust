@@ -79,6 +79,44 @@ impl Token {
     }
 }
 
+/// Short hand macro to create a token
+#[macro_export]
+macro_rules! token {
+    ($chain_id:expr, $address:expr, $decimals:expr) => {
+        Token::new(
+            $chain_id,
+            $address.to_string(),
+            $decimals,
+            None,
+            None,
+            None,
+            None,
+        )
+    };
+    ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr) => {
+        Token::new(
+            $chain_id,
+            $address.to_string(),
+            $decimals,
+            Some($symbol.to_string()),
+            None,
+            None,
+            None,
+        )
+    };
+    ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr, $name:expr) => {
+        Token::new(
+            $chain_id,
+            $address.to_string(),
+            $decimals,
+            Some($symbol.to_string()),
+            Some($name.to_string()),
+            None,
+            None,
+        )
+    };
+}
+
 #[cfg(test)]
 mod tests {
     //should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the compiler will panic by itself, so no need
@@ -90,24 +128,8 @@ mod tests {
 
     #[test]
     fn test_token() {
-        let token = Token::new(
-            2,
-            ADDRESS_ONE.to_string(),
-            18,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
-        let token_1 = Token::new(
-            2,
-            ADDRESS_TWO.to_string(),
-            18,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
+        let token = token!(2, ADDRESS_ONE, 18, "Test", "Te");
+        let token_1 = token!(2, ADDRESS_TWO, 18, "Test", "Te");
 
         assert!(token.address().eq(&ADDRESS_ONE.parse::<Address>().unwrap()));
         assert!(token_1
@@ -118,212 +140,73 @@ mod tests {
     #[test]
     #[should_panic(expected = "DECIMALS")]
     fn test_expect_revert_overflow_dec() {
-        let _token = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            255,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
+        let _token = token!(4, ADDRESS_ONE, 255, "Test", "Te");
     }
 
     #[test]
     fn test_false_if_diff_chain_id() {
-        let token = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
-        let token_1 = Token::new(
-            3,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
+        let token = token!(4, ADDRESS_ONE, 25, "Test", "Te");
+        let token_1 = token!(3, ADDRESS_ONE, 25, "Test", "Te");
 
         assert!(!token.equals(&token_1));
     }
 
     #[test]
     fn test_diff_name() {
-        let token = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("TeW".to_string()),
-            None,
-            None,
-        );
-        let token_1 = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
+        let token = token!(4, ADDRESS_ONE, 25, "Test", "TeW");
+        let token_1 = token!(4, ADDRESS_ONE, 25, "Test", "Te");
 
         assert!(token.equals(&token_1), "true even if names differ");
     }
 
     #[test]
     fn test_diff_symbol() {
-        let token = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
-        let token_1 = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("WETest".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
+        let token = token!(4, ADDRESS_ONE, 25, "Test", "Te");
+        let token_1 = token!(4, ADDRESS_ONE, 25, "WETest", "Te");
 
         assert!(token.equals(&token_1), "true even if symbols differ");
     }
 
     #[test]
     fn test_false_if_diff_address() {
-        let token = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
-        let token_1 = Token::new(
-            4,
-            DAI_MAINNET.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
+        let token = token!(4, ADDRESS_ONE, 25, "Test", "Te");
+        let token_1 = token!(4, DAI_MAINNET, 25, "Test", "Te");
 
         assert!(!token.equals(&token_1));
     }
 
     #[test]
     fn test_true_if_diff_decimals() {
-        assert!(
-            Token::new(1, ADDRESS_ONE.to_string(), 9, None, None, None, None,).equals(&Token::new(
-                1,
-                ADDRESS_ONE.to_string(),
-                18,
-                None,
-                None,
-                None,
-                None,
-            ))
-        );
+        assert!(token!(1, ADDRESS_ONE, 9).equals(&token!(1, ADDRESS_ONE, 18)));
     }
 
     #[test]
     fn test_assert_both_tokens() {
-        let token = Token::new(
-            4,
-            ADDRESS_ONE.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
-
-        let token_1 = Token::new(
-            4,
-            DAI_MAINNET.to_string(),
-            25,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
+        let token = token!(4, ADDRESS_ONE, 25, "Test", "Te");
+        let token_1 = token!(4, DAI_MAINNET, 25, "Test", "Te");
 
         assert_eq!(token.equals(&token_1), token_1.equals(&token));
     }
 
     #[test]
     fn test_true_on_reference_equality() {
-        let token = Token::new(
-            1,
-            ADDRESS_ONE.to_string(),
-            18,
-            Some("Test".to_string()),
-            Some("Te".to_string()),
-            None,
-            None,
-        );
+        let token = token!(1, ADDRESS_ONE, 18, "Test", "Te");
 
         assert!(token.equals(&token));
     }
 
     #[test]
     fn test_true_if_same_address() {
-        let token = Token::new(
-            1,
-            ADDRESS_ONE.to_string(),
-            9,
-            Some("abc".to_string()),
-            Some("def".to_string()),
-            None,
-            None,
-        );
-        let token_1 = Token::new(
-            1,
-            ADDRESS_ONE.to_string(),
-            18,
-            Some("ghi".to_string()),
-            Some("jkl".to_string()),
-            None,
-            None,
-        );
+        let token = token!(1, ADDRESS_ONE, 9, "abc", "def");
+        let token_1 = token!(1, ADDRESS_ONE, 18, "ghi", "jkl");
 
         assert!(token.equals(&token_1));
     }
 
     #[test]
     fn test_true_if_one_token_is_checksummed_and_the_other_is_not() {
-        let token_a = Token::new(
-            1,
-            DAI_MAINNET.to_string(),
-            18,
-            Some("DAI".to_string()),
-            None,
-            None,
-            None,
-        );
-        let token_b = Token::new(
-            1,
-            DAI_MAINNET.to_string().to_lowercase(),
-            18,
-            Some("DAI".to_string()),
-            None,
-            None,
-            None,
-        );
+        let token_a = token!(1, DAI_MAINNET, 18, "DAI");
+        let token_b = token!(1, DAI_MAINNET, 18, "DAI");
 
         assert!(token_a.equals(&token_b));
     }

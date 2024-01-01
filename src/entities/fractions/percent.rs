@@ -39,7 +39,6 @@ impl Percent {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::constants::Rounding;
 
     #[test]
     fn test_add() {

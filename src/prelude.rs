@@ -3,17 +3,19 @@ pub use crate::{
     constants::{Rounding, MAX_UINT256},
     entities::{
         base_currency::{BaseCurrency, CurrencyLike},
-        currency::CurrencyTrait,
+        currency::{Currency, CurrencyTrait},
         ether::Ether,
         fractions::{
             currency_amount::CurrencyAmount,
             fraction::{Fraction, FractionLike, FractionTrait},
+            percent::Percent,
+            price::Price,
         },
         token::Token,
         weth9::WETH9,
     },
 };
-pub use alloy_primitives::Address;
+pub use alloy_primitives::{address, Address};
 pub use bigdecimal::{BigDecimal, RoundingMode};
 pub use lazy_static::lazy_static;
 pub use num_bigint::{BigInt, BigUint, ToBigInt, ToBigUint};

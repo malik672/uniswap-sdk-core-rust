@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 // Lazy static cache for Ether instances
 lazy_static! {
     static ref ETHER_CACHE: Mutex<HashMap<u32, Ether>> = Mutex::new(HashMap::new());
@@ -67,7 +68,6 @@ impl Ether {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::entities::currency::Currency;
 
     #[test]
     fn test_static_constructor_uses_cache() {
