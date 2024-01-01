@@ -20,7 +20,7 @@ impl Fraction {
 }
 
 // Function to convert the custom Rounding enum to `bigdecimal`'s `RoundingMode`
-fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
+const fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
     match rounding {
         Rounding::RoundDown => RoundingMode::Down,
         Rounding::RoundHalfUp => RoundingMode::HalfUp,

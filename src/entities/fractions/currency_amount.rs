@@ -129,10 +129,6 @@ impl CurrencyAmount<Token> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::entities::{
-        currency::Currency, ether::Ether, fractions::percent::Percent, token::Token,
-    };
-    use lazy_static::lazy_static;
 
     // Constants for testing
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";

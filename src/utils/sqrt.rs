@@ -36,7 +36,6 @@ pub fn sqrt(value: &BigInt) -> BigInt {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use num_traits::Num;
 
     #[test]
     fn test_sqrt_0_1000() {

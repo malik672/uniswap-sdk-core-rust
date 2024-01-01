@@ -126,8 +126,6 @@ where
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::entities::{currency::Currency, token::Token};
-    use lazy_static::lazy_static;
 
     const ADDRESS_ZERO: &str = "0x0000000000000000000000000000000000000000";
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
