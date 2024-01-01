@@ -129,30 +129,15 @@ impl CurrencyAmount<Token> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::token;
 
     // Constants for testing
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
 
     // Lazy static variables for testing currencies
     lazy_static! {
-        static ref TOKEN18: Currency = Currency::Token(Token::new(
-            1,
-            ADDRESS_ONE.to_string(),
-            18,
-            None,
-            None,
-            None,
-            None,
-        ));
-        static ref TOKEN0: Currency = Currency::Token(Token::new(
-            1,
-            ADDRESS_ONE.to_string(),
-            0,
-            None,
-            None,
-            None,
-            None,
-        ));
+        static ref TOKEN18: Currency = Currency::Token(token!(1, ADDRESS_ONE, 18));
+        static ref TOKEN0: Currency = Currency::Token(token!(1, ADDRESS_ONE, 0));
     }
 
     // Unit tests

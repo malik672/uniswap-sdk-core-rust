@@ -88,15 +88,14 @@ impl BaseCurrency for Currency {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::token;
 
     const ADDRESS_ZERO: &str = "0x0000000000000000000000000000000000000000";
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
 
     lazy_static! {
-        static ref TOKEN0: Token =
-            Token::new(1, ADDRESS_ZERO.to_string(), 18, None, None, None, None,);
-        static ref TOKEN1: Token =
-            Token::new(1, ADDRESS_ONE.to_string(), 18, None, None, None, None,);
+        static ref TOKEN0: Token = token!(1, ADDRESS_ZERO, 18);
+        static ref TOKEN1: Token = token!(1, ADDRESS_ONE, 18);
     }
 
     #[test]
@@ -121,14 +120,6 @@ mod tests {
 
     #[test]
     fn equals_token0_is_equal_to_another_token0() {
-        assert!(TOKEN0.equals(&Token::new(
-            1,
-            ADDRESS_ZERO.to_owned(),
-            18,
-            Some("symbol".to_owned()),
-            Some("name".to_owned()),
-            None,
-            None
-        )));
+        assert!(TOKEN0.equals(&token!(1, ADDRESS_ZERO, 18, "symbol", "name")));
     }
 }

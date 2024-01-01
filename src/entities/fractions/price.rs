@@ -126,38 +126,15 @@ where
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::token;
 
     const ADDRESS_ZERO: &str = "0x0000000000000000000000000000000000000000";
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
 
     lazy_static! {
-        static ref TOKEN0: Currency = Currency::Token(Token::new(
-            1,
-            ADDRESS_ZERO.to_string(),
-            18,
-            None,
-            None,
-            None,
-            None,
-        ));
-        static ref TOKEN0_6: Currency = Currency::Token(Token::new(
-            1,
-            ADDRESS_ZERO.to_string(),
-            6,
-            None,
-            None,
-            None,
-            None,
-        ));
-        static ref TOKEN1: Currency = Currency::Token(Token::new(
-            1,
-            ADDRESS_ONE.to_string(),
-            18,
-            None,
-            None,
-            None,
-            None,
-        ));
+        static ref TOKEN0: Currency = Currency::Token(token!(1, ADDRESS_ZERO, 18));
+        static ref TOKEN0_6: Currency = Currency::Token(token!(1, ADDRESS_ZERO, 6));
+        static ref TOKEN1: Currency = Currency::Token(token!(1, ADDRESS_ONE, 18));
     }
 
     #[test]
