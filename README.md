@@ -1,9 +1,38 @@
-# Uniswap SDK Core Rust
+#                                           Uniswap SDK Core Rust
 
-The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange.
+**A Custom Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange.**
 
-## TBD(To Be Done)
-### -- Computed Price Inputs (TBD)
+> **Warning**
+> 
+>   This is an custom uniswap library
+
+## Quickstart
+Add this to your Cargo.toml
+```
+[dependencies]
+uniswap-sdk-core = "0.6.1";
+```
+
+And this to your code:
+
+```
+use uniswap_sdk_core::prelude::*;
+```
+
+## Examples
+The code below shows an example of how you can validate an address
+```
+// The `prelude` module provides a convenient way to import a number
+// of common dependencies at once. This can be useful if you are working
+// with multiple parts of the library and want to avoid having
+// to import each dependency individually.
+use uniswap_core::prelude::*;
+
+fn main() {
+        let valid_address: &str = "0x1234567890123456789012345678901234567890";
+        assert!(check_valid_ethereum_address(valid_address).is_ok());
+}
+```
 
 ## Acknowledgments
 

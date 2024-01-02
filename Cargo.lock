@@ -1231,8 +1231,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
 
 [[package]]
-name = "uniswap-sdk-core-rust"
-version = "0.6.0"
+name = "uniswap-core"
+version = "0.6.1"
 dependencies = [
  "alloy-primitives",
  "bigdecimal",
