@@ -1,9 +1,21 @@
-# Uniswap SDK Core Rust
+#                                           Uniswap SDK Core Rust
 
-The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange.
+**An Unofficial Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange.**
 
-## TBD(To Be Done)
-### -- Computed Price Inputs (TBD)
+> **Warning**
+> 
+>   This is an unofficial uniswap library
+
+## Quickstart
+Add this to your Cargo.toml
+
+[dependencies]
+uniswap-sdk-core-rust = "0.6.0";
+
+And this to your code:
+
+use ethers::prelude::*;
+
 
 ## Acknowledgments
 
