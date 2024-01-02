@@ -16,7 +16,7 @@ uniswap-core = "0.6.0";
 And this to your code:
 
 ```
-use ethers::prelude::*;
+use uniswap_sdk_core::prelude::*;
 ```
 
 ## Examples
