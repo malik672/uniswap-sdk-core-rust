@@ -8,13 +8,16 @@
 
 ## Quickstart
 Add this to your Cargo.toml
-
+```
 [dependencies]
 uniswap-core = "0.6.0";
+```
 
 And this to your code:
 
+```
 use ethers::prelude::*;
+```
 
 ## Examples
 The code below shows an example of how you can validate an address
