@@ -1,5 +1,5 @@
 [package]
-name = "uniswap-sdk-core-rust"
+name = "uniswap-core"
 version = "0.6.0"
 edition = "2021"
 authors = ["malik <aremumalik05@gmail.com>", "Shuhui Luo <twitter.com/aureliano_law>"]

@@ -10,12 +10,26 @@
 Add this to your Cargo.toml
 
 [dependencies]
-uniswap-sdk-core-rust = "0.6.0";
+uniswap-core = "0.6.0";
 
 And this to your code:
 
 use ethers::prelude::*;
 
+## Examples
+The code below shows an example of how you can validate an address
+```
+// The `prelude` module provides a convenient way to import a number
+// of common dependencies at once. This can be useful if you are working
+// with multiple parts of the library and want to avoid having
+// to import each dependency individually.
+use uniswap_core::prelude::*;
+
+fn main() {
+        let valid_address: &str = "0x1234567890123456789012345678901234567890";
+        assert!(check_valid_ethereum_address(valid_address).is_ok());
+}
+```
 
 ## Acknowledgments
 
