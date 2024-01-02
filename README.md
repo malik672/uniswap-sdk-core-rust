@@ -1,10 +1,10 @@
 #                                           Uniswap SDK Core Rust
 
-**An Unofficial Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange.**
+**A Custom Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange.**
 
 > **Warning**
 > 
->   This is an unofficial uniswap library
+>   This is an custom uniswap library
 
 ## Quickstart
 Add this to your Cargo.toml
