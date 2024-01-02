@@ -10,7 +10,7 @@
 Add this to your Cargo.toml
 ```
 [dependencies]
-uniswap-core = "0.6.0";
+uniswap-sdk-core = "0.6.0";
 ```
 
 And this to your code:
