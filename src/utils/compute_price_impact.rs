@@ -1,5 +1,15 @@
 use crate::prelude::*;
 
+/// Returns the percent difference between the mid price and the execution price, i.e. price impact.
+///
+/// # Arguments
+///
+/// *  midPrice mid price before the trade
+/// * inputAmount the input amount of the trade
+/// * outputAmount the output amount of the trade
+///
+/// returns: Percent
+///
 pub fn compute_price_impact<TBase: CurrencyTrait, TQuote: CurrencyTrait>(
     mid_price: Price<TBase, TQuote>,
     input_amount: CurrencyAmount<TBase>,
