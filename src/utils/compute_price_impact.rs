@@ -27,11 +27,9 @@ pub fn compute_price_impact<TBase: CurrencyTrait, TQuote: CurrencyTrait>(
 }
 
 #[cfg(test)]
-
 mod tests {
-    use crate::token;
-
     use super::*;
+    use crate::token;
 
     #[test]
     fn test_compute_price_impact() {
