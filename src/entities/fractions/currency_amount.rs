@@ -46,7 +46,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Multiplication of currency amount by another fractional amount
     pub fn multiply<M>(&self, other: &impl FractionTrait<M>) -> Self {
-        let multiplied = self.as_fraction().multiply(&other.as_fraction());
+        let multiplied = self.as_fraction() * other.as_fraction();
         Self::from_fractional_amount(
             self.meta.currency.clone(),
             multiplied.numerator().clone(),
@@ -56,7 +56,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Division of currency amount by another fractional amount
     pub fn divide<M>(&self, other: &impl FractionTrait<M>) -> Self {
-        let divided = self.as_fraction().divide(&other.as_fraction());
+        let divided = self.as_fraction() / other.as_fraction();
         Self::from_fractional_amount(
             self.meta.currency.clone(),
             divided.numerator().clone(),
@@ -75,7 +75,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     // Addition of another currency amount to the current amount
     pub fn add(&self, other: &Self) -> Self {
         assert!(self.meta.currency.equals(&other.meta.currency), "CURRENCY");
-        let added = self.as_fraction().add(&other.as_fraction());
+        let added = self.as_fraction() + other.as_fraction();
         Self::from_fractional_amount(
             self.meta.currency.clone(),
             added.numerator().clone(),
@@ -86,7 +86,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     // Subtraction of another currency amount from the current amount
     pub fn subtract(&self, other: &Self) -> Self {
         assert!(self.meta.currency.equals(&other.meta.currency), "CURRENCY");
-        let subtracted = self.as_fraction().subtract(&other.as_fraction());
+        let subtracted = self.as_fraction() - other.as_fraction();
         Self::from_fractional_amount(
             self.meta.currency.clone(),
             subtracted.numerator().clone(),
@@ -96,16 +96,14 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Convert the currency amount to a string with a specified number of significant digits
     pub fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
-        self.as_fraction()
-            .divide(&Fraction::new(self.meta.decimal_scale.clone(), 1))
+        (self.as_fraction() / Fraction::new(self.meta.decimal_scale.clone(), 1))
             .to_significant(significant_digits, rounding)
     }
 
     // Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         assert!(decimal_places <= self.meta.currency.decimals(), "DECIMALS");
-        self.as_fraction()
-            .divide(&Fraction::new(self.meta.decimal_scale.clone(), 1))
+        (self.as_fraction() / Fraction::new(self.meta.decimal_scale.clone(), 1))
             .to_fixed(decimal_places, rounding)
     }
 }

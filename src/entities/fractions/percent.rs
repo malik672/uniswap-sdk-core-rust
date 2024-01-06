@@ -7,7 +7,7 @@ lazy_static! {
 }
 
 /// Unit struct to distinguish between a fraction and a percent
-#[derive(Clone, PartialEq)]
+#[derive(Clone, Debug)]
 pub struct IsPercent;
 
 // Type alias for a Percent, a Fraction with the IsPercent metadata
@@ -22,17 +22,13 @@ impl Percent {
     /// Converts the Percent to a string with a specified number of significant digits and rounding strategy
     pub fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
         // Convert the Percent to a simple Fraction, multiply by 100, and then call to_significant on the result
-        self.as_fraction()
-            .multiply(&ONE_HUNDRED)
-            .to_significant(significant_digits, rounding)
+        (self.as_fraction() * ONE_HUNDRED.clone()).to_significant(significant_digits, rounding)
     }
 
     /// Converts the Percent to a string with a fixed number of decimal places and rounding strategy
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the result
-        self.as_fraction()
-            .multiply(&ONE_HUNDRED)
-            .to_fixed(decimal_places, rounding)
+        (self.as_fraction() * ONE_HUNDRED.clone()).to_fixed(decimal_places, rounding)
     }
 }
 
@@ -42,42 +38,50 @@ mod tests {
 
     #[test]
     fn test_add() {
-        assert!(Percent::new(1, 100)
-            .add(&Percent::new(2, 100))
-            .equal_to(&Percent::new(3, 100)));
-        assert!(Percent::new(1, 25)
-            .add(&Percent::new(2, 100))
-            .equal_to(&Percent::new(150, 2500)));
+        assert_eq!(
+            Percent::new(1, 100) + Percent::new(2, 100),
+            Percent::new(3, 100)
+        );
+        assert_eq!(
+            Percent::new(1, 25) + Percent::new(2, 100),
+            Percent::new(150, 2500)
+        );
     }
 
     #[test]
     fn test_subtract() {
-        assert!(Percent::new(1, 100)
-            .subtract(&Percent::new(2, 100))
-            .equal_to(&Percent::new(-1, 100)));
-        assert!(Percent::new(1, 25)
-            .subtract(&Percent::new(2, 100))
-            .equal_to(&Percent::new(50, 2500)));
+        assert_eq!(
+            Percent::new(1, 100) - Percent::new(2, 100),
+            Percent::new(-1, 100)
+        );
+        assert_eq!(
+            Percent::new(1, 25) - Percent::new(2, 100),
+            Percent::new(50, 2500)
+        );
     }
 
     #[test]
     fn test_multiply() {
-        assert!(Percent::new(1, 100)
-            .multiply(&Percent::new(2, 100))
-            .equal_to(&Percent::new(2, 10000)));
-        assert!(Percent::new(1, 25)
-            .multiply(&Percent::new(2, 100))
-            .equal_to(&Percent::new(2, 2500)));
+        assert_eq!(
+            Percent::new(1, 100) * Percent::new(2, 100),
+            Percent::new(2, 10000)
+        );
+        assert_eq!(
+            Percent::new(1, 25) * Percent::new(2, 100),
+            Percent::new(2, 2500)
+        );
     }
 
     #[test]
     fn test_divide() {
-        assert!(Percent::new(1, 100)
-            .divide(&Percent::new(2, 100))
-            .equal_to(&Percent::new(100, 200)));
-        assert!(Percent::new(1, 25)
-            .divide(&Percent::new(2, 100))
-            .equal_to(&Percent::new(100, 50)));
+        assert_eq!(
+            Percent::new(1, 100) / Percent::new(2, 100),
+            Percent::new(100, 200)
+        );
+        assert_eq!(
+            Percent::new(1, 25) / Percent::new(2, 100),
+            Percent::new(100, 50)
+        );
     }
 
     #[test]
