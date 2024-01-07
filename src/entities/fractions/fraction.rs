@@ -1,8 +1,9 @@
 // External crate dependencies
 use crate::prelude::*;
+use std::ops::{Add, Div, Mul, Sub};
 
 // Struct representing a fraction with metadata
-#[derive(Clone, PartialEq)]
+#[derive(Clone, Debug)]
 pub struct FractionLike<M: Clone> {
     numerator: BigInt,
     denominator: BigInt,
@@ -29,7 +30,15 @@ const fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
 }
 
 // Trait defining common operations for fractions with metadata
-pub trait FractionTrait<M>: Sized {
+pub trait FractionTrait<M>
+where
+    Self: Sized
+        + Ord
+        + Add<Output = Self>
+        + Sub<Output = Self>
+        + Mul<Output = Self>
+        + Div<Output = Self>,
+{
     // Constructor method for creating a new Fraction with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self;
 
@@ -63,73 +72,6 @@ pub trait FractionTrait<M>: Sized {
             self.numerator().clone(),
             self.meta(),
         )
-    }
-
-    // Adds another fraction to the current fraction
-    fn add(&self, other: &Self) -> Self {
-        if self.denominator() == other.denominator() {
-            Self::new(
-                self.numerator() + other.numerator(),
-                self.denominator().clone(),
-                self.meta(),
-            )
-        } else {
-            Self::new(
-                self.numerator() * other.denominator() + other.numerator() * self.denominator(),
-                self.denominator() * other.denominator(),
-                self.meta(),
-            )
-        }
-    }
-
-    // Subtracts another fraction from the current fraction
-    fn subtract(&self, other: &Self) -> Self {
-        if self.denominator() == other.denominator() {
-            Self::new(
-                self.numerator() - other.numerator(),
-                self.denominator().clone(),
-                self.meta(),
-            )
-        } else {
-            Self::new(
-                self.numerator() * other.denominator() - other.numerator() * self.denominator(),
-                self.denominator() * other.denominator(),
-                self.meta(),
-            )
-        }
-    }
-
-    // Multiplies the current fraction by another fraction
-    fn multiply(&self, other: &Self) -> Self {
-        Self::new(
-            self.numerator() * other.numerator(),
-            self.denominator() * other.denominator(),
-            self.meta(),
-        )
-    }
-
-    // Divides the current fraction by another fraction
-    fn divide(&self, other: &Self) -> Self {
-        Self::new(
-            self.numerator() * other.denominator(),
-            self.denominator() * other.numerator(),
-            self.meta(),
-        )
-    }
-
-    // Checks if the current fraction is less than another fraction
-    fn less_than(&self, other: &Self) -> bool {
-        self.numerator() * other.denominator() < other.numerator() * self.denominator()
-    }
-
-    // Checks if the current fraction is equal to another fraction
-    fn equal_to(&self, other: &Self) -> bool {
-        self.numerator() * other.denominator() == other.numerator() * self.denominator()
-    }
-
-    // Checks if the current fraction is greater than another fraction
-    fn greater_than(&self, other: &Self) -> bool {
-        self.numerator() * other.denominator() > other.numerator() * self.denominator()
     }
 
     // Converts the fraction to a `bigdecimal::BigDecimal`
@@ -201,6 +143,95 @@ impl<M: Clone> FractionTrait<M> for FractionLike<M> {
     }
 }
 
+impl<M: Clone> PartialEq for FractionLike<M> {
+    // Checks if the current fraction is equal to another fraction
+    fn eq(&self, other: &Self) -> bool {
+        self.numerator() * other.denominator() == other.numerator() * self.denominator()
+    }
+}
+
+impl<M: Clone> Eq for FractionLike<M> {}
+
+impl<M: Clone> Ord for FractionLike<M> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        (self.numerator() * other.denominator()).cmp(&(other.numerator() * self.denominator()))
+    }
+}
+
+impl<M: Clone> PartialOrd<Self> for FractionLike<M> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl<M: Clone> Add for FractionLike<M> {
+    type Output = Self;
+
+    // Adds another fraction to the current fraction
+    fn add(self, other: Self) -> Self::Output {
+        if self.denominator() == other.denominator() {
+            FractionTrait::new(
+                self.numerator() + other.numerator(),
+                self.denominator().clone(),
+                self.meta(),
+            )
+        } else {
+            FractionTrait::new(
+                self.numerator() * other.denominator() + other.numerator() * self.denominator(),
+                self.denominator() * other.denominator(),
+                self.meta(),
+            )
+        }
+    }
+}
+
+impl<M: Clone> Sub for FractionLike<M> {
+    type Output = Self;
+
+    // Subtracts another fraction from the current fraction
+    fn sub(self, other: Self) -> Self::Output {
+        if self.denominator() == other.denominator() {
+            FractionTrait::new(
+                self.numerator() - other.numerator(),
+                self.denominator().clone(),
+                self.meta(),
+            )
+        } else {
+            FractionTrait::new(
+                self.numerator() * other.denominator() - other.numerator() * self.denominator(),
+                self.denominator() * other.denominator(),
+                self.meta(),
+            )
+        }
+    }
+}
+
+impl<M: Clone> Mul for FractionLike<M> {
+    type Output = Self;
+
+    // Multiplies the current fraction by another fraction
+    fn mul(self, other: Self) -> Self::Output {
+        FractionTrait::new(
+            self.numerator() * other.numerator(),
+            self.denominator() * other.denominator(),
+            self.meta(),
+        )
+    }
+}
+
+impl<M: Clone> Div for FractionLike<M> {
+    type Output = Self;
+
+    // Divides the current fraction by another fraction
+    fn div(self, other: Self) -> Self::Output {
+        FractionTrait::new(
+            self.numerator() * other.denominator(),
+            self.denominator() * other.numerator(),
+            self.meta(),
+        )
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -214,15 +245,9 @@ mod tests {
 
     #[test]
     fn test_remainder() {
-        assert!(Fraction::new(8, 3)
-            .remainder()
-            .equal_to(&Fraction::new(2, 3)));
-        assert!(Fraction::new(12, 4)
-            .remainder()
-            .equal_to(&Fraction::new(0, 4)));
-        assert!(Fraction::new(16, 5)
-            .remainder()
-            .equal_to(&Fraction::new(1, 5)));
+        assert_eq!(Fraction::new(8, 3).remainder(), Fraction::new(2, 3));
+        assert_eq!(Fraction::new(12, 4).remainder(), Fraction::new(0, 4));
+        assert_eq!(Fraction::new(16, 5).remainder(), Fraction::new(1, 5));
     }
 
     #[test]
@@ -234,76 +259,86 @@ mod tests {
 
     #[test]
     fn test_add() {
-        assert!(Fraction::new(1, 10)
-            .add(&Fraction::new(4, 12))
-            .equal_to(&Fraction::new(52, 120)));
-        assert!(Fraction::new(1, 5)
-            .add(&Fraction::new(2, 5))
-            .equal_to(&Fraction::new(3, 5)));
+        assert_eq!(
+            Fraction::new(1, 10) + Fraction::new(4, 12),
+            Fraction::new(52, 120)
+        );
+        assert_eq!(
+            Fraction::new(1, 5) + Fraction::new(2, 5),
+            Fraction::new(3, 5)
+        );
     }
 
     #[test]
     fn test_subtract() {
-        assert!(Fraction::new(1, 10)
-            .subtract(&Fraction::new(4, 12))
-            .equal_to(&Fraction::new(-28, 120)));
-        assert!(Fraction::new(3, 5)
-            .subtract(&Fraction::new(2, 5))
-            .equal_to(&Fraction::new(1, 5)));
+        assert_eq!(
+            Fraction::new(1, 10) - Fraction::new(4, 12),
+            Fraction::new(-28, 120)
+        );
+        assert_eq!(
+            Fraction::new(3, 5) - Fraction::new(2, 5),
+            Fraction::new(1, 5)
+        );
     }
 
     #[test]
     fn test_less_than() {
-        assert!(Fraction::new(1, 10).less_than(&Fraction::new(4, 12)));
-        assert!(!Fraction::new(1, 3).less_than(&Fraction::new(4, 12)));
-        assert!(!Fraction::new(5, 12).less_than(&Fraction::new(4, 12)));
+        assert!(Fraction::new(1, 10) < Fraction::new(4, 12));
+        assert!(!(Fraction::new(1, 3) < Fraction::new(4, 12)));
+        assert!(!(Fraction::new(5, 12) < Fraction::new(4, 12)));
     }
 
     #[test]
     fn test_equal_to() {
-        assert!(!Fraction::new(1, 10).equal_to(&Fraction::new(4, 12)));
-        assert!(Fraction::new(1, 3).equal_to(&Fraction::new(4, 12)));
-        assert!(!Fraction::new(5, 12).equal_to(&Fraction::new(4, 12)));
+        assert_ne!(Fraction::new(1, 10), Fraction::new(4, 12));
+        assert_eq!(Fraction::new(1, 3), Fraction::new(4, 12));
+        assert_ne!(Fraction::new(5, 12), Fraction::new(4, 12));
     }
 
     #[test]
     fn test_greater_than() {
-        assert!(!Fraction::new(1, 10).greater_than(&Fraction::new(4, 12)));
-        assert!(!Fraction::new(1, 3).greater_than(&Fraction::new(4, 12)));
-        assert!(Fraction::new(5, 12).greater_than(&Fraction::new(4, 12)));
+        assert!(!(Fraction::new(1, 10) > Fraction::new(4, 12)));
+        assert!(!(Fraction::new(1, 3) > Fraction::new(4, 12)));
+        assert!(Fraction::new(5, 12) > Fraction::new(4, 12));
     }
 
     #[test]
     fn test_multiply() {
-        assert!(Fraction::new(1, 10)
-            .multiply(&Fraction::new(4, 12))
-            .equal_to(&Fraction::new(4, 120)));
-        assert!(Fraction::new(1, 3)
-            .multiply(&Fraction::new(4, 12))
-            .equal_to(&Fraction::new(4, 36)));
-        assert!(Fraction::new(5, 12)
-            .multiply(&Fraction::new(4, 12))
-            .equal_to(&Fraction::new(20, 144)));
+        assert_eq!(
+            Fraction::new(1, 10) * Fraction::new(4, 12),
+            Fraction::new(4, 120)
+        );
+        assert_eq!(
+            Fraction::new(1, 3) * Fraction::new(4, 12),
+            Fraction::new(4, 36)
+        );
+        assert_eq!(
+            Fraction::new(5, 12) * Fraction::new(4, 12),
+            Fraction::new(20, 144)
+        );
     }
 
     #[test]
     fn test_divide() {
-        assert!(Fraction::new(1, 10)
-            .divide(&Fraction::new(4, 12))
-            .equal_to(&Fraction::new(12, 40)));
-        assert!(Fraction::new(1, 3)
-            .divide(&Fraction::new(4, 12))
-            .equal_to(&Fraction::new(12, 12)));
-        assert!(Fraction::new(5, 12)
-            .divide(&Fraction::new(4, 12))
-            .equal_to(&Fraction::new(60, 48)));
+        assert_eq!(
+            Fraction::new(1, 10) / Fraction::new(4, 12),
+            Fraction::new(12, 40)
+        );
+        assert_eq!(
+            Fraction::new(1, 3) / Fraction::new(4, 12),
+            Fraction::new(12, 12)
+        );
+        assert_eq!(
+            Fraction::new(5, 12) / Fraction::new(4, 12),
+            Fraction::new(60, 48)
+        );
     }
 
     #[test]
     fn test_as_faction() {
         let f = Fraction::new(1, 2);
         // returns an equivalent but not the same reference fraction
-        assert!(f.as_fraction().equal_to(&f));
+        assert_eq!(f.as_fraction(), f);
         assert_ne!(&f as *const _, &f.as_fraction() as *const _);
     }
 }

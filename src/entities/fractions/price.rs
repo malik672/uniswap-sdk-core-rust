@@ -79,7 +79,7 @@ where
             self.meta.quote_currency.equals(&other.meta.base_currency),
             "TOKEN"
         );
-        let fraction = self.as_fraction().multiply(&other.as_fraction());
+        let fraction = self.as_fraction() * other.as_fraction();
         Price::new(
             self.meta.base_currency.clone(),
             other.meta.quote_currency.clone(),
@@ -97,7 +97,7 @@ where
                 .equals(&self.meta.base_currency),
             "TOKEN"
         );
-        let fraction = self.as_fraction().multiply(&currency_amount.as_fraction());
+        let fraction = self.as_fraction() * currency_amount.as_fraction();
         CurrencyAmount::from_fractional_amount(
             self.meta.quote_currency.clone(),
             fraction.numerator().clone(),
@@ -107,7 +107,7 @@ where
 
     /// Get the value scaled by decimals for formatting
     pub fn adjusted_for_decimals(&self) -> Fraction {
-        self.as_fraction().multiply(&self.meta.scalar)
+        self.as_fraction() * self.meta.scalar.clone()
     }
 
     /// Converts the adjusted price to a string with a specified number of significant digits and rounding strategy
@@ -159,9 +159,10 @@ mod test {
     #[test]
     fn test_quote_returns_correct_value() {
         let price = Price::new(TOKEN0.clone(), TOKEN1.clone(), 1, 5);
-        assert!(price
-            .quote(CurrencyAmount::from_raw_amount(TOKEN0.clone(), 10))
-            .equal_to(&CurrencyAmount::from_raw_amount(TOKEN1.clone(), 50)));
+        assert!(
+            price.quote(CurrencyAmount::from_raw_amount(TOKEN0.clone(), 10))
+                == CurrencyAmount::from_raw_amount(TOKEN1.clone(), 50)
+        );
     }
 
     #[test]
