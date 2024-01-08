@@ -14,6 +14,7 @@ pub use crate::{
         token::Token,
         weth9::WETH9,
     },
+    error::Error,
 };
 pub use alloy_primitives::{address, Address};
 pub use bigdecimal::{BigDecimal, RoundingMode};
@@ -24,3 +25,4 @@ pub use num_traits::{Num, ToPrimitive, Zero};
 pub use std::{
     cmp::Ordering, collections::HashMap, num::NonZeroU64, ops::Div, str::FromStr, sync::Mutex,
 };
+pub use thiserror::Error;

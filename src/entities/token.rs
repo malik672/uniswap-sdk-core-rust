@@ -49,10 +49,11 @@ impl Token {
         name: Option<String>,
         buy_fee_bps: Option<BigUint>,
         sell_fee_bps: Option<BigUint>,
-    ) -> Self {
-        assert!(chain_id > 0, "CHAIN_ID");
-        assert!(decimals < 255, "DECIMALS");
-        Self {
+    ) -> Result<Self, Error> {
+        if chain_id <= 0 {
+            return Err(Error::ChainIdError { field: "CHAIN_ID" });
+        }
+        Ok(Self {
             chain_id,
             decimals,
             symbol,
@@ -62,7 +63,7 @@ impl Token {
                 buy_fee_bps,
                 sell_fee_bps,
             },
-        }
+        })
     }
 
     /// Returns true if the address of this token sorts before the address of the other token.
@@ -72,10 +73,15 @@ impl Token {
     ///
     /// * `other`: other token to compare
     ///
-    pub fn sorts_before(&self, other: &Token) -> bool {
-        assert_eq!(self.chain_id, other.chain_id, "CHAIN_IDS");
-        assert_ne!(self.address(), other.address(), "ADDRESSES");
-        self.address().lt(&other.address())
+    pub fn sorts_before(&self, other: &Token) -> Result<bool, Error> {
+        if self.chain_id != other.chain_id {
+            return Err(Error::ChainIdMismatch(self.chain_id, other.chain_id));
+        }
+
+        if self.address() == other.address() {
+            return Err(Error::EqualAddresses(format!("{}", self.address())));
+        }
+        Ok(self.address().lt(&other.address()))
     }
 }
 
@@ -92,6 +98,7 @@ macro_rules! token {
             None,
             None,
         )
+        .expect("failed to create token")
     };
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr) => {
         Token::new(
@@ -103,6 +110,7 @@ macro_rules! token {
             None,
             None,
         )
+        .expect("failed to create token")
     };
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr, $name:expr) => {
         Token::new(
@@ -114,6 +122,7 @@ macro_rules! token {
             None,
             None,
         )
+        .expect("failed to create token")
     };
 }
 
@@ -138,7 +147,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "DECIMALS")]
     fn test_expect_revert_overflow_dec() {
         let _token = token!(4, ADDRESS_ONE, 255, "Test", "Te");
     }

@@ -14,15 +14,19 @@ pub fn compute_price_impact<TBase: CurrencyTrait, TQuote: CurrencyTrait>(
     mid_price: Price<TBase, TQuote>,
     input_amount: CurrencyAmount<TBase>,
     output_amount: CurrencyAmount<TQuote>,
-) -> Percent {
+) -> Result<Percent, Error> {
     let quoted_output_amount = mid_price.quote(input_amount);
     // calculate price impact := (exactQuote - outputAmount) / exactQuote
-    let price_impact = quoted_output_amount
-        .subtract(&output_amount)
-        .divide(&quoted_output_amount);
+    let price_impact = match quoted_output_amount {
+        Ok(quoted_output_amount) => quoted_output_amount
+            .subtract(&output_amount)?
+            .divide(&quoted_output_amount),
+        Err(e) => Err(e),
+    };
+    let price_impact_clone = price_impact?.clone();
     Percent::new(
-        price_impact.numerator().clone(),
-        price_impact.denominator().clone(),
+        price_impact_clone.numerator().clone(),
+        price_impact_clone.denominator().clone(),
     )
 }
 
@@ -42,28 +46,34 @@ mod tests {
         //is correct for zero
         assert!(
             compute_price_impact(
-                Price::new(Ether::on_chain(1), token.clone(), 10, 100),
-                CurrencyAmount::from_raw_amount(Ether::on_chain(1), 10),
-                CurrencyAmount::from_raw_amount(token.clone(), 100)
-            ) == Percent::new(0, 10000),
+                Price::new(Ether::on_chain(1), token.clone(), 10, 100).unwrap(),
+                CurrencyAmount::from_raw_amount(Ether::on_chain(1), 10).unwrap(),
+                CurrencyAmount::from_raw_amount(token.clone(), 100).unwrap()
+            )
+            .unwrap()
+                == Percent::new(0, 10000).unwrap(),
         );
 
         //is correct for half output
         assert!(
             compute_price_impact(
-                Price::new(token.clone(), token_1.clone(), 10, 100),
-                CurrencyAmount::from_raw_amount(token.clone(), 10),
-                CurrencyAmount::from_raw_amount(token_1.clone(), 50)
-            ) == Percent::new(5000, 10000),
+                Price::new(token.clone(), token_1.clone(), 10, 100).unwrap(),
+                CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
+                CurrencyAmount::from_raw_amount(token_1.clone(), 50).unwrap()
+            )
+            .unwrap()
+                == Percent::new(5000, 10000).unwrap(),
         );
 
         //is negative for more output
         assert!(
             compute_price_impact(
-                Price::new(token.clone(), token_1.clone(), 10, 100),
-                CurrencyAmount::from_raw_amount(token.clone(), 10),
-                CurrencyAmount::from_raw_amount(token_1.clone(), 200)
-            ) == Percent::new(-10000, 10000)
+                Price::new(token.clone(), token_1.clone(), 10, 100).unwrap(),
+                CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
+                CurrencyAmount::from_raw_amount(token_1.clone(), 200).unwrap()
+            )
+            .unwrap()
+                == Percent::new(-10000, 10000).unwrap()
         )
     }
 }
