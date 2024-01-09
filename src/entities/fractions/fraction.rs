@@ -262,18 +262,10 @@ mod tests {
 
     #[test]
     fn test_remainder() {
-        assert_eq!(
-            Fraction::new(8, 3).unwrap().remainder().unwrap(),
-            Fraction::new(2, 3).unwrap()
-        );
-        assert_eq!(
-            Fraction::new(12, 4).unwrap().remainder().unwrap(),
-            Fraction::new(0, 4).unwrap()
-        );
-        assert_eq!(
-            Fraction::new(16, 5).unwrap().remainder().unwrap(),
-            Fraction::new(1, 5).unwrap()
-        );
+        assert_eq!(Fraction::new(8, 3)?.remainder()?, Fraction::new(2, 3)?);
+        assert_eq!(Fraction::new(12, 4)?.remainder()?, Fraction::new(0, 4)?);
+        assert_eq!(Fraction::new(16, 5)?.remainder()?, Fraction::new(1, 5)?);
+        Ok(())
     }
 
     #[test]
