@@ -44,7 +44,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         Self::new(currency, raw_amount, 1).map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
-    // Construct a currency amoun t with a denominator that is not equal to 1
+    // Construct a currency amount with a denominator that is not equal to 1
     pub fn from_fractional_amount(
         currency: T,
         numerator: impl Into<BigInt>,
