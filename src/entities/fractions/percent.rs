@@ -35,7 +35,7 @@ impl Percent {
 
     /// Converts the Percent to a string with a fixed number of decimal places and rounding strategy
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
-        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the
+        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the result
         //Unwrap is used here, because there's little to  no possibility of failure
         (self.as_fraction().unwrap() * ONE_HUNDRED.clone())
             .unwrap()
