@@ -26,14 +26,14 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             return Err(Error::MaxUint { field: "AMOUNT" });
         }
         let exponent = currency.decimals();
-        Ok(FractionTrait::new(
+        FractionTrait::new(
             numerator,
             denominator,
             CurrencyMeta {
                 currency,
                 decimal_scale: BigUint::from(10u64).pow(exponent as u32),
             },
-        )?)
+        )
     }
 
     // Returns a new currency amount instance from the unitless amount of token (raw amount)

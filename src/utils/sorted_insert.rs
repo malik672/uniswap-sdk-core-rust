@@ -8,11 +8,11 @@ pub fn sorted_insert<T: Clone>(
     max_size: usize,
     comparator: fn(&T, &T) -> Ordering,
 ) -> Result<Option<T>, Error> {
-    if !(max_size > 0) {
+    if max_size == 0 {
         return Err(Error::Incorrect("MAX_SIZE_ZERO".to_owned()));
     }
 
-    if !(items.len() <= max_size) {
+    if items.len() > max_size {
         return Err(Error::Incorrect("ITEMS_SIZE".to_owned()));
     }
 

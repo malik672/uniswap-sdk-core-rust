@@ -50,7 +50,7 @@ impl Token {
         buy_fee_bps: Option<BigUint>,
         sell_fee_bps: Option<BigUint>,
     ) -> Result<Self, Error> {
-        if chain_id <= 0 {
+        if chain_id == 0 {
             return Err(Error::ChainIdError { field: "CHAIN_ID" });
         }
         Ok(Self {
