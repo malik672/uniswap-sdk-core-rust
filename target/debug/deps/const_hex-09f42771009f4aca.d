@@ -1,0 +1,12 @@
+/Users/user/Desktop/n-work/uniswap-sdk-core-rust/target/debug/deps/libconst_hex-09f42771009f4aca.rmeta: /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/lib.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/arch/mod.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/arch/generic.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/impl_core.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/buffer.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/arch/x86.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/error.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/traits.rs
+
+/Users/user/Desktop/n-work/uniswap-sdk-core-rust/target/debug/deps/const_hex-09f42771009f4aca.d: /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/lib.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/arch/mod.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/arch/generic.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/impl_core.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/buffer.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/arch/x86.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/error.rs /Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/traits.rs
+
+/Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/lib.rs:
+/Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/arch/mod.rs:
+/Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/arch/generic.rs:
+/Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/impl_core.rs:
+/Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/buffer.rs:
+/Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/arch/x86.rs:
+/Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/error.rs:
+/Users/user/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-hex-1.10.0/src/traits.rs:

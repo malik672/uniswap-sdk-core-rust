@@ -24,10 +24,10 @@ pub fn compute_price_impact<TBase: CurrencyTrait, TQuote: CurrencyTrait>(
         Err(e) => Err(e),
     };
     let price_impact_clone = price_impact?.clone();
-    Percent::new(
+    Ok(Percent::new(
         price_impact_clone.numerator().clone(),
         price_impact_clone.denominator().clone(),
-    )
+    ))
 }
 
 #[cfg(test)]
@@ -46,34 +46,34 @@ mod tests {
         //is correct for zero
         assert!(
             compute_price_impact(
-                Price::new(Ether::on_chain(1), token.clone(), 10, 100).unwrap(),
+                Price::new(Ether::on_chain(1), token.clone(), 10, 100),
                 CurrencyAmount::from_raw_amount(Ether::on_chain(1), 10).unwrap(),
                 CurrencyAmount::from_raw_amount(token.clone(), 100).unwrap()
             )
             .unwrap()
-                == Percent::new(0, 10000).unwrap(),
+                == Percent::new(0, 10000),
         );
 
         //is correct for half output
         assert!(
             compute_price_impact(
-                Price::new(token.clone(), token_1.clone(), 10, 100).unwrap(),
+                Price::new(token.clone(), token_1.clone(), 10, 100),
                 CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
                 CurrencyAmount::from_raw_amount(token_1.clone(), 50).unwrap()
             )
             .unwrap()
-                == Percent::new(5000, 10000).unwrap(),
+                == Percent::new(5000, 10000),
         );
 
         //is negative for more output
         assert!(
             compute_price_impact(
-                Price::new(token.clone(), token_1.clone(), 10, 100).unwrap(),
+                Price::new(token.clone(), token_1.clone(), 10, 100),
                 CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
                 CurrencyAmount::from_raw_amount(token_1.clone(), 200).unwrap()
             )
             .unwrap()
-                == Percent::new(-10000, 10000).unwrap()
+                == Percent::new(-10000, 10000)
         )
     }
 }

@@ -26,21 +26,18 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             return Err(Error::MaxUint);
         }
         let exponent = currency.decimals();
-        FractionTrait::new(
+        Ok(FractionTrait::new(
             numerator,
             denominator,
             CurrencyMeta {
                 currency,
                 decimal_scale: BigUint::from(10u64).pow(exponent as u32),
             },
-        )
+        ))
     }
 
     // Returns a new currency amount instance from the unitless amount of token (raw amount)
-    pub fn from_raw_amount(
-        currency: T,
-        raw_amount: impl Into<BigInt>,
-    ) -> Result<CurrencyAmount<T>, Error> {
+    pub fn from_raw_amount(currency: T, raw_amount: impl Into<BigInt>) -> Result<Self, Error> {
         Self::new(currency, raw_amount, 1)
     }
 
@@ -49,23 +46,23 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         currency: T,
         numerator: impl Into<BigInt>,
         denominator: impl Into<BigInt>,
-    ) -> Result<CurrencyAmount<T>, Error> {
+    ) -> Result<Self, Error> {
         Self::new(currency, numerator, denominator)
     }
 
     // Multiplication of currency amount by another fractional amount
     pub fn multiply<M>(&self, other: &impl FractionTrait<M>) -> Result<Self, Error> {
-        let multiplied = (self.as_fraction()? * other.as_fraction()?)?;
+        let multiplied = self.as_fraction() * other.as_fraction();
         Self::from_fractional_amount(
             self.meta.currency.clone(),
-            multiplied.clone().numerator().clone(),
-            multiplied.clone().denominator().clone(),
+            multiplied.numerator().clone(),
+            multiplied.denominator().clone(),
         )
     }
 
     // Division of currency amount by another fractional amount
     pub fn divide<M>(&self, other: &impl FractionTrait<M>) -> Result<Self, Error> {
-        let divided = (self.as_fraction()? / other.as_fraction()?)?;
+        let divided = self.as_fraction() / other.as_fraction();
         Self::from_fractional_amount(
             self.meta.currency.clone(),
             divided.numerator().clone(),
@@ -86,11 +83,11 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         if !self.meta.currency.equals(&other.meta.currency) {
             return Err(Error::NotEqual("CURRENCY: not equal".to_owned()));
         }
-        let added = (self.as_fraction()? + other.as_fraction()?)?;
+        let added = self.as_fraction() + other.as_fraction();
         Self::from_fractional_amount(
             self.meta.currency.clone(),
-            added.clone().numerator().clone(),
-            added.clone().denominator().clone(),
+            added.numerator().clone(),
+            added.denominator().clone(),
         )
     }
 
@@ -99,11 +96,11 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         if !self.meta.currency.equals(&other.meta.currency) {
             return Err(Error::NotEqual("CURRENCY: not equal".to_owned()));
         }
-        let subtracted = (self.as_fraction()? - other.as_fraction()?)?;
+        let subtracted = self.as_fraction() - other.as_fraction();
         Self::from_fractional_amount(
             self.meta.currency.clone(),
-            subtracted.clone().numerator().clone(),
-            subtracted.clone().denominator().clone(),
+            subtracted.numerator().clone(),
+            subtracted.denominator().clone(),
         )
     }
 
@@ -113,7 +110,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         significant_digits: u8,
         rounding: Rounding,
     ) -> Result<String, Error> {
-        (self.as_fraction()? / Fraction::new(self.meta.decimal_scale.clone(), 1)?)?
+        (self.as_fraction() / Fraction::new(self.meta.decimal_scale.clone(), 1))
             .to_significant(significant_digits, rounding)
     }
 
@@ -128,7 +125,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         }
 
         Ok(
-            (self.as_fraction()? / Fraction::new(self.meta.decimal_scale.clone(), 1)?)?
+            (self.as_fraction() / Fraction::new(self.meta.decimal_scale.clone(), 1))
                 .to_fixed(decimal_places, rounding),
         )
     }
@@ -175,7 +172,7 @@ mod tests {
     fn test_quotient() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 100)
             .unwrap()
-            .multiply(&Percent::new(15, 100).unwrap());
+            .multiply(&Percent::new(15, 100));
         assert_eq!(amount.unwrap().quotient(), BigInt::from(15));
     }
 
@@ -292,7 +289,7 @@ mod tests {
     fn to_exact_0_decimals() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 123456).unwrap();
         println!("{:?}", amount.clone().to_exact());
-        // assert_eq!(amount.clone().to_exact(), "123456");
+        assert_eq!(amount.clone().to_exact(), "123456");
     }
 
     #[test]
