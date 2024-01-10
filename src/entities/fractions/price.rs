@@ -14,8 +14,6 @@ where
     pub base_currency: TBase,
     pub quote_currency: TQuote,
     pub scalar: Fraction,
-
-    
 }
 
 impl<TBase, TQuote> Price<TBase, TQuote>

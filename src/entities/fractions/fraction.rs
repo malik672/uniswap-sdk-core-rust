@@ -309,8 +309,8 @@ mod tests {
     #[test]
     fn test_less_than() {
         assert!(Fraction::new(1, 10).unwrap() < Fraction::new(4, 12).unwrap());
-        assert!(!(Fraction::new(1, 3).unwrap() < Fraction::new(4, 12).unwrap()));
-        assert!(!(Fraction::new(5, 12).unwrap() < Fraction::new(4, 12).unwrap()));
+        assert!(Fraction::new(1, 3).unwrap() >= Fraction::new(4, 12).unwrap());
+        assert!(Fraction::new(5, 12).unwrap() >= Fraction::new(4, 12).unwrap());
     }
 
     #[test]
@@ -322,8 +322,8 @@ mod tests {
 
     #[test]
     fn test_greater_than() {
-        assert!(!(Fraction::new(1, 10).unwrap() > Fraction::new(4, 12).unwrap()));
-        assert!(!(Fraction::new(1, 3).unwrap() > Fraction::new(4, 12).unwrap()));
+        assert!(Fraction::new(1, 10).unwrap() <= Fraction::new(4, 12).unwrap());
+        assert!(Fraction::new(1, 3).unwrap() <= Fraction::new(4, 12).unwrap());
         assert!(Fraction::new(5, 12).unwrap() > Fraction::new(4, 12).unwrap());
     }
 
