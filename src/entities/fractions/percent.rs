@@ -20,7 +20,6 @@ impl Percent {
         denominator: impl Into<BigInt>,
     ) -> Result<Self, Error> {
         FractionTrait::new(numerator, denominator, IsPercent)
-            .map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
     /// Converts the Percent to a string with a specified number of significant digits and rounding strategy

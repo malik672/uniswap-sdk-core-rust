@@ -14,6 +14,8 @@ where
     pub base_currency: TBase,
     pub quote_currency: TQuote,
     pub scalar: Fraction,
+
+    
 }
 
 impl<TBase, TQuote> Price<TBase, TQuote>
@@ -42,7 +44,6 @@ where
                 scalar,
             },
         )
-        .map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
     /// Create a Price instance from currency amounts of the base and quote currencies
@@ -51,14 +52,13 @@ where
         quote_amount: CurrencyAmount<TQuote>,
     ) -> Result<Self, Error> {
         // Calculate the price as the ratio of quote amount to base amount
-        let res = quote_amount.divide(&base_amount)?.clone();
+        let res = quote_amount.divide(&base_amount)?;
         Self::new(
             base_amount.meta.currency,
             quote_amount.meta.currency,
             res.denominator().clone(),
             res.numerator().clone(),
         )
-        .map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
     /// Flip the price, switching the base and quote currency
@@ -69,7 +69,6 @@ where
             self.numerator().clone(),
             self.denominator().clone(),
         )
-        .map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
     /// Multiply the price by another price, returning a new price.
@@ -89,7 +88,6 @@ where
             fraction.denominator().clone(),
             fraction.numerator().clone(),
         )
-        .map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
     /// Return the amount of quote currency corresponding to a given amount of the base currency
@@ -110,7 +108,6 @@ where
             fraction.numerator().clone(),
             fraction.denominator().clone(),
         )
-        .map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
     /// Get the value scaled by decimals for formatting

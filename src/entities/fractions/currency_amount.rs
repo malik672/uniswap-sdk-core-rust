@@ -23,7 +23,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         let denominator = denominator.into();
         // Ensure the amount does not exceed MAX_UINT256
         if !numerator.div_floor(&denominator).le(&MAX_UINT256) {
-            return Err(Error::MaxUint { field: "AMOUNT" });
+            return Err(Error::MaxUint);
         }
         let exponent = currency.decimals();
         FractionTrait::new(
@@ -41,17 +41,16 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         currency: T,
         raw_amount: impl Into<BigInt>,
     ) -> Result<CurrencyAmount<T>, Error> {
-        Self::new(currency, raw_amount, 1).map_err(|err| Error::CreationError(format!("{}", err)))
+        Self::new(currency, raw_amount, 1)
     }
 
-    // Construct a currency amoun t with a denominator that is not equal to 1
+    // Construct a currency amount with a denominator that is not equal to 1
     pub fn from_fractional_amount(
         currency: T,
         numerator: impl Into<BigInt>,
         denominator: impl Into<BigInt>,
     ) -> Result<CurrencyAmount<T>, Error> {
         Self::new(currency, numerator, denominator)
-            .map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
     // Multiplication of currency amount by another fractional amount
@@ -62,7 +61,6 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             multiplied.clone().numerator().clone(),
             multiplied.clone().denominator().clone(),
         )
-        .map_err(|err| Error::CreateFractionalError(format!("{}", err)))
     }
 
     // Division of currency amount by another fractional amount
@@ -73,7 +71,6 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             divided.numerator().clone(),
             divided.denominator().clone(),
         )
-        .map_err(|err| Error::CreateFractionalError(format!("{}", err)))
     }
 
     // Convert the currency amount to a string with exact precision
@@ -95,7 +92,6 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             added.clone().numerator().clone(),
             added.clone().denominator().clone(),
         )
-        .map_err(|err| Error::CreateFractionalError(format!("{}", err)))
     }
 
     // Subtraction of another currency amount from the current amount
@@ -109,7 +105,6 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             subtracted.clone().numerator().clone(),
             subtracted.clone().denominator().clone(),
         )
-        .map_err(|err| Error::CreateFractionalError(format!("{}", err)))
     }
 
     // Convert the currency amount to a string with a specified number of significant digits
@@ -120,7 +115,6 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     ) -> Result<String, Error> {
         (self.as_fraction()? / Fraction::new(self.meta.decimal_scale.clone(), 1)?)?
             .to_significant(significant_digits, rounding)
-            .map_err(|err| Error::CreateFractionalError(format!("{}", err)))
     }
 
     // Convert the currency amount to a string with a fixed number of decimal places
@@ -149,8 +143,7 @@ impl CurrencyAmount<Token> {
                 self.meta.currency.wrapped(),
                 self.numerator().clone(),
                 self.denominator().clone(),
-            )
-            .map_err(|err| Error::CreateFractionalError(format!("{}", err))),
+            ),
             false => Ok(self.clone()),
         }
     }

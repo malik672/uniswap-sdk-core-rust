@@ -70,7 +70,6 @@ where
             self.denominator().clone(),
             self.meta(),
         )
-        .map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
     // Returns the inverted fraction
@@ -80,7 +79,6 @@ where
             self.numerator().clone(),
             self.meta(),
         )
-        .map_err(|err| Error::CreationError(format!("{}", err)))
     }
 
     // Converts the fraction to a `bigdecimal::BigDecimal`
@@ -93,10 +91,9 @@ where
     // Converts the fraction to a string with a specified number of significant digits and rounding strategy
     fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> Result<String, Error> {
         if significant_digits == 0 {
-            return Err(Error::Incorrect(format!(
-                "significant digits:{} should always be positive",
-                significant_digits
-            )));
+            return Err(Error::Incorrect(
+                "significant dgits should always be greater than zero".to_string(),
+            ));
         }
         let rounding_strategy = to_rounding_strategy(rounding);
         let quotient = self.to_decimal().with_precision_round(
@@ -120,7 +117,6 @@ where
     // Helper method for converting any superclass back to a simple Fraction
     fn as_fraction(&self) -> Result<Fraction, Error> {
         Fraction::new(self.numerator().clone(), self.denominator().clone())
-            .map_err(|err| Error::CreateFractionalError(format!("{}", err)))
     }
 }
 
@@ -135,7 +131,7 @@ impl<M: Clone> FractionTrait<M> for FractionLike<M> {
         let denominator = denominator.into();
         // Ensure the denominator is not zero
         if denominator.is_zero() {
-            return Err(Error::Incorrect("denominator can't be zero".to_owned()));
+            return Err(Error::DenominatorIsZero);
         }
         Ok(Self {
             numerator: numerator.into(),

@@ -49,11 +49,11 @@ impl Token {
         name: Option<String>,
         buy_fee_bps: Option<BigUint>,
         sell_fee_bps: Option<BigUint>,
-    ) -> Result<Self, Error> {
+    ) -> Self {
         if chain_id == 0 {
-            return Err(Error::ChainIdError { field: "CHAIN_ID" });
+            panic!("chain id can't be zero");
         }
-        Ok(Self {
+        Self {
             chain_id,
             decimals,
             symbol,
@@ -63,7 +63,7 @@ impl Token {
                 buy_fee_bps,
                 sell_fee_bps,
             },
-        })
+        }
     }
 
     /// Returns true if the address of this token sorts before the address of the other token.
@@ -79,7 +79,7 @@ impl Token {
         }
 
         if self.address() == other.address() {
-            return Err(Error::EqualAddresses(format!("{}", self.address())));
+            return Err(Error::EqualAddresses);
         }
         Ok(self.address().lt(&other.address()))
     }
@@ -98,7 +98,6 @@ macro_rules! token {
             None,
             None,
         )
-        .expect("failed to create token")
     };
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr) => {
         Token::new(
@@ -110,7 +109,6 @@ macro_rules! token {
             None,
             None,
         )
-        .expect("failed to create token")
     };
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr, $name:expr) => {
         Token::new(
@@ -122,7 +120,6 @@ macro_rules! token {
             None,
             None,
         )
-        .expect("failed to create token")
     };
 }
 

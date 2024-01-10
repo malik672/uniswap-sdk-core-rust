@@ -11,11 +11,11 @@ pub enum Error {
     #[error("Chain IDs do not match: {0} and {1}")]
     ChainIdMismatch(u32, u32),
 
-    #[error("Addresses are equal: {0}")]
-    EqualAddresses(String),
+    #[error("Addresses are equal")]
+    EqualAddresses,
 
-    #[error("{field} amount has exceeded MAX_UINT256")]
-    MaxUint { field: &'static str },
+    #[error("amount has exceeded MAX_UINT256")]
+    MaxUint,
 
     #[error("Error creating: {0}")]
     CreationError(String),
@@ -25,6 +25,9 @@ pub enum Error {
 
     #[error("not equal: {0}")]
     NotEqual(String),
+
+    #[error("Denominator is 0")]
+    DenominatorIsZero,
 
     #[error("incorrect: {0}")]
     Incorrect(String),
