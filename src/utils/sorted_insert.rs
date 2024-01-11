@@ -51,7 +51,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "max_size can't be equals to zero")]
+    #[should_panic(expected = "max_size can't be equal to zero")]
     fn test_max_size_zero() {
         let mut arr = Vec::new();
         sorted_insert(&mut arr, 1, 0, cmp).unwrap();
