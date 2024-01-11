@@ -10,7 +10,9 @@ use crate::prelude::*;
 ///
 pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
     if !value >= Zero::zero() {
-        return Err(Error::Incorrect("value has to be greater than -1".to_string()));
+        return Err(Error::Incorrect(
+            "value has to be greater than -1".to_string(),
+        ));
     }
 
     // If the value is less than or equal to MAX_SAFE_INTEGER,
