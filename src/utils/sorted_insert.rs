@@ -9,11 +9,11 @@ pub fn sorted_insert<T: Clone>(
     comparator: fn(&T, &T) -> Ordering,
 ) -> Result<Option<T>, Error> {
     if max_size == 0 {
-        return Err(Error::Incorrect("MAX_SIZE_ZERO".to_owned()));
+        return Err(Error::Incorrect("max_size can't be equals to zero".to_owned()));
     }
 
     if items.len() > max_size {
-        return Err(Error::Incorrect("ITEMS_SIZE".to_owned()));
+        return Err(Error::Incorrect("items_size has to greater than max_size".to_string()));
     }
 
     let removed_item = if items.len() == max_size {
