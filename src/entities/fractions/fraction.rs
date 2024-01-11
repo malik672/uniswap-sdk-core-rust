@@ -4,7 +4,7 @@ use std::ops::{Add, Div, Mul, Sub};
 
 // Struct representing a fraction with metadata
 #[derive(Clone, Debug)]
-pub struct FractionLike<M: Clone> {
+pub struct FractionLike<M> {
     numerator: BigInt,
     denominator: BigInt,
     pub meta: M,
@@ -16,7 +16,7 @@ pub type Fraction = FractionLike<()>;
 impl Fraction {
     // Constructor for creating a new Fraction instance
     pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
-        FractionTrait::new(numerator, denominator, ())
+        FractionBase::new(numerator, denominator, ())
     }
 }
 
@@ -32,13 +32,17 @@ const fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
 // Trait defining common operations for fractions with metadata
 pub trait FractionTrait<M>
 where
-    Self: Sized
+    Self: FractionBase<M>
         + Ord
         + Add<Output = Self>
         + Sub<Output = Self>
         + Mul<Output = Self>
         + Div<Output = Self>,
 {
+}
+
+// Trait defining common operations for fractions with metadata
+pub trait FractionBase<M>: Sized {
     // Constructor method for creating a new Fraction with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self;
 
@@ -46,32 +50,28 @@ where
     fn meta(&self) -> M;
 
     // Accessor method for retrieving the numerator
-    fn numerator(&self) -> &BigInt;
+    fn numerator(&self) -> BigInt;
 
     // Accessor method for retrieving the denominator
-    fn denominator(&self) -> &BigInt;
+    fn denominator(&self) -> BigInt;
 
     // Returns the floor division quotient of the fraction
     fn quotient(&self) -> BigInt {
-        self.numerator().div_floor(self.denominator())
+        self.numerator().div_floor(&self.denominator())
     }
 
     // Returns the remainder after floor division as a new fraction
     fn remainder(&self) -> Self {
         Self::new(
             self.numerator() % self.denominator(),
-            self.denominator().clone(),
+            self.denominator(),
             self.meta(),
         )
     }
 
     // Returns the inverted fraction
     fn invert(&self) -> Self {
-        Self::new(
-            self.denominator().clone(),
-            self.numerator().clone(),
-            self.meta(),
-        )
+        Self::new(self.denominator(), self.numerator(), self.meta())
     }
 
     // Converts the fraction to a `bigdecimal::BigDecimal`
@@ -109,12 +109,14 @@ where
 
     // Helper method for converting any superclass back to a simple Fraction
     fn as_fraction(&self) -> Fraction {
-        Fraction::new(self.numerator().clone(), self.denominator().clone())
+        Fraction::new(self.numerator(), self.denominator())
     }
 }
 
 // Implementation of the FractionTrait for FractionLike
-impl<M: Clone> FractionTrait<M> for FractionLike<M> {
+impl<M: Clone + PartialEq> FractionTrait<M> for FractionLike<M> {}
+
+impl<M: Clone> FractionBase<M> for FractionLike<M> {
     // Constructor for creating a new Fraction with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self {
         let denominator = denominator.into();
@@ -135,32 +137,42 @@ impl<M: Clone> FractionTrait<M> for FractionLike<M> {
     }
 
     // Accessor method for retrieving the numerator
-    fn numerator(&self) -> &BigInt {
-        &self.numerator
+    fn numerator(&self) -> BigInt {
+        self.numerator.clone()
     }
 
     // Accessor method for retrieving the denominator
-    fn denominator(&self) -> &BigInt {
-        &self.denominator
+    fn denominator(&self) -> BigInt {
+        self.denominator.clone()
     }
 }
 
-impl<M: Clone> PartialEq for FractionLike<M> {
+impl<M> PartialEq for FractionLike<M>
+where
+    M: Clone + PartialEq,
+{
     // Checks if the current fraction is equal to another fraction
     fn eq(&self, other: &Self) -> bool {
         self.numerator() * other.denominator() == other.numerator() * self.denominator()
+            && self.meta() == other.meta()
     }
 }
 
-impl<M: Clone> Eq for FractionLike<M> {}
+impl<M: Clone + PartialEq> Eq for FractionLike<M> {}
 
-impl<M: Clone> Ord for FractionLike<M> {
+impl<M> Ord for FractionLike<M>
+where
+    M: Clone + PartialEq,
+{
     fn cmp(&self, other: &Self) -> Ordering {
         (self.numerator() * other.denominator()).cmp(&(other.numerator() * self.denominator()))
     }
 }
 
-impl<M: Clone> PartialOrd<Self> for FractionLike<M> {
+impl<M> PartialOrd<Self> for FractionLike<M>
+where
+    M: Clone + PartialEq,
+{
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
@@ -171,14 +183,14 @@ impl<M: Clone> Add for FractionLike<M> {
 
     // Adds another fraction to the current fraction
     fn add(self, other: Self) -> Self::Output {
-        if self.denominator() == other.denominator() {
-            FractionTrait::new(
+        if self.denominator == other.denominator() {
+            FractionBase::new(
                 self.numerator() + other.numerator(),
-                self.denominator().clone(),
+                self.denominator(),
                 self.meta(),
             )
         } else {
-            FractionTrait::new(
+            FractionBase::new(
                 self.numerator() * other.denominator() + other.numerator() * self.denominator(),
                 self.denominator() * other.denominator(),
                 self.meta(),
@@ -192,14 +204,14 @@ impl<M: Clone> Sub for FractionLike<M> {
 
     // Subtracts another fraction from the current fraction
     fn sub(self, other: Self) -> Self::Output {
-        if self.denominator() == other.denominator() {
-            FractionTrait::new(
+        if self.denominator == other.denominator() {
+            FractionBase::new(
                 self.numerator() - other.numerator(),
-                self.denominator().clone(),
+                self.denominator(),
                 self.meta(),
             )
         } else {
-            FractionTrait::new(
+            FractionBase::new(
                 self.numerator() * other.denominator() - other.numerator() * self.denominator(),
                 self.denominator() * other.denominator(),
                 self.meta(),
@@ -214,7 +226,7 @@ impl<M: Clone> Mul for FractionLike<M> {
     // Multiplies the current fraction by another fraction
     fn mul(self, other: Self) -> Self::Output {
         //There's little to no possibility of an error, so unwrap can be used
-        FractionTrait::new(
+        FractionBase::new(
             self.numerator() * other.numerator(),
             self.denominator() * other.denominator(),
             self.meta(),
@@ -228,7 +240,7 @@ impl<M: Clone> Div for FractionLike<M> {
     // Divides the current fraction by another fraction
     //There's little to no possibility of an error, so unwrap can be used
     fn div(self, other: Self) -> Self::Output {
-        FractionTrait::new(
+        FractionBase::new(
             self.numerator() * other.denominator(),
             self.denominator() * other.numerator(),
             self.meta(),

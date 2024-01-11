@@ -1,5 +1,5 @@
 #[derive(Clone, PartialEq, Debug)]
-pub struct CurrencyLike<M: Clone> {
+pub struct CurrencyLike<M> {
     pub chain_id: u32,
     pub decimals: u8,
     pub symbol: Option<String>,
