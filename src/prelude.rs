@@ -7,7 +7,7 @@ pub use crate::{
         ether::Ether,
         fractions::{
             currency_amount::CurrencyAmount,
-            fraction::{Fraction, FractionLike, FractionTrait},
+            fraction::{Fraction, FractionBase, FractionLike, FractionTrait},
             percent::Percent,
             price::Price,
         },

@@ -7,7 +7,7 @@ lazy_static! {
 }
 
 /// Unit struct to distinguish between a fraction and a percent
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct IsPercent;
 
 // Type alias for a Percent, a Fraction with the IsPercent metadata
@@ -16,7 +16,7 @@ pub type Percent = FractionLike<IsPercent>;
 impl Percent {
     /// Constructor for creating a new Percent instance
     pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
-        FractionTrait::new(numerator, denominator, IsPercent)
+        FractionBase::new(numerator, denominator, IsPercent)
     }
 
     /// Converts the Percent to a string with a specified number of significant digits and rounding strategy
