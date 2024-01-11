@@ -20,16 +20,18 @@ impl Percent {
     }
 
     /// Converts the Percent to a string with a specified number of significant digits and rounding strategy
-    pub fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
+    pub fn to_significant(
+        &self,
+        significant_digits: u8,
+        rounding: Rounding,
+    ) -> Result<String, Error> {
         // Convert the Percent to a simple Fraction, multiply by 100, and then call to_significant on the result
-        (self.as_fraction() * ONE_HUNDRED.clone())
-            .to_significant(significant_digits, rounding)
-            .unwrap()
+        (self.as_fraction() * ONE_HUNDRED.clone()).to_significant(significant_digits, rounding)
     }
 
     /// Converts the Percent to a string with a fixed number of decimal places and rounding strategy
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
-        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the
+        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the result
         (self.as_fraction() * ONE_HUNDRED.clone()).to_fixed(decimal_places, rounding)
     }
 }
@@ -89,7 +91,9 @@ mod tests {
     #[test]
     fn test_to_significant() {
         assert_eq!(
-            Percent::new(154, 10000).to_significant(3, Rounding::RoundHalfUp),
+            Percent::new(154, 10000)
+                .to_significant(3, Rounding::RoundHalfUp)
+                .unwrap(),
             "1.54".to_string()
         );
     }

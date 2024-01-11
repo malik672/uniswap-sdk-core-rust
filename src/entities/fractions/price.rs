@@ -5,7 +5,7 @@ use crate::prelude::*;
 pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
 
 // Struct representing metadata for a Price
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct PriceMeta<TBase, TQuote>
 where
     TBase: CurrencyTrait,
@@ -79,7 +79,7 @@ where
             return Err(Error::NotEqual("the comparison are not equal".to_owned()));
         }
 
-        let fraction = (self.as_fraction() * other.as_fraction()).clone();
+        let fraction = self.as_fraction() * other.as_fraction();
         Ok(Price::new(
             self.meta.base_currency.clone(),
             other.meta.quote_currency.clone(),

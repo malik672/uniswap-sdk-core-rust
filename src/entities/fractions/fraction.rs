@@ -257,23 +257,21 @@ mod tests {
     #[test]
     fn test_invert() {
         let fraction = Fraction::new(5, 10).invert();
-        assert_eq!(fraction.clone().numerator, BigInt::from(10));
-        assert_eq!(fraction.clone().denominator, BigInt::from(5));
+        assert_eq!(fraction.numerator, BigInt::from(10));
+        assert_eq!(fraction.denominator, BigInt::from(5));
     }
 
     #[test]
     fn test_add() {
-        let fraction1 = Fraction::new(1, 10);
-        let fraction2 = Fraction::new(4, 12);
-        let expected = Fraction::new(52, 120);
-        let add = fraction1 + fraction2;
-        assert_eq!(add, expected);
+        assert_eq!(
+            Fraction::new(1, 10) + Fraction::new(4, 12),
+            Fraction::new(52, 120)
+        );
 
-        let fraction3 = Fraction::new(1, 5);
-        let fraction4 = Fraction::new(2, 5);
-        let expected2: FractionLike<()> = Fraction::new(3, 5);
-        let add2 = fraction3 + fraction4;
-        assert_eq!(add2, expected2);
+        assert_eq!(
+            Fraction::new(1, 5) + Fraction::new(2, 5),
+            Fraction::new(3, 5)
+        );
     }
 
     #[test]
@@ -345,7 +343,7 @@ mod tests {
     fn test_as_faction() {
         let f = Fraction::new(1, 2);
         // returns an equivalent but not the same reference fraction
-        assert_eq!(f.clone().as_fraction(), f.clone());
-        assert_ne!(&f.clone() as *const _, &f.clone().as_fraction() as *const _);
+        assert_eq!(f.as_fraction(), f);
+        assert_ne!(&f as *const _, &f.as_fraction() as *const _);
     }
 }
