@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub enum Currency {
     NativeCurrency(Ether),
     Token(Token),

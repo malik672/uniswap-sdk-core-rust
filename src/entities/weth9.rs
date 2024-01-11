@@ -1,6 +1,8 @@
 use crate::{prelude::*, token};
 
 /// `WETH9` represents the WETH9 contract and provides information about WETH tokens on different Ethereum chains.
+
+#[derive(Clone, PartialEq, Debug)]
 pub struct WETH9 {
     /// A mapping of chain IDs to corresponding WETH tokens.
     tokens: HashMap<u32, Token>,

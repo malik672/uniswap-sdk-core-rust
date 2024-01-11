@@ -5,7 +5,7 @@ use crate::prelude::*;
 pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
 
 // Struct representing metadata about a currency
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct CurrencyMeta<T: CurrencyTrait> {
     pub currency: T,
     pub decimal_scale: BigUint,
