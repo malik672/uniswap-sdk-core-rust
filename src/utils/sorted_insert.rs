@@ -16,7 +16,7 @@ pub fn sorted_insert<T: Clone>(
 
     if items.len() > max_size {
         return Err(Error::Incorrect(
-            "items_size has to greater than max_size".to_string(),
+            "items_size has to lesser than max_size".to_string(),
         ));
     }
 
@@ -58,11 +58,11 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "items_size has to greater than max_size")]
+    #[should_panic(expected = "items_size has to lesser than max_size")]
     fn test_length_greater_than_max_size() {
         let mut arr = vec![1, 2];
         let _w = sorted_insert(&mut arr, 1, 1, cmp).unwrap();
-        assert!(_w.is_none(), "items_size has to greater than max_size");
+        assert!(_w.is_none(), "items_size has to lesser than max_size");
     }
 
     #[test]
