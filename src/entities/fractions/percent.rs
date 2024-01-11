@@ -20,7 +20,11 @@ impl Percent {
     }
 
     /// Converts the Percent to a string with a specified number of significant digits and rounding strategy
-    pub fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
+    pub fn to_significant(
+        &self,
+        significant_digits: u8,
+        rounding: Rounding,
+    ) -> Result<String, Error> {
         // Convert the Percent to a simple Fraction, multiply by 100, and then call to_significant on the result
         (self.as_fraction() * ONE_HUNDRED.clone()).to_significant(significant_digits, rounding)
     }
@@ -39,11 +43,11 @@ mod tests {
     #[test]
     fn test_add() {
         assert_eq!(
-            Percent::new(1, 100) + Percent::new(2, 100),
+            (Percent::new(1, 100) + Percent::new(2, 100)),
             Percent::new(3, 100)
         );
         assert_eq!(
-            Percent::new(1, 25) + Percent::new(2, 100),
+            (Percent::new(1, 25) + Percent::new(2, 100)),
             Percent::new(150, 2500)
         );
     }
@@ -51,11 +55,11 @@ mod tests {
     #[test]
     fn test_subtract() {
         assert_eq!(
-            Percent::new(1, 100) - Percent::new(2, 100),
+            (Percent::new(1, 100) - Percent::new(2, 100)),
             Percent::new(-1, 100)
         );
         assert_eq!(
-            Percent::new(1, 25) - Percent::new(2, 100),
+            (Percent::new(1, 25) - Percent::new(2, 100)),
             Percent::new(50, 2500)
         );
     }
@@ -63,11 +67,11 @@ mod tests {
     #[test]
     fn test_multiply() {
         assert_eq!(
-            Percent::new(1, 100) * Percent::new(2, 100),
+            (Percent::new(1, 100) * Percent::new(2, 100)),
             Percent::new(2, 10000)
         );
         assert_eq!(
-            Percent::new(1, 25) * Percent::new(2, 100),
+            (Percent::new(1, 25) * Percent::new(2, 100)),
             Percent::new(2, 2500)
         );
     }
@@ -75,11 +79,11 @@ mod tests {
     #[test]
     fn test_divide() {
         assert_eq!(
-            Percent::new(1, 100) / Percent::new(2, 100),
+            (Percent::new(1, 100) / Percent::new(2, 100)),
             Percent::new(100, 200)
         );
         assert_eq!(
-            Percent::new(1, 25) / Percent::new(2, 100),
+            (Percent::new(1, 25) / Percent::new(2, 100)),
             Percent::new(100, 50)
         );
     }
@@ -87,7 +91,9 @@ mod tests {
     #[test]
     fn test_to_significant() {
         assert_eq!(
-            Percent::new(154, 10000).to_significant(3, Rounding::RoundHalfUp),
+            Percent::new(154, 10000)
+                .to_significant(3, Rounding::RoundHalfUp)
+                .unwrap(),
             "1.54".to_string()
         );
     }

@@ -82,19 +82,19 @@ where
     }
 
     // Converts the fraction to a string with a specified number of significant digits and rounding strategy
-    fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> String {
-        assert!(
-            significant_digits > 0,
-            "Significant digits must be positive."
-        );
-
+    fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> Result<String, Error> {
+        if significant_digits == 0 {
+            return Err(Error::Incorrect(
+                "significant dgits should always be greater than zero".to_string(),
+            ));
+        }
         let rounding_strategy = to_rounding_strategy(rounding);
         let quotient = self.to_decimal().with_precision_round(
             NonZeroU64::new(significant_digits as u64).unwrap(),
             rounding_strategy,
         );
 
-        quotient.normalized().to_string()
+        Ok(quotient.normalized().to_string())
     }
 
     // Converts the fraction to a string with a fixed number of decimal places and rounding strategy
@@ -119,7 +119,9 @@ impl<M: Clone> FractionTrait<M> for FractionLike<M> {
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self {
         let denominator = denominator.into();
         // Ensure the denominator is not zero
-        assert!(!denominator.is_zero(), "DENOMINATOR CAN'T BE ZERO");
+        if denominator.is_zero() {
+            panic!("denominator is zero");
+        }
         Self {
             numerator: numerator.into(),
             denominator,
@@ -211,6 +213,7 @@ impl<M: Clone> Mul for FractionLike<M> {
 
     // Multiplies the current fraction by another fraction
     fn mul(self, other: Self) -> Self::Output {
+        //There's little to no possibility of an error, so unwrap can be used
         FractionTrait::new(
             self.numerator() * other.numerator(),
             self.denominator() * other.denominator(),
@@ -223,6 +226,7 @@ impl<M: Clone> Div for FractionLike<M> {
     type Output = Self;
 
     // Divides the current fraction by another fraction
+    //There's little to no possibility of an error, so unwrap can be used
     fn div(self, other: Self) -> Self::Output {
         FractionTrait::new(
             self.numerator() * other.denominator(),
@@ -263,6 +267,7 @@ mod tests {
             Fraction::new(1, 10) + Fraction::new(4, 12),
             Fraction::new(52, 120)
         );
+
         assert_eq!(
             Fraction::new(1, 5) + Fraction::new(2, 5),
             Fraction::new(3, 5)
@@ -284,8 +289,8 @@ mod tests {
     #[test]
     fn test_less_than() {
         assert!(Fraction::new(1, 10) < Fraction::new(4, 12));
-        assert!(!(Fraction::new(1, 3) < Fraction::new(4, 12)));
-        assert!(!(Fraction::new(5, 12) < Fraction::new(4, 12)));
+        assert!(Fraction::new(1, 3) >= Fraction::new(4, 12));
+        assert!(Fraction::new(5, 12) >= Fraction::new(4, 12));
     }
 
     #[test]
@@ -297,23 +302,23 @@ mod tests {
 
     #[test]
     fn test_greater_than() {
-        assert!(!(Fraction::new(1, 10) > Fraction::new(4, 12)));
-        assert!(!(Fraction::new(1, 3) > Fraction::new(4, 12)));
+        assert!(Fraction::new(1, 10) <= Fraction::new(4, 12));
+        assert!(Fraction::new(1, 3) <= Fraction::new(4, 12));
         assert!(Fraction::new(5, 12) > Fraction::new(4, 12));
     }
 
     #[test]
     fn test_multiply() {
         assert_eq!(
-            Fraction::new(1, 10) * Fraction::new(4, 12),
+            (Fraction::new(1, 10) * Fraction::new(4, 12)),
             Fraction::new(4, 120)
         );
         assert_eq!(
-            Fraction::new(1, 3) * Fraction::new(4, 12),
+            (Fraction::new(1, 3) * Fraction::new(4, 12)),
             Fraction::new(4, 36)
         );
         assert_eq!(
-            Fraction::new(5, 12) * Fraction::new(4, 12),
+            (Fraction::new(5, 12) * Fraction::new(4, 12)),
             Fraction::new(20, 144)
         );
     }
