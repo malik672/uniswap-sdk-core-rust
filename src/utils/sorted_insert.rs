@@ -10,13 +10,13 @@ pub fn sorted_insert<T: Clone>(
 ) -> Result<Option<T>, Error> {
     if max_size == 0 {
         return Err(Error::Incorrect(
-            "max_size can't be equals to zero".to_owned(),
+            "max_size can't be equal to zero".to_owned(),
         ));
     }
 
     if items.len() > max_size {
         return Err(Error::Incorrect(
-            "items_size has to lesser than max_size".to_string(),
+            "array length cannot exceed max_size".to_string(),
         ));
     }
 
@@ -58,11 +58,11 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "items_size has to lesser than max_size")]
+    #[should_panic(expected = "array length cannot exceed max_size")]
     fn test_length_greater_than_max_size() {
         let mut arr = vec![1, 2];
         let _w = sorted_insert(&mut arr, 1, 1, cmp).unwrap();
-        assert!(_w.is_none(), "items_size has to lesser than max_size");
+        assert!(_w.is_none(), "array length cannot exceed max_size");
     }
 
     #[test]
