@@ -3,7 +3,7 @@ use crate::prelude::*;
 /// Represents an ERC20 token with a unique address and some metadata.
 pub type Token = CurrencyLike<TokenMeta>;
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct TokenMeta {
     pub address: Address,
     pub buy_fee_bps: Option<BigUint>,
