@@ -1,6 +1,6 @@
 [package]
 name = "uniswap-sdk-core"
-version = "0.10.0"
+version = "0.10.1"
 edition = "2021"
 authors = ["malik <aremumalik05@gmail.com>", "Shuhui Luo <twitter.com/aureliano_law>"]
 description = "The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange"

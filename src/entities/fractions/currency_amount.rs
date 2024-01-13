@@ -72,9 +72,10 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     // Convert the currency amount to a string with exact precision
     pub fn to_exact(&self) -> String {
-        BigDecimal::from_str(&self.quotient().to_str_radix(10))
-            .unwrap()
-            .div(BigDecimal::from_str(&self.meta.decimal_scale.to_str_radix(10)).unwrap())
+        BigDecimal::from(self.quotient())
+            .div(BigDecimal::from(BigInt::from(
+                self.meta.decimal_scale.clone(),
+            )))
             .to_string()
     }
 

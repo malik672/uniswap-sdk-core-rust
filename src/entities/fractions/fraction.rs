@@ -76,9 +76,7 @@ pub trait FractionBase<M>: Sized {
 
     // Converts the fraction to a `bigdecimal::BigDecimal`
     fn to_decimal(&self) -> BigDecimal {
-        BigDecimal::from_str(&self.numerator().to_str_radix(10))
-            .unwrap()
-            .div(BigDecimal::from_str(&self.denominator().to_str_radix(10)).unwrap())
+        BigDecimal::from(self.numerator()).div(BigDecimal::from(self.denominator()))
     }
 
     // Converts the fraction to a string with a specified number of significant digits and rounding strategy

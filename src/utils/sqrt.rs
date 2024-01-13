@@ -61,11 +61,7 @@ mod tests {
 
     #[test]
     fn test_sqrt_max_uint256() {
-        let max_uint256_string =
-            "115792089237316195423570985008687907853269984665640564039457584007913129639935";
-        let max_uint256 = BigInt::from_str_radix(max_uint256_string, 10).unwrap();
-        let expected_sqrt =
-            BigInt::from_str_radix("340282366920938463463374607431768211455", 10).unwrap();
-        assert_eq!(sqrt(&max_uint256).unwrap(), expected_sqrt);
+        let expected_sqrt = BigInt::from_str("340282366920938463463374607431768211455").unwrap();
+        assert_eq!(sqrt(&MAX_UINT256.clone()).unwrap(), expected_sqrt);
     }
 }

@@ -1,4 +1,6 @@
 use crate::prelude::*;
+use alloy_primitives::U256;
+use num_bigint::Sign;
 
 pub enum TradeType {
     ExactInput,
@@ -12,9 +14,6 @@ pub enum Rounding {
 }
 
 lazy_static! {
-    pub static ref MAX_UINT256: BigInt = BigInt::from_str_radix(
-        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-        16
-    )
-    .unwrap();
+    pub static ref MAX_UINT256: BigInt =
+        BigInt::from_bytes_be(Sign::Plus, &U256::MAX.to_be_bytes::<32>());
 }
