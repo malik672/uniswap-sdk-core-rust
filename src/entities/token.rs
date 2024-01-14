@@ -42,7 +42,7 @@ impl CurrencyTrait for Token {
 
 impl Token {
     pub fn new(
-        chain_id: u32,
+        chain_id: u64,
         address: String,
         decimals: u8,
         symbol: Option<String>,

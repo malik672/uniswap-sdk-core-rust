@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 // Lazy static cache for Ether instances
 lazy_static! {
-    static ref ETHER_CACHE: Mutex<HashMap<u32, Ether>> = Mutex::new(HashMap::new());
+    static ref ETHER_CACHE: Mutex<HashMap<u64, Ether>> = Mutex::new(HashMap::new());
 }
 
 /// Ether is the main usage of a 'native' currency, i.e., for Ethereum mainnet and all testnets.
@@ -41,7 +41,7 @@ impl CurrencyTrait for Ether {
 /// Implementation of additional methods for the `Ether` type.
 impl Ether {
     /// Creates a new instance of `Ether` with the specified chain ID.
-    pub fn new(chain_id: u32) -> Self {
+    pub fn new(chain_id: u64) -> Self {
         Self {
             chain_id,
             decimals: 18,
@@ -52,7 +52,7 @@ impl Ether {
     }
 
     /// Retrieves or creates an `Ether` instance for the specified chain ID.
-    pub fn on_chain(chain_id: u32) -> Self {
+    pub fn on_chain(chain_id: u64) -> Self {
         let mut cache = ETHER_CACHE.lock().unwrap();
         match cache.get(&chain_id) {
             Some(ether) => ether.clone(),
@@ -71,12 +71,12 @@ mod tests {
 
     #[test]
     fn test_static_constructor_uses_cache() {
-        assert!(Ether::on_chain(1) == Ether::on_chain(1));
+        assert_eq!(Ether::on_chain(1), Ether::on_chain(1));
     }
 
     #[test]
     fn test_caches_once_per_chain_id() {
-        assert!(Ether::on_chain(1) != Ether::on_chain(2));
+        assert_ne!(Ether::on_chain(1), Ether::on_chain(2));
     }
 
     #[test]

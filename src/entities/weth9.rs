@@ -5,7 +5,7 @@ use crate::{prelude::*, token};
 #[derive(Clone, PartialEq, Debug)]
 pub struct WETH9 {
     /// A mapping of chain IDs to corresponding WETH tokens.
-    tokens: HashMap<u32, Token>,
+    tokens: HashMap<u64, Token>,
 }
 
 /// Default implementation for `WETH9`, creating an instance with predefined WETH tokens on various chains.
@@ -162,7 +162,7 @@ impl WETH9 {
     /// * `chain_id`: The chain ID for which to retrieve the WETH token.
     ///
     /// Returns: `Some(Token)` if the token exists, `None` otherwise.
-    pub fn get(&self, chain_id: u32) -> Option<&Token> {
+    pub fn get(&self, chain_id: u64) -> Option<&Token> {
         self.tokens.get(&chain_id)
     }
 }

@@ -1,6 +1,8 @@
+use alloy_primitives::ChainId;
+
 #[derive(Clone, PartialEq, Debug)]
 pub struct CurrencyLike<M> {
-    pub chain_id: u32,
+    pub chain_id: ChainId,
     pub decimals: u8,
     pub symbol: Option<String>,
     pub name: Option<String>,
@@ -10,7 +12,7 @@ pub struct CurrencyLike<M> {
 /// A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
 pub trait BaseCurrency: Clone {
     /// The chain ID on which this currency resides
-    fn chain_id(&self) -> u32;
+    fn chain_id(&self) -> ChainId;
 
     /// The decimals used in representing currency amounts
     fn decimals(&self) -> u8;
@@ -24,7 +26,7 @@ pub trait BaseCurrency: Clone {
 
 // Implementation of methods for CurrencyLike
 impl<M: Clone> BaseCurrency for CurrencyLike<M> {
-    fn chain_id(&self) -> u32 {
+    fn chain_id(&self) -> ChainId {
         self.chain_id
     }
 
