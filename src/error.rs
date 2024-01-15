@@ -3,7 +3,7 @@ use crate::prelude::*;
 #[derive(Debug, Error)]
 pub enum Error {
     #[error("Chain IDs do not match: {0} and {1}")]
-    ChainIdMismatch(u32, u32),
+    ChainIdMismatch(u64, u64),
 
     #[error("Addresses are equal")]
     EqualAddresses,

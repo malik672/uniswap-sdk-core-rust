@@ -56,7 +56,7 @@ impl CurrencyTrait for Currency {
 }
 
 impl BaseCurrency for Currency {
-    fn chain_id(&self) -> u32 {
+    fn chain_id(&self) -> u64 {
         match self {
             Currency::NativeCurrency(native_currency) => native_currency.chain_id(),
             Currency::Token(token) => token.chain_id(),

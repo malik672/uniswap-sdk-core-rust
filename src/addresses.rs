@@ -1,8 +1,8 @@
 use crate::prelude::*;
 
-type AddressMap = HashMap<u32, Address>;
-type ChainMap = HashMap<u32, ChainAddresses>;
-type ChainAddress = HashMap<u32, Address>;
+type AddressMap = HashMap<u64, Address>;
+type ChainMap = HashMap<u64, ChainAddresses>;
+type ChainAddress = HashMap<u64, Address>;
 
 #[derive(Clone)]
 pub struct ChainAddresses {
@@ -23,7 +23,7 @@ pub fn construct_same_address_map(address: Address, additional_networks: &[Chain
     networks.extend_from_slice(additional_networks);
     let mut map = AddressMap::new();
     for chain_id in networks {
-        map.insert(chain_id as u32, address);
+        map.insert(chain_id as u64, address);
     }
     map
 }
@@ -248,24 +248,24 @@ pub fn base_goerli_addresses() -> ChainAddresses {
 lazy_static! {
     pub static ref CHAIN_TO_ADDRESSES_MAP: ChainMap = {
         let mut new_map = ChainMap::new();
-        new_map.insert(ChainId::BNB as u32, bnb_addresses());
+        new_map.insert(ChainId::BNB as u64, bnb_addresses());
 
-        new_map.insert(ChainId::AVALANCHE as u32, avalanche_addresses());
-        new_map.insert(ChainId::MAINNET as u32, mainnet_address());
-        new_map.insert(ChainId::SEPOLIA as u32, sepolia_address());
-        new_map.insert(ChainId::GOERLI as u32, goerli_address());
-        new_map.insert(ChainId::ARBITRUMONE as u32, arbitum_one_addresses());
-        new_map.insert(ChainId::ARBITRUMGOERLI as u32, arbitrum_goerli_addresses());
-        new_map.insert(ChainId::CELO as u32, celo_addresses());
-        new_map.insert(ChainId::CELOALFAJORES as u32, celo_addresses());
+        new_map.insert(ChainId::AVALANCHE as u64, avalanche_addresses());
+        new_map.insert(ChainId::MAINNET as u64, mainnet_address());
+        new_map.insert(ChainId::SEPOLIA as u64, sepolia_address());
+        new_map.insert(ChainId::GOERLI as u64, goerli_address());
+        new_map.insert(ChainId::ARBITRUMONE as u64, arbitum_one_addresses());
+        new_map.insert(ChainId::ARBITRUMGOERLI as u64, arbitrum_goerli_addresses());
+        new_map.insert(ChainId::CELO as u64, celo_addresses());
+        new_map.insert(ChainId::CELOALFAJORES as u64, celo_addresses());
 
-        new_map.insert(ChainId::POLYGON as u32, polygon_addresses());
-        new_map.insert(ChainId::POLYGONMUMBAI as u32, polygon_addresses());
-        new_map.insert(ChainId::OPTIMISM as u32, optimism_addresses());
-        new_map.insert(ChainId::OPTIMISMGOERLI as u32, optimism_goerli_addresses());
+        new_map.insert(ChainId::POLYGON as u64, polygon_addresses());
+        new_map.insert(ChainId::POLYGONMUMBAI as u64, polygon_addresses());
+        new_map.insert(ChainId::OPTIMISM as u64, optimism_addresses());
+        new_map.insert(ChainId::OPTIMISMGOERLI as u64, optimism_goerli_addresses());
 
-        new_map.insert(ChainId::BASEGOERLI as u32, base_goerli_addresses());
-        new_map.insert(ChainId::BASE as u32, base_addresses());
+        new_map.insert(ChainId::BASEGOERLI as u64, base_goerli_addresses());
+        new_map.insert(ChainId::BASE as u64, base_addresses());
         new_map
     };
 }
@@ -275,9 +275,9 @@ pub fn v3_factory_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
-            memo as u32,
+            memo as u64,
             CHAIN_TO_ADDRESSES_MAP
-                .get(&(memo as u32))
+                .get(&(memo as u64))
                 .unwrap()
                 .v3_core_factory_address,
         );
@@ -290,9 +290,9 @@ pub fn v3_migrator_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
-            memo as u32,
+            memo as u64,
             CHAIN_TO_ADDRESSES_MAP
-                .get(&(memo as u32))
+                .get(&(memo as u64))
                 .unwrap()
                 .v3_migrator_address
                 .unwrap(),
@@ -306,9 +306,9 @@ pub fn multicall_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
-            memo as u32,
+            memo as u64,
             CHAIN_TO_ADDRESSES_MAP
-                .get(&(memo as u32))
+                .get(&(memo as u64))
                 .unwrap()
                 .multicall_address,
         );
@@ -325,7 +325,7 @@ pub fn governance_alpha_v0_addresses() -> AddressMap {
 pub fn governance_alpha_v1_addresses() -> AddressMap {
     let mut new_map = AddressMap::new();
     new_map.insert(
-        ChainId::MAINNET as u32,
+        ChainId::MAINNET as u64,
         address!("C4e172459f1E7939D522503B81AFAaC1014CE6F6"),
     );
     new_map
@@ -335,7 +335,7 @@ pub fn governance_alpha_v1_addresses() -> AddressMap {
 pub fn governance_bravo_addresses() -> AddressMap {
     let mut new_map = AddressMap::new();
     new_map.insert(
-        ChainId::MAINNET as u32,
+        ChainId::MAINNET as u64,
         address!("408ED6354d4973f66138C91495F2f2FCbd8724C3"),
     );
     new_map
@@ -348,7 +348,7 @@ pub fn timelock_addresses() -> AddressMap {
 pub fn merkle_distributor_address() -> AddressMap {
     let mut new_map = AddressMap::new();
     new_map.insert(
-        ChainId::MAINNET as u32,
+        ChainId::MAINNET as u64,
         address!("090D4613473dEE047c3f2706764f49E0821D256e"),
     );
     new_map
@@ -357,7 +357,7 @@ pub fn merkle_distributor_address() -> AddressMap {
 pub fn argent_wallet_detector_address() -> AddressMap {
     let mut new_map = AddressMap::new();
     new_map.insert(
-        ChainId::MAINNET as u32,
+        ChainId::MAINNET as u64,
         address!("eca4B0bDBf7c55E9b7925919d03CbF8Dc82537E8"),
     );
     new_map
@@ -367,9 +367,9 @@ pub fn quoter_address() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
-            memo as u32,
+            memo as u64,
             CHAIN_TO_ADDRESSES_MAP
-                .get(&(memo as u32))
+                .get(&(memo as u64))
                 .unwrap()
                 .quoter_address,
         );
@@ -381,15 +381,15 @@ pub fn nonfungible_position_manager_address() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         if CHAIN_TO_ADDRESSES_MAP
-            .get(&(memo as u32))
+            .get(&(memo as u64))
             .unwrap()
             .nonfungible_position_manager_address
             .is_some()
         {
             chain_add.insert(
-                memo as u32,
+                memo as u64,
                 CHAIN_TO_ADDRESSES_MAP
-                    .get(&(memo as u32))
+                    .get(&(memo as u64))
                     .unwrap()
                     .nonfungible_position_manager_address
                     .unwrap(),
@@ -406,7 +406,7 @@ pub fn ens_resgister_address_map() -> AddressMap {
 pub fn socks_controller_addresses() -> AddressMap {
     let mut new_map = AddressMap::new();
     new_map.insert(
-        ChainId::MAINNET as u32,
+        ChainId::MAINNET as u64,
         address!("65770b5283117639760beA3F867b69b3697a91dd"),
     );
     new_map
@@ -416,15 +416,15 @@ pub fn tick_lens_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         if CHAIN_TO_ADDRESSES_MAP
-            .get(&(memo as u32))
+            .get(&(memo as u64))
             .unwrap()
             .tick_lens_address
             .is_some()
         {
             chain_add.insert(
-                memo as u32,
+                memo as u64,
                 CHAIN_TO_ADDRESSES_MAP
-                    .get(&(memo as u32))
+                    .get(&(memo as u64))
                     .unwrap()
                     .tick_lens_address
                     .unwrap(),
@@ -438,15 +438,15 @@ pub fn v1_mixed_route_quoter_address() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         if CHAIN_TO_ADDRESSES_MAP
-            .get(&(memo as u32))
+            .get(&(memo as u64))
             .unwrap()
             .v1_mixed_route_quoter_address
             .is_some()
         {
             chain_add.insert(
-                memo as u32,
+                memo as u64,
                 CHAIN_TO_ADDRESSES_MAP
-                    .get(&(memo as u32))
+                    .get(&(memo as u64))
                     .unwrap()
                     .v1_mixed_route_quoter_address
                     .unwrap(),
@@ -456,8 +456,8 @@ pub fn v1_mixed_route_quoter_address() -> ChainAddress {
     chain_add
 }
 
-pub fn swap_router02_address(chain_id: u32) -> Address {
-    if chain_id == ChainId::BNB as u32 {
+pub fn swap_router02_address(chain_id: u64) -> Address {
+    if chain_id == ChainId::BNB as u64 {
         CHAIN_TO_ADDRESSES_MAP
             .get(&chain_id)
             .unwrap()
