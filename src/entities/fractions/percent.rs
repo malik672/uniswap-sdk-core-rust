@@ -28,7 +28,8 @@ impl Percent {
         rounding: Rounding,
     ) -> Result<String, Error> {
         // Convert the Percent to a simple Fraction, multiply by 100, and then call to_significant on the result
-        (self.as_fraction() * ONE_HUNDRED.as_fraction()).to_significant(significant_digits, rounding)
+        (self.as_fraction() * ONE_HUNDRED.as_fraction())
+            .to_significant(significant_digits, rounding)
     }
 
     /// Converts the Percent to a string with a fixed number of decimal places and rounding strategy

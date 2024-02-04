@@ -1367,7 +1367,7 @@ checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
 
 [[package]]
 name = "uniswap-sdk-core"
-version = "0.12.0"
+version = "0.12.5"
 dependencies = [
  "alloy-primitives",
  "bigdecimal",
