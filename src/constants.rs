@@ -2,11 +2,13 @@ use crate::prelude::*;
 use alloy_primitives::U256;
 use num_bigint::Sign;
 
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum TradeType {
     ExactInput,
     ExactOutput,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Rounding {
     RoundDown,
     RoundHalfUp,
