@@ -23,10 +23,10 @@ pub fn compute_price_impact<TBase: CurrencyTrait, TQuote: CurrencyTrait>(
             .divide(&quoted_output_amount),
         Err(e) => Err(e),
     };
-    let price_impact_clone = price_impact?.clone();
+    let price_impact_clone = price_impact?;
     Ok(Percent::new(
-        price_impact_clone.numerator().clone(),
-        price_impact_clone.denominator().clone(),
+        price_impact_clone.numerator(),
+        price_impact_clone.denominator(),
     ))
 }
 
