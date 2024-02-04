@@ -10,7 +10,7 @@ pub fn sorted_insert<T: Clone>(
 ) -> Result<Option<T>, Error> {
     if max_size == 0 {
         return Err(Error::Incorrect(
-            "max_size can't be equal to zero".to_owned(),
+            "max_size can't be equal to zero".to_string(),
         ));
     }
 
