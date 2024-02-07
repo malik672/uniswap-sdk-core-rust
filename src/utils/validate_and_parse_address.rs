@@ -10,10 +10,10 @@ use regex::Regex;
 ///
 /// * If the input string satisfies the condition of starting with `0x` and being 42 characters long with only hexadecimal characters after `0x`, returns `Ok(ethereum_address.to_string())`.
 /// * Otherwise, returns an error message in the form of `Err(format!("{} is not a valid Ethereum address.", ethereum_address))`.
-pub fn check_valid_ethereum_address(ethereum_address: &str) -> Result<String, String> {
+pub fn check_valid_ethereum_address(ethereum_address: &str) -> Result<&str, String> {
     let valid_address_regex = Regex::new(r"^0x[0-9a-fA-F]{40}$").unwrap();
     if valid_address_regex.is_match(ethereum_address) {
-        Ok(ethereum_address.to_string())
+        Ok(ethereum_address)
     } else {
         Err(format!(
             "{} is not a valid Ethereum address.",

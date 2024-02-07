@@ -9,15 +9,11 @@ pub fn sorted_insert<T: Clone>(
     comparator: fn(&T, &T) -> Ordering,
 ) -> Result<Option<T>, Error> {
     if max_size == 0 {
-        return Err(Error::Incorrect(
-            "max_size can't be equal to zero".to_string(),
-        ));
+        return Err(Error::Incorrect());
     }
 
     if items.len() > max_size {
-        return Err(Error::Incorrect(
-            "array length cannot exceed max_size".to_string(),
-        ));
+        return Err(Error::Incorrect());
     }
 
     let removed_item = if items.len() == max_size {
@@ -51,14 +47,14 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "max_size can't be equal to zero")]
+    #[should_panic]
     fn test_max_size_zero() {
         let mut arr = Vec::new();
         sorted_insert(&mut arr, 1, 0, cmp).unwrap();
     }
 
     #[test]
-    #[should_panic(expected = "array length cannot exceed max_size")]
+    #[should_panic]
     fn test_length_greater_than_max_size() {
         let mut arr = vec![1, 2];
         let _w = sorted_insert(&mut arr, 1, 1, cmp).unwrap();

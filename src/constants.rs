@@ -8,7 +8,7 @@ pub enum TradeType {
     ExactOutput,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Rounding {
     RoundDown,
     RoundHalfUp,

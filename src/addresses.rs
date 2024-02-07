@@ -29,7 +29,7 @@ pub fn construct_same_address_map(address: Address, additional_networks: &[Chain
 }
 
 lazy_static! {
-    #[derive(Copy, Clone)]
+    #[derive(Debug, Clone, Copy)]
     pub static ref UNI_ADDRESSES: AddressMap = construct_same_address_map(
         address!("1f9840a85d5aF5bf1D1762F925BDADdC4201F984"),
         &[

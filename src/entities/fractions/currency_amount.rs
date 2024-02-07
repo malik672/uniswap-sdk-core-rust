@@ -82,7 +82,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     // Addition of another currency amount to the current amount
     pub fn add(&self, other: &Self) -> Result<Self, Error> {
         if !self.meta.currency.equals(&other.meta.currency) {
-            return Err(Error::NotEqual("CURRENCY: not equal".to_owned()));
+            return Err(Error::NotEqual());
         }
         let added = self.as_fraction() + other.as_fraction();
         Self::from_fractional_amount(
@@ -95,7 +95,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     // Subtraction of another currency amount from the current amount
     pub fn subtract(&self, other: &Self) -> Result<Self, Error> {
         if !self.meta.currency.equals(&other.meta.currency) {
-            return Err(Error::NotEqual("CURRENCY: not equal".to_owned()));
+            return Err(Error::NotEqual());
         }
         let subtracted = self.as_fraction() - other.as_fraction();
         Self::from_fractional_amount(
@@ -118,11 +118,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     // Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
         if !decimal_places <= self.meta.currency.decimals() {
-            return Err(Error::NotEqual(format!(
-                "{} should be less than or equal to {}",
-                decimal_places,
-                self.meta.currency.decimals()
-            )));
+            return Err(Error::NotEqual());
         }
 
         Ok(
