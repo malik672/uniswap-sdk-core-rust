@@ -277,7 +277,7 @@ pub fn v3_factory_addresses() -> ChainAddress {
         chain_add.insert(
             memo as u64,
             CHAIN_TO_ADDRESSES_MAP
-                .get(&(memo.clone() as u64))
+                .get(&(memo as u64))
                 .unwrap()
                 .v3_core_factory_address,
         );
@@ -290,7 +290,7 @@ pub fn v3_migrator_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
-            memo.clone() as u64,
+            memo as u64,
             CHAIN_TO_ADDRESSES_MAP
                 .get(&(memo as u64))
                 .unwrap()
@@ -306,7 +306,7 @@ pub fn multicall_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
-            memo.clone() as u64,
+            memo as u64,
             CHAIN_TO_ADDRESSES_MAP
                 .get(&(memo as u64))
                 .unwrap()
