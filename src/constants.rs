@@ -2,7 +2,7 @@ use crate::prelude::*;
 use alloy_primitives::U256;
 use num_bigint::Sign;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum TradeType {
     ExactInput,
     ExactOutput,
