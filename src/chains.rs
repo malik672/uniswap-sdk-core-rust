@@ -1,4 +1,4 @@
-#[derive(Copy, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum ChainId {
     MAINNET = 1,
     GOERLI = 5,

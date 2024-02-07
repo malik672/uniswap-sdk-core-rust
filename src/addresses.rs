@@ -29,7 +29,7 @@ pub fn construct_same_address_map(address: Address, additional_networks: &[Chain
 }
 
 lazy_static! {
-    #[derive(Copy, Clone)]
+    #[derive(Debug, Clone, Copy)]
     pub static ref UNI_ADDRESSES: AddressMap = construct_same_address_map(
         address!("1f9840a85d5aF5bf1D1762F925BDADdC4201F984"),
         &[
@@ -277,7 +277,7 @@ pub fn v3_factory_addresses() -> ChainAddress {
         chain_add.insert(
             memo as u64,
             CHAIN_TO_ADDRESSES_MAP
-                .get(&(memo as u64))
+                .get(&(memo.clone() as u64))
                 .unwrap()
                 .v3_core_factory_address,
         );
@@ -290,7 +290,7 @@ pub fn v3_migrator_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
-            memo as u64,
+            memo.clone() as u64,
             CHAIN_TO_ADDRESSES_MAP
                 .get(&(memo as u64))
                 .unwrap()
@@ -306,7 +306,7 @@ pub fn multicall_addresses() -> ChainAddress {
     let mut chain_add = ChainAddress::new();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
-            memo as u64,
+            memo.clone() as u64,
             CHAIN_TO_ADDRESSES_MAP
                 .get(&(memo as u64))
                 .unwrap()

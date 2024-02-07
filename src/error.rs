@@ -11,10 +11,10 @@ pub enum Error {
     #[error("amount has exceeded MAX_UINT256")]
     MaxUint,
 
-    #[error("not equal: {0}")]
-    NotEqual(String),
+    #[error("not equal")]
+    NotEqual(),
 
     //Custo
-    #[error("incorrect: {0}")]
-    Incorrect(String),
+    #[error("incorrect")]
+    Incorrect(),
 }
