@@ -5,7 +5,6 @@ type ChainMap = HashMap<u64, ChainAddresses>;
 type ChainAddress = HashMap<u64, Address>;
 
 #[derive(Clone)]
-
 pub struct ChainAddresses {
     v3_core_factory_address: Address,
     multicall_address: Address,
