@@ -1361,6 +1361,7 @@ dependencies = [
  "num-rational",
  "num-traits",
  "regex",
+ "syn 2.0.48",
  "thiserror",
 ]
 

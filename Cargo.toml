@@ -18,4 +18,8 @@ num-integer = "0.1.45"
 num-rational = "0.4.1"
 num-traits = "0.2.17"
 regex = "1.10.2"
+syn = "2.0.48"
 thiserror = "1.0.56"
+
+[features]
+validate_parse_address = []
