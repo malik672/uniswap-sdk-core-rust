@@ -6,7 +6,6 @@ type ChainAddress = HashMap<u64, Address>;
 
 #[derive(Clone)]
 
-
 pub struct ChainAddresses {
     v3_core_factory_address: Address,
     multicall_address: Address,
@@ -26,7 +25,7 @@ pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, C
 ///
 /// *  Address  
 /// * additional networks a vector of chainid
-/// 
+///
 ///
 /// returns: AdresssMap
 ///
