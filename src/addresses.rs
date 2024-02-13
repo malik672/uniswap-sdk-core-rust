@@ -18,6 +18,16 @@ pub struct ChainAddresses {
 
 pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
 
+/// returns an hashmap of key pair input of chainid to address
+///
+/// # Arguments
+///
+/// *  Address  
+/// * additional networks a vector of chainid
+///
+///
+/// returns: AdresssMap
+///
 pub fn construct_same_address_map(address: Address, additional_networks: &[ChainId]) -> AddressMap {
     let mut networks = DEFAULT_NETWORKS.to_vec();
     networks.extend_from_slice(additional_networks);
