@@ -26,7 +26,6 @@ impl CurrencyTrait for Token {
     /// * `other`: other token to compare
     ///
     /// returns: bool
-    ///
     fn equals(&self, other: &impl CurrencyTrait) -> bool {
         match other.is_native() {
             false => self.chain_id == other.chain_id() && self.address() == other.address(),
@@ -72,7 +71,6 @@ impl Token {
     /// # Arguments
     ///
     /// * `other`: other token to compare
-    ///
     pub fn sorts_before(&self, other: &Token) -> Result<bool, Error> {
         if self.chain_id != other.chain_id {
             return Err(Error::ChainIdMismatch(self.chain_id, other.chain_id));
