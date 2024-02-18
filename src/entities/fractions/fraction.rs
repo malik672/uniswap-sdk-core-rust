@@ -10,6 +10,16 @@ pub struct FractionLike<M> {
     pub meta: M,
 }
 
+impl<M: Default> Default for FractionLike<M> {
+    fn default() -> Self {
+        Self {
+            numerator: BigInt::from(0),
+            denominator: BigInt::from(1),
+            meta: M::default(),
+        }
+    }
+}
+
 // Type alias for a simple Fraction without metadata
 pub type Fraction = FractionLike<()>;
 
@@ -258,7 +268,7 @@ mod tests {
     #[test]
     fn test_remainder() {
         assert_eq!(Fraction::new(8, 3).remainder(), Fraction::new(2, 3));
-        assert_eq!(Fraction::new(12, 4).remainder(), Fraction::new(0, 4));
+        assert_eq!(Fraction::new(12, 4).remainder(), Fraction::default());
         assert_eq!(Fraction::new(16, 5).remainder(), Fraction::new(1, 5));
     }
 

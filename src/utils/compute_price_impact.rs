@@ -50,7 +50,7 @@ mod tests {
                 CurrencyAmount::from_raw_amount(token.clone(), 100).unwrap()
             )
             .unwrap()
-                == Percent::new(0, 10000),
+                == Percent::default(),
         );
 
         //is correct for half output
