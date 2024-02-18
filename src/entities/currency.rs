@@ -17,7 +17,6 @@ pub trait CurrencyTrait: BaseCurrency {
     /// # Arguments
     ///
     /// * `other`: the other currency
-    ///
     fn equals(&self, other: &impl CurrencyTrait) -> bool;
 
     /// Return the wrapped version of this currency that can be used with the Uniswap contracts.

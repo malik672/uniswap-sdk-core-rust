@@ -9,7 +9,6 @@ use crate::prelude::*;
 /// * outputAmount the output amount of the trade
 ///
 /// returns: Percent
-///
 pub fn compute_price_impact<TBase: CurrencyTrait, TQuote: CurrencyTrait>(
     mid_price: Price<TBase, TQuote>,
     input_amount: CurrencyAmount<TBase>,
@@ -51,7 +50,7 @@ mod tests {
                 CurrencyAmount::from_raw_amount(token.clone(), 100).unwrap()
             )
             .unwrap()
-                == Percent::new(0, 10000),
+                == Percent::default(),
         );
 
         //is correct for half output

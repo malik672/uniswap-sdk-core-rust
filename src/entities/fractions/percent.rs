@@ -1,15 +1,13 @@
 // Importing dependencies from the same module
 use crate::prelude::*;
 
-use super::fraction::FractionBase;
-
 // Lazily initialized constant representing the fraction 100/1
 lazy_static! {
     static ref ONE_HUNDRED: Fraction = Fraction::new(100, 1);
 }
 
 /// Unit struct to distinguish between a fraction and a percent
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct IsPercent;
 
 // Type alias for a Percent, a Fraction with the IsPercent metadata
