@@ -1,8 +1,8 @@
-// External crate dependencies
+/// External crate dependencies
 use crate::prelude::*;
-use std::ops::{Add, Div, Mul, Sub};
+use std::ops::{Add, Div, Mul, Sub, Deref};
 
-// Struct representing a fraction with metadata
+/// Struct representing a fraction with metadata
 #[derive(Clone, Debug)]
 pub struct FractionLike<M> {
     numerator: BigInt,
@@ -20,7 +20,15 @@ impl<M: Default> Default for FractionLike<M> {
     }
 }
 
-// Type alias for a simple Fraction without metadata
+impl Deref for FractionLike<Currency> {
+    type Target = Currency;
+
+    fn deref(&self) -> &Self::Target {
+        &self.meta
+    }
+}
+
+/// Type alias for a simple Fraction without metadata
 pub type Fraction = FractionLike<()>;
 
 impl Fraction {
@@ -30,7 +38,7 @@ impl Fraction {
     }
 }
 
-// Function to convert the custom Rounding enum to `bigdecimal`'s `RoundingMode`
+/// Function to convert the custom Rounding enum to `bigdecimal`'s `RoundingMode`
 const fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
     match rounding {
         Rounding::RoundDown => RoundingMode::Down,
@@ -39,7 +47,7 @@ const fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
     }
 }
 
-// Trait defining common operations for fractions with metadata
+/// Trait defining common operations for fractions with metadata
 pub trait FractionTrait<M>
 where
     Self: FractionBase<M>
@@ -51,26 +59,26 @@ where
 {
 }
 
-// Trait defining common operations for fractions with metadata
+/// Trait defining common operations for fractions with metadata
 pub trait FractionBase<M>: Sized {
-    // Constructor method for creating a new Fraction with metadata
+    /// Constructor method for creating a new Fraction with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self;
 
-    // Accessor method for retrieving metadata
+    /// Accessor method for retrieving metadata
     fn meta(&self) -> M;
 
-    // Accessor method for retrieving the numerator
+    /// Accessor method for retrieving the numerator
     fn numerator(&self) -> BigInt;
 
-    // Accessor method for retrieving the denominator
+    /// Accessor method for retrieving the denominator
     fn denominator(&self) -> BigInt;
 
-    // Returns the floor division quotient of the fraction
+    /// Returns the floor division quotient of the fraction
     fn quotient(&self) -> BigInt {
         self.numerator().div_floor(&self.denominator())
     }
 
-    // Returns the remainder after floor division as a new fraction
+    /// Returns the remainder after floor division as a new fraction
     fn remainder(&self) -> Self {
         Self::new(
             self.numerator() % self.denominator(),
@@ -79,17 +87,17 @@ pub trait FractionBase<M>: Sized {
         )
     }
 
-    // Returns the inverted fraction
+    /// Returns the inverted fraction
     fn invert(&self) -> Self {
         Self::new(self.denominator(), self.numerator(), self.meta())
     }
 
-    // Converts the fraction to a `bigdecimal::BigDecimal`
+    /// Converts the fraction to a `bigdecimal::BigDecimal`
     fn to_decimal(&self) -> BigDecimal {
         BigDecimal::from(self.numerator()).div(BigDecimal::from(self.denominator()))
     }
 
-    // Converts the fraction to a string with a specified number of significant digits and rounding strategy
+    /// Converts the fraction to a string with a specified number of significant digits and rounding strategy
     fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> Result<String, Error> {
         if significant_digits == 0 {
             return Err(Error::Incorrect());
@@ -103,7 +111,7 @@ pub trait FractionBase<M>: Sized {
         Ok(quotient.normalized().to_string())
     }
 
-    // Converts the fraction to a string with a fixed number of decimal places and rounding strategy
+    /// Converts the fraction to a string with a fixed number of decimal places and rounding strategy
     fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         let rounding_strategy = to_rounding_strategy(rounding);
         let quotient = self
@@ -113,17 +121,17 @@ pub trait FractionBase<M>: Sized {
         format!("{:.1$}", quotient, decimal_places as usize)
     }
 
-    // Helper method for converting any superclass back to a simple Fraction
+    /// Helper method for converting any superclass back to a simple Fraction
     fn as_fraction(&self) -> Fraction {
         Fraction::new(self.numerator(), self.denominator())
     }
 }
 
-// Implementation of the FractionTrait for FractionLike
+/// Implementation of the FractionTrait for FractionLike
 impl<M: Clone + PartialEq> FractionTrait<M> for FractionLike<M> {}
 
 impl<M: Clone> FractionBase<M> for FractionLike<M> {
-    // Constructor for creating a new Fraction with metadata
+    /// Constructor for creating a new Fraction with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self {
         let denominator = denominator.into();
         // Ensure the denominator is not zero
@@ -137,17 +145,17 @@ impl<M: Clone> FractionBase<M> for FractionLike<M> {
         }
     }
 
-    // Accessor method for retrieving metadata
+    /// Accessor method for retrieving metadata
     fn meta(&self) -> M {
         self.meta.clone()
     }
 
-    // Accessor method for retrieving the numerator
+    /// Accessor method for retrieving the numerator
     fn numerator(&self) -> BigInt {
         self.numerator.clone()
     }
 
-    // Accessor method for retrieving the denominator
+    /// Accessor method for retrieving the denominator
     fn denominator(&self) -> BigInt {
         self.denominator.clone()
     }
@@ -157,7 +165,7 @@ impl<M> PartialEq for FractionLike<M>
 where
     M: Clone + PartialEq,
 {
-    // Checks if the current fraction is equal to another fraction
+    /// Checks if the current fraction is equal to another fraction
     fn eq(&self, other: &Self) -> bool {
         self.numerator() * other.denominator() == other.numerator() * self.denominator()
             && self.meta() == other.meta()
@@ -187,7 +195,7 @@ where
 impl<M: Clone> Add for FractionLike<M> {
     type Output = Self;
 
-    // Adds another fraction to the current fraction
+    /// Adds another fraction to the current fraction
     fn add(self, other: Self) -> Self::Output {
         if self.denominator == other.denominator() {
             FractionBase::new(
@@ -208,7 +216,7 @@ impl<M: Clone> Add for FractionLike<M> {
 impl<M: Clone> Sub for FractionLike<M> {
     type Output = Self;
 
-    // Subtracts another fraction from the current fraction
+    /// Subtracts another fraction from the current fraction
     fn sub(self, other: Self) -> Self::Output {
         if self.denominator == other.denominator() {
             FractionBase::new(
@@ -229,7 +237,7 @@ impl<M: Clone> Sub for FractionLike<M> {
 impl<M: Clone> Mul for FractionLike<M> {
     type Output = Self;
 
-    // Multiplies the current fraction by another fraction
+    /// Multiplies the current fraction by another fraction
     fn mul(self, other: Self) -> Self::Output {
         //There's little to no possibility of an error, so unwrap can be used
         FractionBase::new(
@@ -243,8 +251,8 @@ impl<M: Clone> Mul for FractionLike<M> {
 impl<M: Clone> Div for FractionLike<M> {
     type Output = Self;
 
-    // Divides the current fraction by another fraction
-    //There's little to no possibility of an error, so unwrap can be used
+    /// Divides the current fraction by another fraction
+    /// There's little to no possibility of an error, so unwrap can be used
     fn div(self, other: Self) -> Self::Output {
         FractionBase::new(
             self.numerator() * other.denominator(),

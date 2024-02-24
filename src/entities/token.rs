@@ -123,7 +123,7 @@ macro_rules! token {
 
 #[cfg(test)]
 mod tests {
-    //should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the compiler will panic by itself, so no need
+    ///should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the compiler will panic by itself, so no need
     use super::*;
 
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";

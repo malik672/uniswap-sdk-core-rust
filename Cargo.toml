@@ -23,3 +23,6 @@ thiserror = "1.0.56"
 
 [features]
 validate_parse_address = []
+
+[lib]
+doctest = true

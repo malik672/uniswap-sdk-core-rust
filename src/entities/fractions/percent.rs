@@ -1,4 +1,4 @@
-// Importing dependencies from the same module
+/// Importing dependencies from the same module
 use crate::prelude::*;
 
 // Lazily initialized constant representing the fraction 100/1
@@ -10,7 +10,7 @@ lazy_static! {
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct IsPercent;
 
-// Type alias for a Percent, a Fraction with the IsPercent metadata
+/// Type alias for a Percent, a Fraction with the IsPercent metadata
 pub type Percent = FractionLike<IsPercent>;
 
 impl Percent {

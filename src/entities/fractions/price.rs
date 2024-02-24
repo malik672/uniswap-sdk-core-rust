@@ -1,10 +1,10 @@
-// External crate dependencies
+/// External crate dependencies
 use crate::prelude::*;
 
-// Type alias for a Price, a Fraction with metadata PriceMeta
+/// Type alias for a Price, a Fraction with metadata PriceMeta
 pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
 
-// Struct representing metadata for a Price
+/// Struct representing metadata for a Price
 #[derive(Clone, Debug, PartialEq)]
 pub struct PriceMeta<TBase, TQuote>
 where
