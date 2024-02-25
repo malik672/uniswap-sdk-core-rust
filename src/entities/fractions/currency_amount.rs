@@ -1,19 +1,21 @@
-// External crate dependencies
+/// External crate dependencies
 use crate::prelude::*;
 
-// Type alias for a currency amount using the FractionLike trait
+/// Represents metadata about a currency.
+///
+/// This struct holds information about a currency, including its symbol and the number of decimals.
 pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
 
-// Struct representing metadata about a currency
+/// Struct representing metadata about a currency
 #[derive(Clone, Debug, PartialEq)]
 pub struct CurrencyMeta<T: CurrencyTrait> {
     pub currency: T,
     pub decimal_scale: BigUint,
 }
 
-// Implementation of methods for CurrencyAmount
+/// Implementation of methods for CurrencyAmount
 impl<T: CurrencyTrait> CurrencyAmount<T> {
-    // Constructor method for creating a new currency amount
+    /// Constructor method for creating a new currency amount
     fn new(
         currency: T,
         numerator: impl Into<BigInt>,
@@ -36,12 +38,12 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         ))
     }
 
-    // Returns a new currency amount instance from the unitless amount of token (raw amount)
+    /// Returns a new currency amount instance from the unitless amount of token (raw amount)
     pub fn from_raw_amount(currency: T, raw_amount: impl Into<BigInt>) -> Result<Self, Error> {
         Self::new(currency, raw_amount, 1)
     }
 
-    // Construct a currency amount with a denominator that is not equal to 1
+    /// Construct a currency amount with a denominator that is not equal to 1
     pub fn from_fractional_amount(
         currency: T,
         numerator: impl Into<BigInt>,
@@ -50,7 +52,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         Self::new(currency, numerator, denominator)
     }
 
-    // Multiplication of currency amount by another fractional amount
+    /// Multiplication of currency amount by another fractional amount
     pub fn multiply<M>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let multiplied = self.as_fraction() * other.as_fraction();
         Self::from_fractional_amount(
@@ -60,7 +62,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    // Division of currency amount by another fractional amount
+    /// Division of currency amount by another fractional amount
     pub fn divide<M>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let divided = self.as_fraction() / other.as_fraction();
         Self::from_fractional_amount(
@@ -70,7 +72,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    // Convert the currency amount to a string with exact precision
+    /// Convert the currency amount to a string with exact precision
     pub fn to_exact(&self) -> String {
         BigDecimal::from(self.quotient())
             .div(BigDecimal::from(BigInt::from(
@@ -79,7 +81,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             .to_string()
     }
 
-    // Addition of another currency amount to the current amount
+    /// Addition of another currency amount to the current amount
     pub fn add(&self, other: &Self) -> Result<Self, Error> {
         if !self.meta.currency.equals(&other.meta.currency) {
             return Err(Error::NotEqual());
@@ -92,7 +94,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    // Subtraction of another currency amount from the current amount
+    /// Subtraction of another currency amount from the current amount
     pub fn subtract(&self, other: &Self) -> Result<Self, Error> {
         if !self.meta.currency.equals(&other.meta.currency) {
             return Err(Error::NotEqual());
@@ -105,7 +107,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    // Convert the currency amount to a string with a specified number of significant digits
+    /// Convert the currency amount to a string with a specified number of significant digits
     pub fn to_significant(
         &self,
         significant_digits: u8,
@@ -115,7 +117,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             .to_significant(significant_digits, rounding)
     }
 
-    // Convert the currency amount to a string with a fixed number of decimal places
+    /// Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
         if !decimal_places <= self.meta.currency.decimals() {
             return Err(Error::NotEqual());
@@ -128,9 +130,9 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     }
 }
 
-// Implementation for a specific type of CurrencyAmount (Token)
+/// Implementation for a specific type of CurrencyAmount (Token)
 impl<T: CurrencyTrait> CurrencyAmount<T> {
-    // Wrap the currency amount if the currency is not native
+    /// Wrap the currency amount if the currency is not native
     pub fn wrapped(&self) -> Result<CurrencyAmount<Token>, Error> {
         CurrencyAmount::from_fractional_amount(
             self.meta.currency.wrapped(),
@@ -140,7 +142,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     }
 }
 
-// Unit tests for the currency module
+/// Unit tests for the currency module
 #[cfg(test)]
 mod tests {
     use super::*;

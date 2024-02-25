@@ -25,6 +25,7 @@ pub trait CurrencyTrait: BaseCurrency {
 }
 
 impl CurrencyTrait for Currency {
+    /// Returns a bool indicating whether the currency is native or not
     fn is_native(&self) -> bool {
         match self {
             Currency::NativeCurrency(_) => true,
@@ -32,6 +33,7 @@ impl CurrencyTrait for Currency {
         }
     }
 
+    /// Accessor method for retrieving either the NativeCurrency or Token address
     fn address(&self) -> Address {
         match self {
             Currency::NativeCurrency(native_currency) => native_currency.address(),
