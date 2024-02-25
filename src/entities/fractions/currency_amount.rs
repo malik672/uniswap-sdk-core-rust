@@ -56,7 +56,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     pub fn multiply<M>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let multiplied = self.as_fraction() * other.as_fraction();
         Self::from_fractional_amount(
-            self.meta.currency.clone(),
+            self.currency.clone(),
             multiplied.numerator(),
             multiplied.denominator(),
         )
@@ -66,7 +66,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     pub fn divide<M>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let divided = self.as_fraction() / other.as_fraction();
         Self::from_fractional_amount(
-            self.meta.currency.clone(),
+            self.currency.clone(),
             divided.numerator(),
             divided.denominator(),
         )
@@ -75,20 +75,18 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     /// Convert the currency amount to a string with exact precision
     pub fn to_exact(&self) -> String {
         BigDecimal::from(self.quotient())
-            .div(BigDecimal::from(BigInt::from(
-                self.meta.decimal_scale.clone(),
-            )))
+            .div(BigDecimal::from(BigInt::from(self.decimal_scale.clone())))
             .to_string()
     }
 
     /// Addition of another currency amount to the current amount
     pub fn add(&self, other: &Self) -> Result<Self, Error> {
-        if !self.meta.currency.equals(&other.meta.currency) {
+        if !self.currency.equals(&other.currency) {
             return Err(Error::NotEqual());
         }
         let added = self.as_fraction() + other.as_fraction();
         Self::from_fractional_amount(
-            self.meta.currency.clone(),
+            self.currency.clone(),
             added.numerator(),
             added.denominator(),
         )
@@ -96,12 +94,12 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     /// Subtraction of another currency amount from the current amount
     pub fn subtract(&self, other: &Self) -> Result<Self, Error> {
-        if !self.meta.currency.equals(&other.meta.currency) {
+        if !self.currency.equals(&other.currency) {
             return Err(Error::NotEqual());
         }
         let subtracted = self.as_fraction() - other.as_fraction();
         Self::from_fractional_amount(
-            self.meta.currency.clone(),
+            self.currency.clone(),
             subtracted.numerator(),
             subtracted.denominator(),
         )
@@ -113,18 +111,18 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         significant_digits: u8,
         rounding: Rounding,
     ) -> Result<String, Error> {
-        (self.as_fraction() / Fraction::new(self.meta.decimal_scale.clone(), 1))
+        (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1))
             .to_significant(significant_digits, rounding)
     }
 
     /// Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
-        if !decimal_places <= self.meta.currency.decimals() {
+        if !decimal_places <= self.currency.decimals() {
             return Err(Error::NotEqual());
         }
 
         Ok(
-            (self.as_fraction() / Fraction::new(self.meta.decimal_scale.clone(), 1))
+            (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1))
                 .to_fixed(decimal_places, rounding),
         )
     }
@@ -135,7 +133,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     /// Wrap the currency amount if the currency is not native
     pub fn wrapped(&self) -> Result<CurrencyAmount<Token>, Error> {
         CurrencyAmount::from_fractional_amount(
-            self.meta.currency.wrapped(),
+            self.currency.wrapped(),
             self.numerator(),
             self.denominator(),
         )
@@ -179,10 +177,7 @@ mod tests {
         let amount =
             CurrencyAmount::from_raw_amount(Currency::NativeCurrency(ether.clone()), 100).unwrap();
         assert_eq!(amount.quotient(), 100.into());
-        assert!(amount
-            .meta
-            .currency
-            .equals(&Currency::NativeCurrency(ether)));
+        assert!(amount.currency.equals(&Currency::NativeCurrency(ether)));
     }
 
     #[test]
