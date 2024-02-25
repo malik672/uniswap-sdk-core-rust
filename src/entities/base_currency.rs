@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 use alloy_primitives::ChainId;
 
 #[derive(Clone, PartialEq, Debug)]
@@ -40,5 +42,13 @@ impl<M: Clone> BaseCurrency for CurrencyLike<M> {
 
     fn name(&self) -> Option<String> {
         self.name.clone()
+    }
+}
+
+impl<M> Deref for CurrencyLike<M> {
+    type Target = M;
+
+    fn deref(&self) -> &Self::Target {
+        &self.meta
     }
 }
