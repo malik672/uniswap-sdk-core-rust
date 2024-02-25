@@ -5,6 +5,7 @@ pub enum ChainId {
     SEPOLIA = 11155111,
     OPTIMISM = 10,
     OPTIMISMGOERLI = 420,
+    OPTIMISMSEPOLIA = 11155420,
     ARBITRUMONE = 42161,
     ARBITRUMGOERLI = 421613,
     POLYGON = 137,
@@ -19,10 +20,11 @@ pub enum ChainId {
     BASE = 8453,
 }
 
-pub const SUPPORTED_CHAINS: [ChainId; 15] = [
+pub const SUPPORTED_CHAINS: [ChainId; 16] = [
     ChainId::MAINNET,
     ChainId::OPTIMISM,
     ChainId::OPTIMISMGOERLI,
+    ChainId::OPTIMISMSEPOLIA,
     ChainId::ARBITRUMONE,
     ChainId::ARBITRUMGOERLI,
     ChainId::POLYGON,

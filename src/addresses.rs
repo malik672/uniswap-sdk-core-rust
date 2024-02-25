@@ -174,6 +174,23 @@ pub fn optimism_goerli_addresses() -> ChainAddresses {
     }
 }
 
+/// Optimism Sepolia addresses
+pub fn optimism_sepolia_addresses() -> ChainAddresses {
+    ChainAddresses {
+        v3_core_factory_address: address!("8CE191193D15ea94e11d327b4c7ad8bbE520f6aF"),
+        multicall_address: address!("80e4e06841bb76AA9735E0448cB8d003C0EF009a"),
+        quoter_address: address!("0FBEa6cf957d95ee9313490050F6A0DA68039404"),
+        v3_migrator_address: Some(address!("E7EcbAAaA54D007A00dbb6c1d2f150066D69dA07")),
+        nonfungible_position_manager_address: Some(address!(
+            "dA75cEf1C93078e8b736FCA5D5a30adb97C8957d"
+        )),
+        tick_lens_address: Some(address!("0xCb7f54747F58F8944973cea5b8f4ac2209BadDC5")),
+        swap_router02_address: None,
+        v1_mixed_route_quoter_address: None,
+    }
+}
+
+
 /// Arbitrum Goerli v3 addresses
 pub fn arbitrum_goerli_addresses() -> ChainAddresses {
     ChainAddresses {
@@ -272,7 +289,7 @@ lazy_static! {
         new_map.insert(ChainId::POLYGONMUMBAI as u64, polygon_addresses());
         new_map.insert(ChainId::OPTIMISM as u64, optimism_addresses());
         new_map.insert(ChainId::OPTIMISMGOERLI as u64, optimism_goerli_addresses());
-
+        new_map.insert(ChainId::OPTIMISMSEPOLIA as u64, optimism_sepolia_addresses());
         new_map.insert(ChainId::BASEGOERLI as u64, base_goerli_addresses());
         new_map.insert(ChainId::BASE as u64, base_addresses());
         new_map
