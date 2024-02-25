@@ -24,7 +24,6 @@ pub trait CurrencyTrait: BaseCurrency {
     fn wrapped(&self) -> Token;
 }
 
-///implementation of CurrencyTrait for a currency
 impl CurrencyTrait for Currency {
     /// Returns a bool indicating whether the currency is native or not
     fn is_native(&self) -> bool {

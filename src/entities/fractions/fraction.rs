@@ -1,6 +1,6 @@
 /// External crate dependencies
 use crate::prelude::*;
-use std::ops::{Add, Deref, Div, Mul, Sub};
+use std::ops::{Add, Deref, Mul, Sub};
 
 /// Struct representing a fraction with metadata
 #[derive(Clone, Debug)]
@@ -20,8 +20,8 @@ impl<M: Default> Default for FractionLike<M> {
     }
 }
 
-impl Deref for FractionLike<Currency> {
-    type Target = Currency;
+impl<M> Deref for FractionLike<M> {
+    type Target = M;
 
     fn deref(&self) -> &Self::Target {
         &self.meta
