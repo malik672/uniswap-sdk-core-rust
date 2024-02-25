@@ -184,12 +184,11 @@ pub fn optimism_sepolia_addresses() -> ChainAddresses {
         nonfungible_position_manager_address: Some(address!(
             "dA75cEf1C93078e8b736FCA5D5a30adb97C8957d"
         )),
-        tick_lens_address: Some(address!("0xCb7f54747F58F8944973cea5b8f4ac2209BadDC5")),
+        tick_lens_address: Some(address!("Cb7f54747F58F8944973cea5b8f4ac2209BadDC5")),
         swap_router02_address: None,
         v1_mixed_route_quoter_address: None,
     }
 }
-
 
 /// Arbitrum Goerli v3 addresses
 pub fn arbitrum_goerli_addresses() -> ChainAddresses {
@@ -289,7 +288,10 @@ lazy_static! {
         new_map.insert(ChainId::POLYGONMUMBAI as u64, polygon_addresses());
         new_map.insert(ChainId::OPTIMISM as u64, optimism_addresses());
         new_map.insert(ChainId::OPTIMISMGOERLI as u64, optimism_goerli_addresses());
-        new_map.insert(ChainId::OPTIMISMSEPOLIA as u64, optimism_sepolia_addresses());
+        new_map.insert(
+            ChainId::OPTIMISMSEPOLIA as u64,
+            optimism_sepolia_addresses(),
+        );
         new_map.insert(ChainId::BASEGOERLI as u64, base_goerli_addresses());
         new_map.insert(ChainId::BASE as u64, base_addresses());
         new_map
