@@ -20,8 +20,8 @@ impl<M: Default> Default for FractionLike<M> {
     }
 }
 
-impl Deref for FractionLike<Currency> {
-    type Target = Currency;
+impl<M> Deref for FractionLike<M> {
+    type Target = M;
 
     fn deref(&self) -> &Self::Target {
         &self.meta
