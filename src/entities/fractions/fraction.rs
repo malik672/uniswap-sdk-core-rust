@@ -1,6 +1,6 @@
 /// External crate dependencies
 use crate::prelude::*;
-use std::ops::{Add, Div, Mul, Sub, Deref};
+use std::ops::{Add, Deref, Div, Mul, Sub};
 
 /// Struct representing a fraction with metadata
 #[derive(Clone, Debug)]
