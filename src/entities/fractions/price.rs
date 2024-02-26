@@ -62,8 +62,8 @@ where
     /// Flip the price, switching the base and quote currency
     pub fn invert(&self) -> Price<TQuote, TBase> {
         Price::new(
-            self.meta.quote_currency.clone(),
-            self.meta.base_currency.clone(),
+            self.quote_currency.clone(),
+            self.base_currency.clone(),
             self.numerator().clone(),
             self.denominator().clone(),
         )
@@ -75,14 +75,14 @@ where
         &self,
         other: &Price<TQuote, TOtherQuote>,
     ) -> Result<Price<TBase, TOtherQuote>, Error> {
-        if !self.meta.quote_currency.equals(&other.meta.base_currency) {
+        if !self.quote_currency.equals(&other.base_currency) {
             return Err(Error::NotEqual());
         }
 
         let fraction = self.as_fraction() * other.as_fraction();
         Ok(Price::new(
-            self.meta.base_currency.clone(),
-            other.meta.quote_currency.clone(),
+            self.base_currency.clone(),
+            other.quote_currency.clone(),
             fraction.denominator().clone(),
             fraction.numerator().clone(),
         ))
@@ -93,16 +93,12 @@ where
         &self,
         currency_amount: CurrencyAmount<TBase>,
     ) -> Result<CurrencyAmount<TQuote>, Error> {
-        if !currency_amount
-            .meta
-            .currency
-            .equals(&self.meta.base_currency)
-        {
+        if !currency_amount.currency.equals(&self.base_currency) {
             return Err(Error::NotEqual());
         }
         let fraction = self.as_fraction() * currency_amount.as_fraction();
         CurrencyAmount::from_fractional_amount(
-            self.meta.quote_currency.clone(),
+            self.quote_currency.clone(),
             fraction.numerator().clone(),
             fraction.denominator().clone(),
         )
@@ -110,7 +106,7 @@ where
 
     /// Get the value scaled by decimals for formatting
     pub fn adjusted_for_decimals(&self) -> Fraction {
-        self.as_fraction() * self.meta.scalar.clone()
+        self.as_fraction() * self.scalar.clone()
     }
 
     /// Converts the adjusted price to a string with a specified number of significant digits and rounding strategy
@@ -151,8 +147,8 @@ mod test {
             price.to_significant(5, Rounding::RoundDown).unwrap(),
             "54321"
         );
-        assert!(price.clone().meta.base_currency.equals(&TOKEN0.clone()));
-        assert!(price.clone().meta.quote_currency.equals(&TOKEN1.clone()));
+        assert!(price.clone().base_currency.equals(&TOKEN0.clone()));
+        assert!(price.clone().quote_currency.equals(&TOKEN1.clone()));
     }
 
     #[test]
@@ -165,8 +161,8 @@ mod test {
             price.to_significant(5, Rounding::RoundDown).unwrap(),
             "54321"
         );
-        assert!(price.clone().meta.base_currency.equals(&TOKEN0.clone()));
-        assert!(price.clone().meta.quote_currency.equals(&TOKEN1.clone()));
+        assert!(price.clone().base_currency.equals(&TOKEN0.clone()));
+        assert!(price.clone().quote_currency.equals(&TOKEN1.clone()));
     }
 
     #[test]

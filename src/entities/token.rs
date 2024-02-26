@@ -16,7 +16,7 @@ impl CurrencyTrait for Token {
     }
 
     fn address(&self) -> Address {
-        self.meta.address
+        self.address
     }
 
     /// Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
