@@ -40,9 +40,9 @@ impl CurrencyTrait for Token {
 }
 
 impl Token {
-    pub fn new(
+    pub const fn new(
         chain_id: u64,
-        address: String,
+        address: Address,
         decimals: u8,
         symbol: Option<String>,
         name: Option<String>,
@@ -58,7 +58,7 @@ impl Token {
             symbol,
             name,
             meta: TokenMeta {
-                address: address.parse().unwrap(),
+                address,
                 buy_fee_bps,
                 sell_fee_bps,
             },
@@ -83,13 +83,13 @@ impl Token {
     }
 }
 
-/// Short hand macro to create a token
+/// Shorthand macro to create a token
 #[macro_export]
 macro_rules! token {
     ($chain_id:expr, $address:expr, $decimals:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string(),
+            $address.parse::<Address>().unwrap(),
             $decimals,
             None,
             None,
@@ -100,7 +100,7 @@ macro_rules! token {
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string(),
+            $address.parse::<Address>().unwrap(),
             $decimals,
             Some($symbol.to_string()),
             None,
@@ -111,7 +111,7 @@ macro_rules! token {
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr, $name:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string(),
+            $address.parse::<Address>().unwrap(),
             $decimals,
             Some($symbol.to_string()),
             Some($name.to_string()),
