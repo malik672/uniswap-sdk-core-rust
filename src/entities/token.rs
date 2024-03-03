@@ -86,12 +86,34 @@ impl Token {
 /// Shorthand macro to create a token
 #[macro_export]
 macro_rules! token {
+    ($chain_id:expr, $address:literal, $decimals:expr) => {
+        Token::new(
+            $chain_id,
+            address!($address),
+            $decimals,
+            None,
+            None,
+            None,
+            None,
+        )
+    };
     ($chain_id:expr, $address:expr, $decimals:expr) => {
         Token::new(
             $chain_id,
-            $address.parse::<Address>().unwrap(),
+            $address.to_string().parse::<Address>().unwrap(),
             $decimals,
             None,
+            None,
+            None,
+            None,
+        )
+    };
+    ($chain_id:expr, $address:literal, $decimals:expr, $symbol:expr) => {
+        Token::new(
+            $chain_id,
+            address!($address),
+            $decimals,
+            Some($symbol.to_string()),
             None,
             None,
             None,
@@ -100,7 +122,7 @@ macro_rules! token {
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr) => {
         Token::new(
             $chain_id,
-            $address.parse::<Address>().unwrap(),
+            $address.to_string().parse::<Address>().unwrap(),
             $decimals,
             Some($symbol.to_string()),
             None,
@@ -108,10 +130,21 @@ macro_rules! token {
             None,
         )
     };
+    ($chain_id:expr, $address:literal, $decimals:expr, $symbol:expr, $name:expr) => {
+        Token::new(
+            $chain_id,
+            address!($address),
+            $decimals,
+            Some($symbol.to_string()),
+            Some($name.to_string()),
+            None,
+            None,
+        )
+    };
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr, $name:expr) => {
         Token::new(
             $chain_id,
-            $address.parse::<Address>().unwrap(),
+            $address.to_string().parse::<Address>().unwrap(),
             $decimals,
             Some($symbol.to_string()),
             Some($name.to_string()),
