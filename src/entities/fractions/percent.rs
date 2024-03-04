@@ -10,29 +10,33 @@ lazy_static! {
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct IsPercent;
 
-/// Type alias for a Percent, a Fraction with the IsPercent metadata
+/// Type alias for a Percent, a [`FractionLike`] with the [`IsPercent`] metadata
 pub type Percent = FractionLike<IsPercent>;
 
 impl Percent {
-    /// Constructor for creating a new Percent instance
+    /// Constructor for creating a new [`Percent`] instance
     pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
         FractionBase::new(numerator, denominator, IsPercent)
     }
 
-    /// Converts the Percent to a string with a specified number of significant digits and rounding strategy
+    /// Converts the [`Percent`] to a string with a specified number of significant digits and
+    /// rounding strategy
     pub fn to_significant(
         &self,
         significant_digits: u8,
         rounding: Rounding,
     ) -> Result<String, Error> {
-        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_significant on the result
+        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_significant
+        // on the result
         (self.as_fraction() * ONE_HUNDRED.as_fraction())
             .to_significant(significant_digits, rounding)
     }
 
-    /// Converts the Percent to a string with a fixed number of decimal places and rounding strategy
+    /// Converts the [`Percent`] to a string with a fixed number of decimal places and rounding
+    /// strategy
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
-        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the result
+        // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the
+        // result
         (self.as_fraction() * ONE_HUNDRED.as_fraction()).to_fixed(decimal_places, rounding)
     }
 }

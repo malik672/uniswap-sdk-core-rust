@@ -1,21 +1,21 @@
 use crate::{prelude::*, token};
 
-/// `WETH9` represents the WETH9 contract and provides information about WETH tokens on different Ethereum chains.
-
+/// Represents the WETH9 contract and provides information about WETH tokens on different Ethereum
+/// chains.
 #[derive(Clone, PartialEq, Debug)]
 pub struct WETH9 {
     /// A mapping of chain IDs to corresponding WETH tokens.
     tokens: HashMap<u64, Token>,
 }
 
-/// Default implementation for `WETH9`, creating an instance with predefined WETH tokens on various chains.
+/// Default implementation for [`WETH9`], creating an instance with predefined WETH tokens on
+/// various chains.
 impl Default for WETH9 {
     fn default() -> Self {
         Self::new()
     }
 }
 
-/// Implementation for methods specific to the `WETH9` struct.
 impl WETH9 {
     pub fn new() -> Self {
         let mut tokens = HashMap::new();

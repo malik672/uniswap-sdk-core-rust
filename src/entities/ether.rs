@@ -6,10 +6,9 @@ lazy_static! {
 }
 
 /// Ether is the main usage of a 'native' currency, i.e., for Ethereum mainnet and all testnets.
-/// Represents the native currency with additional metadata.
+/// Represents the native currency of the blockchain.
 pub type Ether = CurrencyLike<()>;
 
-/// Implementation of the `CurrencyTrait` for the `Ether` type.
 impl CurrencyTrait for Ether {
     /// Checks if the currency is native to the blockchain.
     fn is_native(&self) -> bool {
@@ -38,9 +37,8 @@ impl CurrencyTrait for Ether {
     }
 }
 
-/// Implementation of additional methods for the `Ether` type.
 impl Ether {
-    /// Creates a new instance of `Ether` with the specified chain ID.
+    /// Creates a new instance of [`Ether`] with the specified chain ID.
     pub fn new(chain_id: u64) -> Self {
         Self {
             chain_id,
@@ -51,7 +49,7 @@ impl Ether {
         }
     }
 
-    /// Retrieves or creates an `Ether` instance for the specified chain ID.
+    /// Retrieves or creates an [`Ether`] instance for the specified chain ID.
     pub fn on_chain(chain_id: u64) -> Self {
         let mut cache = ETHER_CACHE.lock().unwrap();
         match cache.get(&chain_id) {

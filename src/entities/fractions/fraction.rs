@@ -20,6 +20,7 @@ impl<M: Default> Default for FractionLike<M> {
     }
 }
 
+/// Implement [`Deref`] to allow direct access to the metadata of the fraction
 impl<M> Deref for FractionLike<M> {
     type Target = M;
 
@@ -38,7 +39,7 @@ impl Fraction {
     }
 }
 
-/// Function to convert the custom Rounding enum to `bigdecimal`'s `RoundingMode`
+/// Function to convert the custom Rounding enum to [`bigdecimal`]'s [`RoundingMode`]
 const fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
     match rounding {
         Rounding::RoundDown => RoundingMode::Down,
@@ -92,12 +93,13 @@ pub trait FractionBase<M>: Sized {
         Self::new(self.denominator(), self.numerator(), self.meta())
     }
 
-    /// Converts the fraction to a `bigdecimal::BigDecimal`
+    /// Converts the fraction to a [`BigDecimal`]
     fn to_decimal(&self) -> BigDecimal {
         BigDecimal::from(self.numerator()).div(BigDecimal::from(self.denominator()))
     }
 
-    /// Converts the fraction to a string with a specified number of significant digits and rounding strategy
+    /// Converts the fraction to a string with a specified number of significant digits and rounding
+    /// strategy
     fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> Result<String, Error> {
         if significant_digits == 0 {
             return Err(Error::Incorrect());
@@ -111,7 +113,8 @@ pub trait FractionBase<M>: Sized {
         Ok(quotient.normalized().to_string())
     }
 
-    /// Converts the fraction to a string with a fixed number of decimal places and rounding strategy
+    /// Converts the fraction to a string with a fixed number of decimal places and rounding
+    /// strategy
     fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         let rounding_strategy = to_rounding_strategy(rounding);
         let quotient = self
@@ -121,17 +124,16 @@ pub trait FractionBase<M>: Sized {
         format!("{:.1$}", quotient, decimal_places as usize)
     }
 
-    /// Helper method for converting any superclass back to a simple Fraction
+    /// Helper method for converting any superclass back to a simple [`Fraction`]
     fn as_fraction(&self) -> Fraction {
         Fraction::new(self.numerator(), self.denominator())
     }
 }
 
-/// Implementation of the FractionTrait for FractionLike
 impl<M: Clone + PartialEq> FractionTrait<M> for FractionLike<M> {}
 
 impl<M: Clone> FractionBase<M> for FractionLike<M> {
-    /// Constructor for creating a new Fraction with metadata
+    /// Constructor for creating a new [`FractionLike`] with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self {
         let denominator = denominator.into();
         // Ensure the denominator is not zero
@@ -239,7 +241,6 @@ impl<M: Clone> Mul for FractionLike<M> {
 
     /// Multiplies the current fraction by another fraction
     fn mul(self, other: Self) -> Self::Output {
-        //There's little to no possibility of an error, so unwrap can be used
         FractionBase::new(
             self.numerator() * other.numerator(),
             self.denominator() * other.denominator(),

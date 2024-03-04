@@ -83,7 +83,34 @@ impl Token {
     }
 }
 
-/// Shorthand macro to create a token
+/// Shorthand macro to create a [`Token`] with the given chain id, address, decimals, optional
+/// symbol and name.
+///
+/// # Arguments
+///
+/// * `chain_id`: The chain id
+/// * `address`: The address of the token as a string, [`Address`] or a string literal without "0x"
+/// * `decimals`: The decimals of the token
+/// * `symbol`: The symbol of the token, optional
+/// * `name`: The name of the token, optional
+///
+/// returns: [`Token`]
+///
+/// # Example
+///
+/// ```
+/// use uniswap_sdk_core::{prelude::*, token};
+///
+/// const DAI_MAINNET: &str = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+/// let dai: Token = token!(1, DAI_MAINNET, 18, "DAI", "Dai Stablecoin");
+/// let dai: Token = token!(
+///     1,
+///     "6B175474E89094C44Da98b954EedeAC495271d0F",
+///     18,
+///     "DAI",
+///     "Dai Stablecoin"
+/// );
+/// ```
 #[macro_export]
 macro_rules! token {
     ($chain_id:expr, $address:literal, $decimals:expr) => {
@@ -156,7 +183,8 @@ macro_rules! token {
 
 #[cfg(test)]
 mod tests {
-    ///should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the compiler will panic by itself, so no need
+    ///should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the
+    /// compiler will panic by itself, so no need
     use super::*;
 
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
