@@ -17,7 +17,7 @@ Add this to your Cargo.toml
 
 ```
 [dependencies]
-uniswap-sdk-core = "0.14.0";
+uniswap-sdk-core = "0.17.0";
 ```
 
 And this to your code:
@@ -43,17 +43,24 @@ fn main() {
 }
 ```
 
-## Acknowledgments
-
-The Uniswap SDK Core in Rust is inspired by the original [Uniswap SDK]() and aims to provide similar functionality in
-the Rust programming language.
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/Uniswap/sdk-core/tree/main) file
-for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contribution
 
 Contributions are welcome! If you find a bug or have suggestions for improvements, feel free to open an issue or submit
 a pull request on the [GitHub repository](https://github.com/malik672/uniswap-sdk-core-rust).
+
+## Acknowledgments
+
+The Uniswap SDK Core in Rust is inspired by the original [Uniswap SDK](https://github.com/Uniswap/sdk-core) and aims to
+provide similar functionality in the Rust programming language.
+
+## Used by
+
+- [Uniswap V3 SDK Rust](https://github.com/shuhuiluo/uniswap-v3-sdk-rs): Opinionated Rust implementation of the Uniswap
+  V3 SDK with a focus on readability and performance
+- ...
+
+*(If you want to add project to the list, dm or open a PR)*

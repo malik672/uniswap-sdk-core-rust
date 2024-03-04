@@ -16,7 +16,7 @@ impl CurrencyTrait for Token {
     }
 
     fn address(&self) -> Address {
-        self.meta.address
+        self.address
     }
 
     /// Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
@@ -40,9 +40,9 @@ impl CurrencyTrait for Token {
 }
 
 impl Token {
-    pub fn new(
+    pub const fn new(
         chain_id: u64,
-        address: String,
+        address: Address,
         decimals: u8,
         symbol: Option<String>,
         name: Option<String>,
@@ -58,7 +58,7 @@ impl Token {
             symbol,
             name,
             meta: TokenMeta {
-                address: address.parse().unwrap(),
+                address,
                 buy_fee_bps,
                 sell_fee_bps,
             },
@@ -83,15 +83,64 @@ impl Token {
     }
 }
 
-/// Short hand macro to create a token
+/// Shorthand macro to create a [`Token`] with the given chain id, address, decimals, optional
+/// symbol and name.
+///
+/// # Arguments
+///
+/// * `chain_id`: The chain id
+/// * `address`: The address of the token as a string, [`Address`] or a string literal without "0x"
+/// * `decimals`: The decimals of the token
+/// * `symbol`: The symbol of the token, optional
+/// * `name`: The name of the token, optional
+///
+/// returns: [`Token`]
+///
+/// # Example
+///
+/// ```
+/// use uniswap_sdk_core::{prelude::*, token};
+///
+/// const DAI_MAINNET: &str = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+/// let dai: Token = token!(1, DAI_MAINNET, 18, "DAI", "Dai Stablecoin");
+/// let dai: Token = token!(
+///     1,
+///     "6B175474E89094C44Da98b954EedeAC495271d0F",
+///     18,
+///     "DAI",
+///     "Dai Stablecoin"
+/// );
+/// ```
 #[macro_export]
 macro_rules! token {
+    ($chain_id:expr, $address:literal, $decimals:expr) => {
+        Token::new(
+            $chain_id,
+            address!($address),
+            $decimals,
+            None,
+            None,
+            None,
+            None,
+        )
+    };
     ($chain_id:expr, $address:expr, $decimals:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string(),
+            $address.to_string().parse::<Address>().unwrap(),
             $decimals,
             None,
+            None,
+            None,
+            None,
+        )
+    };
+    ($chain_id:expr, $address:literal, $decimals:expr, $symbol:expr) => {
+        Token::new(
+            $chain_id,
+            address!($address),
+            $decimals,
+            Some($symbol.to_string()),
             None,
             None,
             None,
@@ -100,7 +149,7 @@ macro_rules! token {
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string(),
+            $address.to_string().parse::<Address>().unwrap(),
             $decimals,
             Some($symbol.to_string()),
             None,
@@ -108,10 +157,21 @@ macro_rules! token {
             None,
         )
     };
+    ($chain_id:expr, $address:literal, $decimals:expr, $symbol:expr, $name:expr) => {
+        Token::new(
+            $chain_id,
+            address!($address),
+            $decimals,
+            Some($symbol.to_string()),
+            Some($name.to_string()),
+            None,
+            None,
+        )
+    };
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr, $name:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string(),
+            $address.to_string().parse::<Address>().unwrap(),
             $decimals,
             Some($symbol.to_string()),
             Some($name.to_string()),
@@ -123,7 +183,8 @@ macro_rules! token {
 
 #[cfg(test)]
 mod tests {
-    ///should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the compiler will panic by itself, so no need
+    ///should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the
+    /// compiler will panic by itself, so no need
     use super::*;
 
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";

@@ -11,7 +11,8 @@ pub struct CurrencyLike<M> {
     pub meta: M,
 }
 
-/// A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
+/// A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other
+/// chain-native currencies
 pub trait BaseCurrency: Clone {
     /// The chain ID on which this currency resides
     fn chain_id(&self) -> ChainId;
@@ -26,7 +27,6 @@ pub trait BaseCurrency: Clone {
     fn name(&self) -> Option<String>;
 }
 
-// Implementation of methods for CurrencyLike
 impl<M: Clone> BaseCurrency for CurrencyLike<M> {
     fn chain_id(&self) -> ChainId {
         self.chain_id
@@ -45,6 +45,10 @@ impl<M: Clone> BaseCurrency for CurrencyLike<M> {
     }
 }
 
+<<<<<<< HEAD
+=======
+/// Implement [`Deref`] to allow direct access to the metadata of the currency
+>>>>>>> 2891f4e4fc69685514fcf70a9bf090dca1dfbb22
 impl<M> Deref for CurrencyLike<M> {
     type Target = M;
 
