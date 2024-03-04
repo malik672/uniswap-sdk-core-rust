@@ -1,9 +1,7 @@
 /// External crate dependencies
 use crate::prelude::*;
 
-/// Represents metadata about a currency.
-///
-/// This struct holds information about a currency, including its symbol and the number of decimals.
+/// Currency amount struct that represents a rational amount of a currency
 pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
 
 /// Struct representing metadata about a currency
@@ -13,7 +11,6 @@ pub struct CurrencyMeta<T: CurrencyTrait> {
     pub decimal_scale: BigUint,
 }
 
-/// Implementation of methods for CurrencyAmount
 impl<T: CurrencyTrait> CurrencyAmount<T> {
     /// Constructor method for creating a new currency amount
     fn new(
@@ -43,7 +40,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         Self::new(currency, raw_amount, 1)
     }
 
-    /// Construct a currency amount with a denominator that is not equal to 1
+    /// Construct a currency amount with a denominator that is not equal to 0
     pub fn from_fractional_amount(
         currency: T,
         numerator: impl Into<BigInt>,
@@ -126,10 +123,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
                 .to_fixed(decimal_places, rounding),
         )
     }
-}
 
-/// Implementation for a specific type of CurrencyAmount (Token)
-impl<T: CurrencyTrait> CurrencyAmount<T> {
     /// Wrap the currency amount if the currency is not native
     pub fn wrapped(&self) -> Result<CurrencyAmount<Token>, Error> {
         CurrencyAmount::from_fractional_amount(

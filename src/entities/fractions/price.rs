@@ -1,10 +1,10 @@
 /// External crate dependencies
 use crate::prelude::*;
 
-/// Type alias for a Price, a Fraction with metadata PriceMeta
+/// Type alias for a Price, a [`FractionLike`] with metadata [`PriceMeta`]
 pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
 
-/// Struct representing metadata for a Price
+/// Struct representing metadata for a [`Price`]
 #[derive(Clone, Debug, PartialEq)]
 pub struct PriceMeta<TBase, TQuote>
 where
@@ -21,7 +21,7 @@ where
     TBase: CurrencyTrait,
     TQuote: CurrencyTrait,
 {
-    /// Constructor for creating a new Price instance
+    /// Constructor for creating a new [`Price`] instance
     pub fn new(
         base_currency: TBase,
         quote_currency: TQuote,
@@ -44,7 +44,7 @@ where
         )
     }
 
-    /// Create a Price instance from currency amounts of the base and quote currencies
+    /// Create a [`Price`] instance from currency amounts of the base and quote currencies
     pub fn from_currency_amounts(
         base_amount: CurrencyAmount<TBase>,
         quote_amount: CurrencyAmount<TQuote>,
@@ -109,7 +109,8 @@ where
         self.as_fraction() * self.scalar.clone()
     }
 
-    /// Converts the adjusted price to a string with a specified number of significant digits and rounding strategy
+    /// Converts the adjusted price to a string with a specified number of significant digits and
+    /// rounding strategy
     pub fn to_significant(
         &self,
         significant_digits: u8,
@@ -119,7 +120,8 @@ where
             .to_significant(significant_digits, rounding)
     }
 
-    /// Converts the adjusted price to a string with a fixed number of decimal places and rounding strategy
+    /// Converts the adjusted price to a string with a fixed number of decimal places and rounding
+    /// strategy
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         self.adjusted_for_decimals()
             .to_fixed(decimal_places, rounding)

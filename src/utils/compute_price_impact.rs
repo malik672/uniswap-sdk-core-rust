@@ -4,9 +4,9 @@ use crate::prelude::*;
 ///
 /// # Arguments
 ///
-/// *  midPrice mid price before the trade
-/// * inputAmount the input amount of the trade
-/// * outputAmount the output amount of the trade
+/// * `midPrice`: mid price before the trade
+/// * `inputAmount`: the input amount of the trade
+/// * `outputAmount`: the output amount of the trade
 ///
 /// returns: Percent
 pub fn compute_price_impact<TBase: CurrencyTrait, TQuote: CurrencyTrait>(

@@ -18,15 +18,15 @@ pub struct ChainAddresses {
 
 pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
 
-/// returns an hashmap of key pair input of chainid to address
+/// returns a hashmap of key pair input of chainid to address
 ///
 /// # Arguments
 ///
-/// *  Address  
-/// * additional networks a vector of chainid
+/// * `address`: Address
+/// * `additional networks`: a vector of chain ids
 ///
 ///
-/// returns: AdresssMap
+/// returns: [`AdresssMap`]
 pub fn construct_same_address_map(address: Address, additional_networks: &[ChainId]) -> AddressMap {
     let mut networks = DEFAULT_NETWORKS.to_vec();
     networks.extend_from_slice(additional_networks);
@@ -79,7 +79,8 @@ lazy_static! {
 }
 
 impl Default for ChainAddresses {
-    /// Networks that share most of the same addresses i.e. Mainnet, Goerli, Optimism, Arbitrum, Polygon
+    /// Networks that share most of the same addresses i.e. Mainnet, Goerli, Optimism, Arbitrum,
+    /// Polygon
     fn default() -> Self {
         Self {
             v3_core_factory_address: address!("1F98431c8aD98523631AE4a59f267346ea31F984"),
