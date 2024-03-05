@@ -592,7 +592,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref V1_MIXED_ROUTE_QUOTER_ADDRESSES: ChainAddress = {
+    pub static ref MIXED_ROUTE_QUOTER_V1_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
         for chain_id in SUPPORTED_CHAINS {
             if CHAIN_TO_ADDRESSES_MAP
