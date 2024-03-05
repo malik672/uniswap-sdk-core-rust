@@ -8,6 +8,7 @@ pub enum ChainId {
     OPTIMISMSEPOLIA = 11155420,
     ARBITRUMONE = 42161,
     ARBITRUMGOERLI = 421613,
+    ARBITRUMSEPOLIA = 421614,
     POLYGON = 137,
     POLYGONMUMBAI = 80001,
     CELO = 42220,
@@ -18,15 +19,19 @@ pub enum ChainId {
     AVALANCHE = 43114,
     BASEGOERLI = 84531,
     BASE = 8453,
+    ZORA = 7777777,
+    ZORASEPOLIA = 999999999,
+    ROOTSTOCK = 30,
 }
 
-pub const SUPPORTED_CHAINS: [ChainId; 16] = [
+pub const SUPPORTED_CHAINS: [ChainId; 20] = [
     ChainId::MAINNET,
     ChainId::OPTIMISM,
     ChainId::OPTIMISMGOERLI,
     ChainId::OPTIMISMSEPOLIA,
     ChainId::ARBITRUMONE,
     ChainId::ARBITRUMGOERLI,
+    ChainId::ARBITRUMSEPOLIA,
     ChainId::POLYGON,
     ChainId::POLYGONMUMBAI,
     ChainId::GOERLI,
@@ -37,6 +42,9 @@ pub const SUPPORTED_CHAINS: [ChainId; 16] = [
     ChainId::AVALANCHE,
     ChainId::BASE,
     ChainId::BASEGOERLI,
+    ChainId::ZORA,
+    ChainId::ZORASEPOLIA,
+    ChainId::ROOTSTOCK,
 ];
 
 pub enum NativeCurrencyName {
@@ -47,4 +55,5 @@ pub enum NativeCurrencyName {
     MOONBEAM,
     BNB,
     AVAX,
+    ROOTSTOCK,
 }
