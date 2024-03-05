@@ -552,7 +552,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref ENS_RESGISTER_ADDRESS: AddressMap =
+    pub static ref ENS_REGISTRAR_ADDRESSES: AddressMap =
         construct_same_address_map(address!("00000000000C2E074eC69A0dFb2997BA6C7d2e1e"), &[]);
 }
 
