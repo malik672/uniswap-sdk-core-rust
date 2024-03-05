@@ -275,7 +275,7 @@ pub const ARBITRUM_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
 };
 
 /// sepolia v3 addresses
-pub const SEPOLIA_ADDRESS: ChainAddresses = ChainAddresses {
+pub const SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory_address: address!("0227628f3F023bb0B980b67D528571c95c6DaC1c"),
     multicall_address: address!("D7F33bCdb21b359c8ee6F0251d30E94832baAd07"),
     quoter_address: address!("Ed1f6473345F45b75F8179591dd5bA1888cf2FB3"),
@@ -283,7 +283,7 @@ pub const SEPOLIA_ADDRESS: ChainAddresses = ChainAddresses {
     nonfungible_position_manager_address: Some(address!(
         "1238536071E1c677A632429e3655c799b22cDA52"
     )),
-    tick_lens_address: Some(address!("d7f33bcdb21b359c8ee6f0251d30e94832baad07")),
+    tick_lens_address: Some(address!("0b343475d44EC2b4b8243EBF81dc888BF0A14b36")),
     swap_router02_address: Some(address!("3bFA4769FB09eefC5a80d6E87c3B9C650f7Ae48E")),
     v1_mixed_route_quoter_address: None,
 };
@@ -405,11 +405,11 @@ lazy_static! {
     /// V3 Contract Addresses
     pub static ref V3_CORE_FACTORY_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
-        for memo in SUPPORTED_CHAINS {
+        for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
-                memo as u64,
+                chain_id as u64,
                 CHAIN_TO_ADDRESSES_MAP
-                    .get(&(memo as u64))
+                    .get(&(chain_id as u64))
                     .unwrap()
                     .v3_core_factory_address,
             );
@@ -422,11 +422,11 @@ lazy_static! {
     /// V3 Contract Addresses
     pub static ref V3_MIGRATOR_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
-        for memo in SUPPORTED_CHAINS {
+        for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
-                memo as u64,
+                chain_id as u64,
                 CHAIN_TO_ADDRESSES_MAP
-                    .get(&(memo as u64))
+                    .get(&(chain_id as u64))
                     .unwrap()
                     .v3_migrator_address
                     .unwrap(),
@@ -440,11 +440,11 @@ lazy_static! {
     /// V3 Contract Addresses
     pub static ref MULTICALL_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
-        for memo in SUPPORTED_CHAINS {
+        for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
-                memo as u64,
+                chain_id as u64,
                 CHAIN_TO_ADDRESSES_MAP
-                    .get(&(memo as u64))
+                    .get(&(chain_id as u64))
                     .unwrap()
                     .multicall_address,
             );
@@ -512,13 +512,13 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref QUOTER_ADDRESS: ChainAddress = {
+    pub static ref QUOTER_ADDRESSESES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
-        for memo in SUPPORTED_CHAINS {
+        for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
-                memo as u64,
+                chain_id as u64,
                 CHAIN_TO_ADDRESSES_MAP
-                    .get(&(memo as u64))
+                    .get(&(chain_id as u64))
                     .unwrap()
                     .quoter_address,
             );
@@ -528,19 +528,19 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref NONFUNGIBLE_POSITION_MANAGER_ADDRESS: ChainAddress = {
+    pub static ref NONFUNGIBLE_POSITION_MANAGER_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
-        for memo in SUPPORTED_CHAINS {
+        for chain_id in SUPPORTED_CHAINS {
             if CHAIN_TO_ADDRESSES_MAP
-                .get(&(memo as u64))
+                .get(&(chain_id as u64))
                 .unwrap()
                 .nonfungible_position_manager_address
                 .is_some()
             {
                 chain_add.insert(
-                    memo as u64,
+                    chain_id as u64,
                     CHAIN_TO_ADDRESSES_MAP
-                        .get(&(memo as u64))
+                        .get(&(chain_id as u64))
                         .unwrap()
                         .nonfungible_position_manager_address
                         .unwrap(),
@@ -552,7 +552,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref ENS_RESGISTER_ADDRESS_MAP: AddressMap =
+    pub static ref ENS_RESGISTER_ADDRESS: AddressMap =
         construct_same_address_map(address!("00000000000C2E074eC69A0dFb2997BA6C7d2e1e"), &[]);
 }
 
@@ -570,17 +570,17 @@ lazy_static! {
 lazy_static! {
     pub static ref TICK_LENS_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
-        for memo in SUPPORTED_CHAINS {
+        for chain_id in SUPPORTED_CHAINS {
             if CHAIN_TO_ADDRESSES_MAP
-                .get(&(memo as u64))
+                .get(&(chain_id as u64))
                 .unwrap()
                 .tick_lens_address
                 .is_some()
             {
                 chain_add.insert(
-                    memo as u64,
+                    chain_id as u64,
                     CHAIN_TO_ADDRESSES_MAP
-                        .get(&(memo as u64))
+                        .get(&(chain_id as u64))
                         .unwrap()
                         .tick_lens_address
                         .unwrap(),
@@ -592,19 +592,19 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref V1_MIXED_ROUTE_QUOTER_ADDRESS: ChainAddress = {
+    pub static ref V1_MIXED_ROUTE_QUOTER_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
-        for memo in SUPPORTED_CHAINS {
+        for chain_id in SUPPORTED_CHAINS {
             if CHAIN_TO_ADDRESSES_MAP
-                .get(&(memo as u64))
+                .get(&(chain_id as u64))
                 .unwrap()
                 .v1_mixed_route_quoter_address
                 .is_some()
             {
                 chain_add.insert(
-                    memo as u64,
+                    chain_id as u64,
                     CHAIN_TO_ADDRESSES_MAP
-                        .get(&(memo as u64))
+                        .get(&(chain_id as u64))
                         .unwrap()
                         .v1_mixed_route_quoter_address
                         .unwrap(),
