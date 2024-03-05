@@ -379,7 +379,7 @@ lazy_static! {
 
         new_map.insert(ChainId::AVALANCHE as u64, AVALANCHE_ADDRESSES);
         new_map.insert(ChainId::MAINNET as u64, *MAINNET_ADDRESSES);
-        new_map.insert(ChainId::SEPOLIA as u64, SEPOLIA_ADDRESS);
+        new_map.insert(ChainId::SEPOLIA as u64, SEPOLIA_ADDRESSES);
         new_map.insert(ChainId::GOERLI as u64, *GOERLI_ADDRESSES);
         new_map.insert(ChainId::ARBITRUMONE as u64, *ARBITUM_ONE_ADDRESSES);
         new_map.insert(ChainId::ARBITRUMGOERLI as u64, ARBITRUM_GOERLI_ADDRESSES);
