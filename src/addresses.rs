@@ -512,7 +512,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref QUOTER_ADDRESSESES: ChainAddress = {
+    pub static ref QUOTER_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
         for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
