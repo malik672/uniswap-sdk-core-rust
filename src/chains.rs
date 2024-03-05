@@ -21,7 +21,7 @@ pub enum ChainId {
     BASE = 8453,
     ZORA = 7777777,
     ZORASEPOLIA = 999999999,
-    ROOTSTOCK = 30
+    ROOTSTOCK = 30,
 }
 
 pub const SUPPORTED_CHAINS: [ChainId; 20] = [
@@ -44,7 +44,7 @@ pub const SUPPORTED_CHAINS: [ChainId; 20] = [
     ChainId::BASEGOERLI,
     ChainId::ZORA,
     ChainId::ZORASEPOLIA,
-    ChainId::ROOTSTOCK
+    ChainId::ROOTSTOCK,
 ];
 
 pub enum NativeCurrencyName {
