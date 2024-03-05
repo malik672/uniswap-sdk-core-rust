@@ -45,10 +45,7 @@ impl<M: Clone> BaseCurrency for CurrencyLike<M> {
     }
 }
 
-<<<<<<< HEAD
-=======
 /// Implement [`Deref`] to allow direct access to the metadata of the currency
->>>>>>> 2891f4e4fc69685514fcf70a9bf090dca1dfbb22
 impl<M> Deref for CurrencyLike<M> {
     type Target = M;
 
