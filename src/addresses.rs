@@ -552,7 +552,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref ENS_RESGISTER_ADDRESSES: AddressMap =
+    pub static ref ENS_REGISTRAR_ADDRESSES: AddressMap =
         construct_same_address_map(address!("00000000000C2E074eC69A0dFb2997BA6C7d2e1e"), &[]);
 }
 
@@ -592,7 +592,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref V1_MIXED_ROUTE_QUOTER_ADDRESSES: ChainAddress = {
+    pub static ref MIXED_ROUTE_QUOTER_V1_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
         for chain_id in SUPPORTED_CHAINS {
             if CHAIN_TO_ADDRESSES_MAP
