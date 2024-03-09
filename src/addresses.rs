@@ -512,7 +512,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref QUOTER_ADDRESSESES: ChainAddress = {
+    pub static ref QUOTER_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
         for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
@@ -552,7 +552,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref ENS_RESGISTER_ADDRESS: AddressMap =
+    pub static ref ENS_RESGISTER_ADDRESSES: AddressMap =
         construct_same_address_map(address!("00000000000C2E074eC69A0dFb2997BA6C7d2e1e"), &[]);
 }
 
