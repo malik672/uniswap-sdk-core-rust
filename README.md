@@ -65,13 +65,12 @@ fn main() {
         Err(e) => println!("Error comparing tokens: {:?}", e),
     }
 }
-//This example demonstrates how to create a Token instance for DAI on the Ethereum Mainnet using the token! macro.
-//It then prints the token's address and checks if it's a native token (which it isn't, so it prints false). 
-//It also compares the DAI token with another DAI token instance to show that two instances of the same token are considered equal. 
-//Finally, it attempts to sort the DAI token before an Ethereum token, which should print that DAI sorts before ETH, assuming the addresses are correctly set up for this comparison.
-//Remember to replace "0x6B175474E89094C44Da98b954EedeAC495271d0F" with the actual address of the DAI token you're working with, and adjust the CHAIN_ID if you're working on a different network (e.g., a testnet).
-
-```
+\```
+This example demonstrates how to create a Token instance for DAI on the Ethereum Mainnet using the token! macro.
+It then prints the token's address and checks if it's a native token (which it isn't, so it prints false). 
+It also compares the DAI token with another DAI token instance to show that two instances of the same token are considered equal. 
+Finally, it attempts to sort the DAI token before an Ethereum token, which should print that DAI sorts before ETH, assuming the addresses are correctly set up for this comparison.
+Remember to replace "0x6B175474E89094C44Da98b954EedeAC495271d0F" with the actual address of the DAI token you're working with, and adjust the CHAIN_ID if you're working on a different network (e.g., a testnet).
 
 ## License
 
