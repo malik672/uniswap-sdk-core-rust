@@ -7,6 +7,8 @@ use crate::prelude::*;
 /// * `value`: the value for which to compute the square root, rounded down
 ///
 /// returns: BigInt
+
+#[allow(clippy::assigning_clones)]
 pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
     if !value >= Zero::zero() {
         return Err(Error::Incorrect());
