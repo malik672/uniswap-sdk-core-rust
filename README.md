@@ -28,13 +28,13 @@ use uniswap_sdk_core::prelude::*;
 
 ## Examples
 
-The code below shows an example of how you can validate an address
+The code below shows an example of how to create a new `Token` instance for the DAI token on the Ethereum Mainnet using
+the `token!` macro.
 
-```
-// The `prelude` module provides a convenient way to import a number
-// of common dependencies at once. This can be useful if you are working
-// with multiple parts of the library and want to avoid having
-// to import each dependency individually.
+```rust
+// The `prelude` module provides a convenient way to import a number of common dependencies at 
+// once. This can be useful if you are working with multiple parts of the library and want to avoid
+// having to import each dependency individually.
 // Import necessary preludes and types
 use uniswap_sdk_core::prelude::*;
 
@@ -65,12 +65,20 @@ fn main() {
         Err(e) => println!("Error comparing tokens: {:?}", e),
     }
 }
-\```
+```
+
 This example demonstrates how to create a Token instance for DAI on the Ethereum Mainnet using the token! macro.
-It then prints the token's address and checks if it's a native token (which it isn't, so it prints false). 
-It also compares the DAI token with another DAI token instance to show that two instances of the same token are considered equal. 
-Finally, it attempts to sort the DAI token before an Ethereum token, which should print that DAI sorts before ETH, assuming the addresses are correctly set up for this comparison.
-Remember to replace "0x6B175474E89094C44Da98b954EedeAC495271d0F" with the actual address of the DAI token you're working with, and adjust the CHAIN_ID if you're working on a different network (e.g., a testnet).
+
+It then prints the token's address and checks if it's a native token (which it isn't, so it prints false).
+
+It also compares the DAI token with another DAI token instance to show that two instances of the same token are
+considered equal.
+
+Finally, it attempts to sort the DAI token before an Ethereum token, which should print that DAI sorts before ETH,
+assuming the addresses are correctly set up for this comparison.
+
+Remember to replace "0x6B175474E89094C44Da98b954EedeAC495271d0F" with the actual address of the DAI token you're working
+with, and adjust the CHAIN_ID if you're working on a different network (e.g., a testnet).
 
 ## License
 
