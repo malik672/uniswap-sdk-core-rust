@@ -28,7 +28,7 @@ pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
     let mut x = (value / &two) + &one;
 
     while x < z {
-        z = x.clone();
+        z.clone_from(&x);
         x = ((value / &x) + &x) / &two;
     }
 
