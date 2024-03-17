@@ -117,11 +117,9 @@ pub trait FractionBase<M>: Sized {
     /// strategy
     fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         let rounding_strategy = to_rounding_strategy(rounding);
-        let quotient = self
-            .to_decimal()
-            .with_scale_round(decimal_places as i64, rounding_strategy);
-
-        format!("{:.1$}", quotient, decimal_places as usize)
+        self.to_decimal()
+            .with_scale_round(decimal_places as i64, rounding_strategy)
+            .to_string()
     }
 
     /// Helper method for converting any superclass back to a simple [`Fraction`]

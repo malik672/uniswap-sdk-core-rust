@@ -67,7 +67,7 @@ fn main() {
 }
 ```
 
-This example demonstrates how to create a Token instance for DAI on the Ethereum Mainnet using the token! macro.
+This example demonstrates how to create a `Token` instance for DAI on the Ethereum Mainnet using the `token!` macro.
 
 It then prints the token's address and checks if it's a native token (which it isn't, so it prints false).
 
