@@ -117,12 +117,12 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         if !decimal_places <= self.currency.decimals() {
             return Err(Error::NotEqual());
         }
-    
+
         if decimal_places == 0 {
             // Directly convert the numerator to a string for zero decimal places
             return Ok(self.numerator().to_string());
         }
-    
+
         Ok(
             (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1))
                 .to_fixed(decimal_places, rounding),
@@ -194,7 +194,7 @@ mod tests {
 
     #[test]
     #[should_panic(expected = "AMOUNT")]
-    fn test_token_amount_quotient_exceeds_max_uint256() {   
+    fn test_token_amount_quotient_exceeds_max_uint256() {
         let numerator: BigInt = (MAX_UINT256.clone() + 1) * 2;
         let _w = CurrencyAmount::from_fractional_amount(TOKEN18.clone(), numerator, 2);
         assert!(_w.is_ok(), "AMOUNT");
@@ -219,7 +219,10 @@ mod tests {
     #[test]
     fn to_fixed_0_decimals() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 12345896).unwrap();
-        assert_eq!(amount.to_fixed(0, Rounding::RoundHalfUp).unwrap(), "12345896");
+        assert_eq!(
+            amount.to_fixed(0, Rounding::RoundHalfUp).unwrap(),
+            "12345896"
+        );
     }
 
     #[test]
