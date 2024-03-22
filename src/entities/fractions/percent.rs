@@ -7,7 +7,7 @@ lazy_static! {
 }
 
 /// Unit struct to distinguish between a fraction and a percent
-#[derive(Clone, Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq, Copy)]
 pub struct IsPercent;
 
 /// Type alias for a Percent, a [`FractionLike`] with the [`IsPercent`] metadata

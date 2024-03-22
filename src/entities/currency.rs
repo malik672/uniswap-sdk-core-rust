@@ -1,15 +1,34 @@
 use crate::prelude::*;
 
 #[derive(Clone, PartialEq, Debug)]
+/// Represents a currency in the Uniswap SDK.
+///
+/// This enum can represent either a native currency (like Ether) or a token.
 pub enum Currency {
+    /// Represents a native currency.
     NativeCurrency(Ether),
+    /// Represents a token.
     Token(Token),
 }
 
+/// Trait for representing a currency in the Uniswap SDK.
+///
+/// This trait provides methods for interacting with currencies, whether they are native currencies
+/// like Ether or tokens. Implementations of this trait must provide functionality for determining
+/// if a currency is native, getting its address, checking equality with another currency, and
+/// wrapping the currency for use with Uniswap contracts.
 pub trait CurrencyTrait: BaseCurrency {
     /// Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
     fn is_native(&self) -> bool;
 
+    /// Returns the address of the currency.
+    ///
+    /// This method returns the address associated with the currency, whether it's a native currency
+    /// or a token.
+    ///
+    /// # Returns
+    ///
+    /// * `Address` - The address of the currency.
     fn address(&self) -> Address;
 
     /// Returns whether this currency is functionally equivalent to the other currency

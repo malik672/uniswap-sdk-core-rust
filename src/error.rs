@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 /// Represents errors that can occur in the context of currency operations.
-#[derive(Debug, Error)]
+#[derive(Debug, Error, Clone, Copy)]
 pub enum Error {
     /// Indicates a mismatch in chain IDs.
     #[error("Chain IDs do not match: {0} and {1}")]

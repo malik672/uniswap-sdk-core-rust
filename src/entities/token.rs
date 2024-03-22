@@ -4,9 +4,18 @@ use crate::prelude::*;
 pub type Token = CurrencyLike<TokenMeta>;
 
 #[derive(Clone, PartialEq, Debug)]
+
+/// Represents the metadata for an ERC20 token, including its address and optional fees.
+///
+/// This struct holds the address of the token and optional buy and sell fees in basis points (bps).
+/// It is used to provide additional information about the token that is not directly related to its
+/// value or quantity.
 pub struct TokenMeta {
+    /// The address of the token.
     pub address: Address,
+    /// The buy fee in basis points (bps) for the token.
     pub buy_fee_bps: Option<BigUint>,
+    /// The sell fee in basis points (bps) for the token.
     pub sell_fee_bps: Option<BigUint>,
 }
 
@@ -40,6 +49,25 @@ impl CurrencyTrait for Token {
 }
 
 impl Token {
+    /// Creates a new `Token` with the given parameters.
+    ///
+    /// # Arguments
+    ///
+    /// * `chain_id` - The chain ID of the token.
+    /// * `address` - The address of the token.
+    /// * `decimals` - The number of decimals the token uses.
+    /// * `symbol` - The symbol of the token, if any.
+    /// * `name` - The name of the token, if any.
+    /// * `buy_fee_bps` - The buy fee in basis points (bps), if any.
+    /// * `sell_fee_bps` - The sell fee in basis points (bps), if any.
+    ///
+    /// # Returns
+    ///
+    /// A new `Token` instance.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `chain_id` is 0.
     pub const fn new(
         chain_id: u64,
         address: Address,

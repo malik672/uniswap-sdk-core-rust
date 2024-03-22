@@ -7,7 +7,9 @@ pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
 /// Struct representing metadata about a currency
 #[derive(Clone, Debug, PartialEq)]
 pub struct CurrencyMeta<T: CurrencyTrait> {
+    /// The currency associated with this metadata
     pub currency: T,
+    /// The scale factor for the currency's decimal places
     pub decimal_scale: BigUint,
 }
 
