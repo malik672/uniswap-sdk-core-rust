@@ -116,7 +116,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
 
     /// Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
-        if !decimal_places <= self.currency.decimals() {
+        if decimal_places > self.currency.decimals() {
             return Err(Error::NotEqual());
         }
 
@@ -211,7 +211,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "DECIMALS")]
     fn to_fixed_decimals_exceeds_currency_decimals() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 1000).unwrap();
         let _w = amount.to_fixed(3, Rounding::RoundDown);

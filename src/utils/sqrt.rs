@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use num_traits::Signed;
 
 /// Computes floor(sqrt(value))
 ///
@@ -7,10 +8,8 @@ use crate::prelude::*;
 /// * `value`: the value for which to compute the square root, rounded down
 ///
 /// returns: BigInt
-
-#[allow(clippy::assigning_clones)]
 pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
-    if !value >= Zero::zero() {
+    if value.is_negative() {
         return Err(Error::Incorrect());
     }
 
@@ -29,7 +28,7 @@ pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
     let mut x = (value / &two) + &one;
 
     while x < z {
-        z = x.clone();
+        z.clone_from(&x);
         x = ((value / &x) + &x) / &two;
     }
 
