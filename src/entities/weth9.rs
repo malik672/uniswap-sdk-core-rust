@@ -17,6 +17,15 @@ impl Default for WETH9 {
 }
 
 impl WETH9 {
+    /// Creates a new instance of `WETH9` with predefined WETH tokens for various chains.
+    ///
+    /// This function initializes a `WETH9` struct with a predefined set of WETH tokens
+    /// for different Ethereum chains. It's useful for quickly setting up a `WETH9`
+    /// instance without manually inserting each token.
+    ///
+    /// # Returns
+    ///
+    /// A new `WETH9` instance with predefined WETH tokens.
     pub fn new() -> Self {
         let mut tokens = HashMap::new();
 

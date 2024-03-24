@@ -7,7 +7,9 @@ pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
 /// Struct representing metadata about a currency
 #[derive(Clone, Debug, PartialEq)]
 pub struct CurrencyMeta<T: CurrencyTrait> {
+    /// The currency associated with this metadata
     pub currency: T,
+    /// The scale factor for the currency's decimal places
     pub decimal_scale: BigUint,
 }
 
@@ -116,6 +118,11 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
         if decimal_places > self.currency.decimals() {
             return Err(Error::NotEqual());
+        }
+
+        if decimal_places == 0 {
+            // Directly convert the numerator to a string for zero decimal places
+            return Ok(self.numerator().to_string());
         }
 
         Ok(

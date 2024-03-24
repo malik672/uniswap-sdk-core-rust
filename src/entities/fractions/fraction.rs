@@ -7,6 +7,7 @@ use std::ops::{Add, Deref, Mul, Sub};
 pub struct FractionLike<M> {
     numerator: BigInt,
     denominator: BigInt,
+    /// Metadata associated with the fraction
     pub meta: M,
 }
 
@@ -33,7 +34,20 @@ impl<M> Deref for FractionLike<M> {
 pub type Fraction = FractionLike<()>;
 
 impl Fraction {
-    // Constructor for creating a new Fraction instance
+    /// Creates a new `Fraction` instance with the given numerator and denominator.
+    ///
+    /// # Arguments
+    ///
+    /// * `numerator` - The numerator of the fraction.
+    /// * `denominator` - The denominator of the fraction.
+    ///
+    /// # Returns
+    ///
+    /// A new `Fraction` instance with the specified numerator and denominator.
+    ///
+    /// # Panics
+    ///
+    /// This function will panic if the denominator is zero.
     pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
         FractionBase::new(numerator, denominator, ())
     }
