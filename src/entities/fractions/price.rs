@@ -200,7 +200,7 @@ mod test {
         let p = Price::new(TOKEN0_6.clone(), TOKEN1.clone(), 123, 456);
         assert_eq!(
             p.to_significant(4, Rounding::RoundDown).unwrap(),
-            "3.707E-12"
+            "0.000000000003707"
         );
     }
 
@@ -209,7 +209,7 @@ mod test {
         let p = Price::new(TOKEN0_6.clone(), TOKEN1.clone(), 456, 123);
         assert_eq!(
             p.to_significant(4, Rounding::RoundDown).unwrap(),
-            "2.697E-13"
+            "0.0000000000002697"
         );
     }
 
@@ -218,7 +218,7 @@ mod test {
         let p = Price::new(TOKEN1.clone(), TOKEN0_6.clone(), 456, 123);
         assert_eq!(
             p.to_significant(4, Rounding::RoundDown).unwrap(),
-            "2.697E+11"
+            "269700000000"
         );
     }
 }

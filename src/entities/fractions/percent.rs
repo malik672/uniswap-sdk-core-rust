@@ -107,7 +107,7 @@ mod tests {
     fn test_to_fixed() {
         assert_eq!(
             Percent::new(154, 10000).to_fixed(2, Rounding::RoundHalfUp),
-            "1.5".to_string()
+            "1.54".to_string()
         );
     }
 }

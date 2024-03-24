@@ -10,8 +10,8 @@ pub mod ether;
 /// The `fractions` module contains functionality related to fractional values, such as currency
 /// amounts, percentages, and prices.
 pub mod fractions;
-/// The `token` module provides definitions and utilities for handling tokens on the Uniswap
-/// platform, including their creation, management, and interactions.
+/// The `token` module provides definitions and utilities for handling tokens including
+/// their creation, management, and interactions.
 pub mod token;
 /// The `weth9` module provides functionalities specific to Wrapped Ether (WETH9), a standard ERC-20
 /// token representation of Ether on the Ethereum blockchain.

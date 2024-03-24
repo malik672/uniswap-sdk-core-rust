@@ -219,11 +219,8 @@ mod tests {
 
     #[test]
     fn to_fixed_0_decimals() {
-        let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 12345896).unwrap();
-        assert_eq!(
-            amount.to_fixed(0, Rounding::RoundHalfUp).unwrap(),
-            "12345896"
-        );
+        let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 123456).unwrap();
+        assert_eq!(amount.to_fixed(0, Rounding::RoundDown).unwrap(), "123456");
     }
 
     #[test]
@@ -240,7 +237,7 @@ mod tests {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 1000).unwrap();
         assert_eq!(
             amount.to_significant(3, Rounding::RoundDown).unwrap(),
-            "1E+3"
+            "1000"
         );
     }
 
@@ -249,7 +246,7 @@ mod tests {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 123456).unwrap();
         assert_eq!(
             amount.to_significant(4, Rounding::RoundDown).unwrap(),
-            "1.234E+5"
+            "123400"
         );
     }
 

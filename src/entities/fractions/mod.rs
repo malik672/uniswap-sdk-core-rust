@@ -1,11 +1,11 @@
-/// This module contains functionality related to currency amounts in the context of fractions.
+/// This module represents currency, including the currency type and the amount as a fraction, also including.
+/// methods for arithmetic operations, conversions to and from string representations, and checks for validity.
 pub mod currency_amount;
-/// This module contains functionality related to fractions, which are used for various calculations
-/// in the SDK.
+/// This module contains with precise division results, avoiding floating-point arithmetic issues, also including
+/// operations like addition, subtraction, multiplication, and division, as well as conversions to other formats.
 pub mod fraction;
-/// This module contains functionality related to percentages, which are used for expressing
-/// fractions in a more human-readable format.
+/// A module represents a percentage as a fraction, with methods for arithmetic and string conversions, it also includes
+/// methods for precise calculations involving percentages and ensures accurate representation of percentage values.
 pub mod percent;
-/// This module contains functionality related to prices, which are used for calculating exchange
-/// rates and other financial metrics.
+/// A module represents' a price as a ratio between two currencies, with methods for arithmetic and string conversions.
 pub mod price;
