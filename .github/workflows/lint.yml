@@ -34,6 +34,7 @@ jobs:
         run: |
           rustup override set nightly
           rustup component add clippy --toolchain nightly
+          rustup component add rustfmt --toolchain nightly
 
       - name: Check lint
         run: cargo clippy -- -D warnings
