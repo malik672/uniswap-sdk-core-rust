@@ -30,8 +30,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-registry-
 
-      - name: Use nightly toolchain
-        run: rustup override set nightly
+      - name: Install Rust toolchain via rustup
+        run: |
+          rustup override set nightly
+          rustup component add clippy --toolchain nightly
 
       - name: Check lint
         run: cargo clippy -- -D warnings
