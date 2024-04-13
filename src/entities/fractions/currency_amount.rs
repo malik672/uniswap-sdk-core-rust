@@ -78,7 +78,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             .to_string()
     }
 
-    /// 
+    ///
     pub fn add(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
             return Err(Error::NotEqual());
@@ -91,7 +91,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    /// 
+    ///
     pub fn subtract(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
             return Err(Error::NotEqual());
@@ -114,7 +114,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             .to_significant(significant_digits, rounding)
     }
 
-    /// 
+    ///
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
         if decimal_places > self.currency.decimals() {
             return Err(Error::NotEqual());
