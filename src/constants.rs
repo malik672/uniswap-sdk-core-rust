@@ -14,7 +14,7 @@ pub enum TradeType {
 }
 
 #[derive(Clone, Debug, PartialEq, Copy)]
-/// Represents a rounding strategy.
+/// 
 pub enum Rounding {
     /// Rounds down to the nearest whole number.
     ///

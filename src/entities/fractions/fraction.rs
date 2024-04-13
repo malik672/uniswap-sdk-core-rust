@@ -112,8 +112,7 @@ pub trait FractionBase<M>: Sized {
         BigDecimal::from(self.numerator()).div(BigDecimal::from(self.denominator()))
     }
 
-    /// Converts the fraction to a string with a specified number of significant digits and rounding
-    /// strategy
+    /// 
     fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> Result<String, Error> {
         if significant_digits == 0 {
             return Err(Error::Incorrect());
@@ -127,8 +126,7 @@ pub trait FractionBase<M>: Sized {
         Ok(quotient.normalized().to_string())
     }
 
-    /// Converts the fraction to a string with a fixed number of decimal places and rounding
-    /// strategy
+    /// 
     fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         let rounding_strategy = to_rounding_strategy(rounding);
         self.to_decimal()
