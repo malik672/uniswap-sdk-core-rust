@@ -2,7 +2,7 @@
 use crate::prelude::*;
 use std::ops::{Add, Deref, Mul, Sub};
 
-///
+/// struct to represent a fraction
 #[derive(Clone, Debug)]
 pub struct FractionLike<M> {
     numerator: BigInt,
@@ -74,15 +74,16 @@ where
 {
 }
 
-///
+/// Trait defining common operations for fractions with metadata
 pub trait FractionBase<M>: Sized {
-    ///
+   
+    /// Constructor method for creating a new Fraction with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self;
 
-    ///
+    /// Accessor method for retrieving metadata
     fn meta(&self) -> M;
 
-    ///
+    /// Accessor method for retrieving metadata
     fn numerator(&self) -> BigInt;
 
     /// Accessor method for retrieving the denominator
@@ -112,7 +113,8 @@ pub trait FractionBase<M>: Sized {
         BigDecimal::from(self.numerator()).div(BigDecimal::from(self.denominator()))
     }
 
-    ///
+    /// Converts the fraction to a string with a specified number of significant digits and rounding
+    /// strategy
     fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> Result<String, Error> {
         if significant_digits == 0 {
             return Err(Error::Incorrect());
@@ -126,7 +128,8 @@ pub trait FractionBase<M>: Sized {
         Ok(quotient.normalized().to_string())
     }
 
-    ///
+    /// Converts the fraction to a string with a fixed number of decimal places and rounding
+    /// strategy
     fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         let rounding_strategy = to_rounding_strategy(rounding);
         self.to_decimal()
@@ -177,7 +180,7 @@ impl<M> PartialEq for FractionLike<M>
 where
     M: Clone + PartialEq,
 {
-    ///
+    /// Checks if the current fraction is equal to another fraction
     fn eq(&self, other: &Self) -> bool {
         self.numerator() * other.denominator() == other.numerator() * self.denominator()
             && self.meta() == other.meta()
@@ -207,7 +210,6 @@ where
 impl<M: Clone> Add for FractionLike<M> {
     type Output = Self;
 
-    ///
     fn add(self, other: Self) -> Self::Output {
         if self.denominator == other.denominator() {
             FractionBase::new(
@@ -228,7 +230,6 @@ impl<M: Clone> Add for FractionLike<M> {
 impl<M: Clone> Sub for FractionLike<M> {
     type Output = Self;
 
-    ///
     fn sub(self, other: Self) -> Self::Output {
         if self.denominator == other.denominator() {
             FractionBase::new(
@@ -249,7 +250,6 @@ impl<M: Clone> Sub for FractionLike<M> {
 impl<M: Clone> Mul for FractionLike<M> {
     type Output = Self;
 
-    ///
     fn mul(self, other: Self) -> Self::Output {
         FractionBase::new(
             self.numerator() * other.numerator(),
@@ -262,7 +262,6 @@ impl<M: Clone> Mul for FractionLike<M> {
 impl<M: Clone> Div for FractionLike<M> {
     type Output = Self;
 
-    ///
     /// There's little to no possibility of an error, so unwrap can be used
     fn div(self, other: Self) -> Self::Output {
         FractionBase::new(

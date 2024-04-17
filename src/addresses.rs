@@ -18,7 +18,7 @@ pub struct ChainAddresses {
     v1_mixed_route_quoter_address: Option<Address>,
 }
 
-///
+/// Represents default networks which are Mainnet, Goerli, Sepolia
 pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
 
 /// returns a hashmap of key pair input of chainid to address
