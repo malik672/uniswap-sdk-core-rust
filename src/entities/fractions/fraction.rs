@@ -76,7 +76,6 @@ where
 
 /// Trait defining common operations for fractions with metadata
 pub trait FractionBase<M>: Sized {
-   
     /// Constructor method for creating a new Fraction with metadata
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self;
 

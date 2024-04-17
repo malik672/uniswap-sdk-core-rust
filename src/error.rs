@@ -42,7 +42,7 @@ mod tests {
         assert_eq!(error.to_string(), "Addresses are equal");
     }
 
-    /// Test that `Error::MaxUint` displays the correct error message.
+    /// Test that `Error::MaxUint` displays the correct error messagit push ge.
     #[test]
     fn test_max_uint_error() {
         let error = Error::MaxUint;
