@@ -141,7 +141,6 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
