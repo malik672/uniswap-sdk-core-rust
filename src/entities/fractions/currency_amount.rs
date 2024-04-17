@@ -51,7 +51,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         Self::new(currency, numerator, denominator)
     }
 
-    ///
+    /// Multiplication of currency amount by another fractional amount
     pub fn multiply<M>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let multiplied = self.as_fraction() * other.as_fraction();
         Self::from_fractional_amount(
@@ -61,7 +61,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    ///
+    /// Division of currency amount by another fractional amount
     pub fn divide<M>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let divided = self.as_fraction() / other.as_fraction();
         Self::from_fractional_amount(
@@ -78,7 +78,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             .to_string()
     }
 
-    ///
+    /// Addition of another currency amount to the current amount
     pub fn add(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
             return Err(Error::NotEqual());
@@ -91,7 +91,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    ///
+    /// Subtraction of another currency amount from the current amount
     pub fn subtract(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
             return Err(Error::NotEqual());
@@ -104,7 +104,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    ///
+    /// Convert the currency amount to a string with a specified number of significant digits
     pub fn to_significant(
         &self,
         significant_digits: u8,
@@ -114,7 +114,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
             .to_significant(significant_digits, rounding)
     }
 
-    ///
+    /// Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
         if decimal_places > self.currency.decimals() {
             return Err(Error::NotEqual());
@@ -131,7 +131,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    ///
+    /// Wrap the currency amount if the currency is not native
     pub fn wrapped(&self) -> Result<CurrencyAmount<Token>, Error> {
         CurrencyAmount::from_fractional_amount(
             self.currency.wrapped(),
@@ -141,7 +141,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     }
 }
 
-///
+
 #[cfg(test)]
 mod tests {
     use super::*;

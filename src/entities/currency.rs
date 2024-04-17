@@ -1,7 +1,8 @@
 use crate::prelude::*;
 
 #[derive(Clone, PartialEq, Debug)]
-///
+
+/// This enum represnets the two type of currencies i.e native and Token
 pub enum Currency {
     /// Represents a native currency.
     NativeCurrency(Ether),
@@ -20,7 +21,7 @@ pub trait CurrencyTrait: BaseCurrency {
     /// Returns whether this currency is functionally equivalent to the other currency
     fn equals(&self, other: &impl CurrencyTrait) -> bool;
 
-    ///
+    /// Returns a Token that represents the wrapped quivalent of the mative currency
     fn wrapped(&self) -> Token;
 }
 

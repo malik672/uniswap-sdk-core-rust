@@ -3,7 +3,7 @@ use alloy_primitives::U256;
 use num_bigint::Sign;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-/// Represents the type of trade in the Uniswap Core SDK.
+/// Represents the various type of trades.
 pub enum TradeType {
     /// Indicates that the trade is based on an exact input amount.
     ExactInput,
@@ -13,7 +13,8 @@ pub enum TradeType {
 }
 
 #[derive(Clone, Debug, PartialEq, Copy)]
-///
+
+/// Represents three various way to rounds
 pub enum Rounding {
     /// Rounds down to the nearest whole number.
     RoundDown,
