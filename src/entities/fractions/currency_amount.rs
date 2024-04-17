@@ -14,7 +14,7 @@ pub struct CurrencyMeta<T: CurrencyTrait> {
 }
 
 impl<T: CurrencyTrait> CurrencyAmount<T> {
-    /// Constructor method for creating a new currency amount
+    ///
     fn new(
         currency: T,
         numerator: impl Into<BigInt>,
@@ -104,7 +104,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    /// Convert the currency amount to a string with a specified number of significant digits
+    ///
     pub fn to_significant(
         &self,
         significant_digits: u8,
@@ -131,7 +131,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
         )
     }
 
-    /// Wrap the currency amount if the currency is not native
+    ///
     pub fn wrapped(&self) -> Result<CurrencyAmount<Token>, Error> {
         CurrencyAmount::from_fractional_amount(
             self.currency.wrapped(),
@@ -141,7 +141,7 @@ impl<T: CurrencyTrait> CurrencyAmount<T> {
     }
 }
 
-/// Unit tests for the currency module
+///
 #[cfg(test)]
 mod tests {
     use super::*;

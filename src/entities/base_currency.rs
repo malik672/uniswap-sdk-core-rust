@@ -14,30 +14,19 @@ use alloy_primitives::ChainId;
 ///
 /// - `M`: The type of the additional metadata associated with the currency.
 pub struct CurrencyLike<M> {
-    /// The chain ID on which this currency resides.
     ///
-    /// This identifies the blockchain network where the currency is used.
     pub chain_id: ChainId,
 
-    /// The number of decimal places the currency can be divided into.
     ///
-    /// This is used to represent the smallest unit of the currency.
     pub decimals: u8,
 
-    /// The symbol of the currency, i.e., a short textual non-unique identifier.
     ///
-    /// This is a common abbreviation used to represent the currency.
     pub symbol: Option<String>,
 
-    /// The name of the currency, i.e., a descriptive textual non-unique identifier.
     ///
-    /// This is a more detailed name used to represent the currency.
     pub name: Option<String>,
 
-    /// Additional metadata associated with the currency.
     ///
-    /// This can include various details specific to the currency, such as contract addresses or
-    /// other relevant information.
     pub meta: M,
 }
 

@@ -78,8 +78,6 @@ pub const SUPPORTED_CHAINS: [ChainId; 20] = [
 
 #[derive(Debug, Clone, Copy)]
 /// Represents the names of native currencies supported by the Uniswap SDK.
-///
-/// Each variant corresponds to a specific native currency name.
 pub enum NativeCurrencyName {
     /// Ethereum's native currency.
     ETHER,

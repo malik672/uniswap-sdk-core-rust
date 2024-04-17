@@ -1,9 +1,7 @@
 use crate::prelude::*;
 
 #[derive(Clone, PartialEq, Debug)]
-/// Represents a currency in the Uniswap SDK.
 ///
-/// This enum can represent either a native currency (like Ether) or a token.
 pub enum Currency {
     /// Represents a native currency.
     NativeCurrency(Ether),
@@ -11,40 +9,22 @@ pub enum Currency {
     Token(Token),
 }
 
-/// Trait for representing a currency in the Uniswap SDK.
-///
-/// This trait provides methods for interacting with currencies, whether they are native currencies
-/// like Ether or tokens. Implementations of this trait must provide functionality for determining
-/// if a currency is native, getting its address, checking equality with another currency, and
-/// wrapping the currency for use with Uniswap contracts.
+/// Trait for representing a currency in the Uniswap Core SDK.
 pub trait CurrencyTrait: BaseCurrency {
     /// Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
     fn is_native(&self) -> bool;
 
     /// Returns the address of the currency.
-    ///
-    /// This method returns the address associated with the currency, whether it's a native currency
-    /// or a token.
-    ///
-    /// # Returns
-    ///
-    /// * `Address` - The address of the currency.
     fn address(&self) -> Address;
 
     /// Returns whether this currency is functionally equivalent to the other currency
-    ///
-    /// # Arguments
-    ///
-    /// * `other`: the other currency
     fn equals(&self, other: &impl CurrencyTrait) -> bool;
 
-    /// Return the wrapped version of this currency that can be used with the Uniswap contracts.
-    /// Currencies must implement this to be used in Uniswap
+    ///
     fn wrapped(&self) -> Token;
 }
 
 impl CurrencyTrait for Currency {
-    /// Returns a bool indicating whether the currency is native or not
     fn is_native(&self) -> bool {
         match self {
             Currency::NativeCurrency(_) => true,
@@ -52,7 +32,6 @@ impl CurrencyTrait for Currency {
         }
     }
 
-    /// Accessor method for retrieving either the NativeCurrency or Token address
     fn address(&self) -> Address {
         match self {
             Currency::NativeCurrency(native_currency) => native_currency.address(),

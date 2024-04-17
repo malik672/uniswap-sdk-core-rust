@@ -54,7 +54,6 @@ where
         base_amount: CurrencyAmount<TBase>,
         quote_amount: CurrencyAmount<TQuote>,
     ) -> Self {
-        // Calculate the price as the ratio of quote amount to base amount
         let res = quote_amount.divide(&base_amount).unwrap();
         Self::new(
             base_amount.meta.currency,

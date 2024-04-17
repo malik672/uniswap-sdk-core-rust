@@ -6,10 +6,6 @@ pub type Token = CurrencyLike<TokenMeta>;
 #[derive(Clone, PartialEq, Debug)]
 
 /// Represents the metadata for an ERC20 token, including its address and optional fees.
-///
-/// This struct holds the address of the token and optional buy and sell fees in basis points (bps).
-/// It is used to provide additional information about the token that is not directly related to its
-/// value or quantity.
 pub struct TokenMeta {
     /// The address of the token.
     pub address: Address,

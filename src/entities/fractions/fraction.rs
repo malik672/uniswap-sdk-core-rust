@@ -2,7 +2,7 @@
 use crate::prelude::*;
 use std::ops::{Add, Deref, Mul, Sub};
 
-/// Struct representing a fraction with metadata
+///
 #[derive(Clone, Debug)]
 pub struct FractionLike<M> {
     numerator: BigInt,
@@ -74,15 +74,15 @@ where
 {
 }
 
-/// Trait defining common operations for fractions with metadata
+///
 pub trait FractionBase<M>: Sized {
-    /// Constructor method for creating a new Fraction with metadata
+    ///
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self;
 
-    /// Accessor method for retrieving metadata
+    ///
     fn meta(&self) -> M;
 
-    /// Accessor method for retrieving the numerator
+    ///
     fn numerator(&self) -> BigInt;
 
     /// Accessor method for retrieving the denominator
@@ -102,7 +102,7 @@ pub trait FractionBase<M>: Sized {
         )
     }
 
-    /// Returns the inverted fraction
+    /// Returns the inverted [`fraction`]
     fn invert(&self) -> Self {
         Self::new(self.denominator(), self.numerator(), self.meta())
     }
@@ -177,7 +177,7 @@ impl<M> PartialEq for FractionLike<M>
 where
     M: Clone + PartialEq,
 {
-    /// Checks if the current fraction is equal to another fraction
+    ///
     fn eq(&self, other: &Self) -> bool {
         self.numerator() * other.denominator() == other.numerator() * self.denominator()
             && self.meta() == other.meta()
@@ -207,7 +207,7 @@ where
 impl<M: Clone> Add for FractionLike<M> {
     type Output = Self;
 
-    /// Adds another fraction to the current fraction
+    ///
     fn add(self, other: Self) -> Self::Output {
         if self.denominator == other.denominator() {
             FractionBase::new(
@@ -228,7 +228,7 @@ impl<M: Clone> Add for FractionLike<M> {
 impl<M: Clone> Sub for FractionLike<M> {
     type Output = Self;
 
-    /// Subtracts another fraction from the current fraction
+    ///
     fn sub(self, other: Self) -> Self::Output {
         if self.denominator == other.denominator() {
             FractionBase::new(
@@ -249,7 +249,7 @@ impl<M: Clone> Sub for FractionLike<M> {
 impl<M: Clone> Mul for FractionLike<M> {
     type Output = Self;
 
-    /// Multiplies the current fraction by another fraction
+    ///
     fn mul(self, other: Self) -> Self::Output {
         FractionBase::new(
             self.numerator() * other.numerator(),
@@ -262,7 +262,7 @@ impl<M: Clone> Mul for FractionLike<M> {
 impl<M: Clone> Div for FractionLike<M> {
     type Output = Self;
 
-    /// Divides the current fraction by another fraction
+    ///
     /// There's little to no possibility of an error, so unwrap can be used
     fn div(self, other: Self) -> Self::Output {
         FractionBase::new(

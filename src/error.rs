@@ -7,19 +7,19 @@ pub enum Error {
     #[error("Chain IDs do not match: {0} and {1}")]
     ChainIdMismatch(u64, u64),
 
-    /// Indicates that two addresses are equal.
+    ///
     #[error("Addresses are equal")]
     EqualAddresses,
 
-    /// Indicates that an amount has exceeded MAX_UINT256.
+    ///
     #[error("amount has exceeded MAX_UINT256")]
     MaxUint,
 
-    /// Indicates that two entities are not equal.
+    ///
     #[error("not equal")]
     NotEqual(),
 
-    /// Custom error for incorrect input.
+    ///
     #[error("incorrect")]
     Incorrect(),
 }

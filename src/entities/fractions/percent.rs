@@ -1,7 +1,6 @@
 /// Importing dependencies from the same module
 use crate::prelude::*;
 
-// Lazily initialized constant representing the fraction 100/1
 lazy_static! {
     static ref ONE_HUNDRED: Fraction = Fraction::new(100, 1);
 }
