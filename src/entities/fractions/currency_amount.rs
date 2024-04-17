@@ -14,7 +14,7 @@ pub struct CurrencyMeta<T: CurrencyTrait> {
 }
 
 impl<T: CurrencyTrait> CurrencyAmount<T> {
-    ///
+    /// Constructor method for creating a new currency amount
     fn new(
         currency: T,
         numerator: impl Into<BigInt>,
