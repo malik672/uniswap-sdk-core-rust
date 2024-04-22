@@ -7,7 +7,7 @@ pub enum Error {
     #[error("Chain IDs do not match: {0} and {1}")]
     ChainIdMismatch(u64, u64),
 
-    /// Triggers when comapred addresses are not the smae
+    /// Triggers when comapred addresses are the smae
     #[error("Addresses are equal")]
     EqualAddresses,
 
