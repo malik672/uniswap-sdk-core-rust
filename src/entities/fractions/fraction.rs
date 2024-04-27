@@ -2,7 +2,7 @@
 use crate::prelude::*;
 use std::ops::{Add, Deref, Mul, Sub};
 
-/// struct to represent a fraction
+/// Struct representing a fraction with metadata
 #[derive(Clone, Debug)]
 pub struct FractionLike<M> {
     numerator: BigInt,
