@@ -102,7 +102,7 @@ pub trait FractionBase<M>: Sized {
         )
     }
 
-    /// Returns the inverted [`fraction`]
+    /// Returns the inverted fraction
     fn invert(&self) -> Self {
         Self::new(self.denominator(), self.numerator(), self.meta())
     }
