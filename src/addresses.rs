@@ -175,7 +175,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    /// The `MAINNET_ADDRESSES` struct holds the Uniswap contract addresses for the Goerli Testnet.
+    /// The `GOERLI_ADDRESSES` struct holds the Uniswap contract addresses for the Goerli Testnet.
     pub static ref GOERLI_ADDRESSES: ChainAddresses = {
         ChainAddresses {
             v1_mixed_route_quoter_address: Some(address!(
