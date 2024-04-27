@@ -59,7 +59,7 @@ impl Token {
     ///
     /// # Returns
     ///
-    /// A new `Token` instance.
+    /// A new [`Token`] instance.
     ///
     /// # Panics
     ///
