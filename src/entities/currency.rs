@@ -1,8 +1,7 @@
 use crate::prelude::*;
 
-#[derive(Clone, PartialEq, Debug)]
-
 /// This enum represnets the two type of currencies i.e native and Token
+#[derive(Clone, PartialEq, Debug)]
 pub enum Currency {
     /// Represents a native currency.
     NativeCurrency(Ether),
