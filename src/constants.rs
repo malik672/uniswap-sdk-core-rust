@@ -12,9 +12,8 @@ pub enum TradeType {
     ExactOutput,
 }
 
-#[derive(Clone, Debug, PartialEq, Copy)]
-
 /// Represents three various way to rounds
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Rounding {
     /// Rounds down to the nearest whole number.
     RoundDown,
