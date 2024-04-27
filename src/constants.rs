@@ -2,8 +2,8 @@ use crate::prelude::*;
 use alloy_primitives::U256;
 use num_bigint::Sign;
 
-#[derive(Clone, Copy, Debug, PartialEq)]
 /// Represents the various type of trades.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TradeType {
     /// Indicates that the trade is based on an exact input amount.
     ExactInput,
