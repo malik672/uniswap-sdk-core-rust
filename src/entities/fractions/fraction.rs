@@ -7,6 +7,7 @@ use std::ops::{Add, Deref, Mul, Sub};
 pub struct FractionLike<M> {
     numerator: BigInt,
     denominator: BigInt,
+    /// Metadata associated with the fraction
     pub meta: M,
 }
 
@@ -33,7 +34,20 @@ impl<M> Deref for FractionLike<M> {
 pub type Fraction = FractionLike<()>;
 
 impl Fraction {
-    // Constructor for creating a new Fraction instance
+    /// Creates a new `Fraction` instance with the given numerator and denominator.
+    ///
+    /// # Arguments
+    ///
+    /// * `numerator` - The numerator of the fraction.
+    /// * `denominator` - The denominator of the fraction.
+    ///
+    /// # Returns
+    ///
+    /// A new `Fraction` instance with the specified numerator and denominator.
+    ///
+    /// # Panics
+    ///
+    /// This function will panic if the denominator is zero.
     pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
         FractionBase::new(numerator, denominator, ())
     }
@@ -195,7 +209,6 @@ where
 impl<M: Clone> Add for FractionLike<M> {
     type Output = Self;
 
-    /// Adds another fraction to the current fraction
     fn add(self, other: Self) -> Self::Output {
         if self.denominator == other.denominator() {
             FractionBase::new(
@@ -216,7 +229,6 @@ impl<M: Clone> Add for FractionLike<M> {
 impl<M: Clone> Sub for FractionLike<M> {
     type Output = Self;
 
-    /// Subtracts another fraction from the current fraction
     fn sub(self, other: Self) -> Self::Output {
         if self.denominator == other.denominator() {
             FractionBase::new(
@@ -237,7 +249,6 @@ impl<M: Clone> Sub for FractionLike<M> {
 impl<M: Clone> Mul for FractionLike<M> {
     type Output = Self;
 
-    /// Multiplies the current fraction by another fraction
     fn mul(self, other: Self) -> Self::Output {
         FractionBase::new(
             self.numerator() * other.numerator(),
@@ -250,7 +261,6 @@ impl<M: Clone> Mul for FractionLike<M> {
 impl<M: Clone> Div for FractionLike<M> {
     type Output = Self;
 
-    /// Divides the current fraction by another fraction
     /// There's little to no possibility of an error, so unwrap can be used
     fn div(self, other: Self) -> Self::Output {
         FractionBase::new(

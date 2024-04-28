@@ -11,8 +11,13 @@ where
     TBase: CurrencyTrait,
     TQuote: CurrencyTrait,
 {
+    /// The base currency for the price
     pub base_currency: TBase,
+
+    /// The quote currency for the price
     pub quote_currency: TQuote,
+
+    /// The scalar used to adjust the price for decimal places
     pub scalar: Fraction,
 }
 
@@ -49,7 +54,6 @@ where
         base_amount: CurrencyAmount<TBase>,
         quote_amount: CurrencyAmount<TQuote>,
     ) -> Self {
-        // Calculate the price as the ratio of quote amount to base amount
         let res = quote_amount.divide(&base_amount).unwrap();
         Self::new(
             base_amount.meta.currency,

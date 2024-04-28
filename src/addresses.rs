@@ -4,7 +4,8 @@ type AddressMap = HashMap<u64, Address>;
 type ChainMap = HashMap<u64, ChainAddresses>;
 type ChainAddress = HashMap<u64, Address>;
 
-#[derive(Clone, Copy)]
+/// Represents the addresses of various core contracts of uniswap on a network.
+#[derive(Clone, Copy, Debug)]
 pub struct ChainAddresses {
     v3_core_factory_address: Address,
     multicall_address: Address,
@@ -16,6 +17,7 @@ pub struct ChainAddresses {
     v1_mixed_route_quoter_address: Option<Address>,
 }
 
+/// Represents default networks which are Mainnet, Goerli, Sepolia
 pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
 
 /// returns a hashmap of key pair input of chainid to address
@@ -38,6 +40,7 @@ pub fn construct_same_address_map(address: Address, additional_networks: &[Chain
 }
 
 lazy_static! {
+    /// The UNI_ADDRESSES struct holds a map of addresses for the UNI token on various networks.
     #[derive(Debug, Clone, Copy)]
     pub static ref UNI_ADDRESSES: AddressMap = construct_same_address_map(
         address!("1f9840a85d5aF5bf1D1762F925BDADdC4201F984"),
@@ -51,12 +54,15 @@ lazy_static! {
     );
 }
 
+/// The address for the Uniswap NFT airdrop claim contract.
 pub const UNISWAP_NFT_AIRDROP_CLAIM_ADDRESS: Address =
     address!("8B799381ac40b838BBA4131ffB26197C432AFe78");
 
+/// The address for the Uniswap V2 Factory Address claim contract.
 pub const V2_FACTORY_ADDRESS: Address = address!("5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f");
 
 lazy_static! {
+    /// A map of Uniswap V2 Factory addresses for various networks.
     pub static ref V2_FACTORY_ADDRESSES: HashMap<u64, Address> = {
         let mut m = HashMap::new();
         m.insert(ChainId::MAINNET as u64, V2_FACTORY_ADDRESS);
@@ -97,9 +103,15 @@ lazy_static! {
     };
 }
 
+/// This represents V2 router address across all chains
 pub const V2_ROUTER_ADDRESS: Address = address!("7a250d5630B4cF539739dF2C5dAcb4c659F2488D");
 
 lazy_static! {
+    /// A map of Uniswap V2 Router addresses for various networks.
+    ///
+    /// This map is used to look up the address of the Uniswap V2 Router contract
+    /// for a given network. The keys in the map are the network IDs, and the values
+    /// are the corresponding contract addresses.
     pub static ref V2_ROUTER_ADDRESSES: HashMap<u64, Address> = {
         let mut m = HashMap::new();
         m.insert(ChainId::MAINNET as u64, V2_ROUTER_ADDRESS);
@@ -134,7 +146,6 @@ lazy_static! {
 
 impl Default for ChainAddresses {
     /// Networks that share most of the same addresses i.e. Mainnet, Goerli, Optimism, Arbitrum,
-    /// Polygon
     fn default() -> Self {
         Self {
             v3_core_factory_address: address!("1F98431c8aD98523631AE4a59f267346ea31F984"),
@@ -152,6 +163,7 @@ impl Default for ChainAddresses {
 }
 
 lazy_static! {
+    /// The `MAINNET_ADDRESSES` struct holds the Uniswap contract addresses for the Ethereum Mainnet.
     pub static ref MAINNET_ADDRESSES: ChainAddresses = {
         ChainAddresses {
             v1_mixed_route_quoter_address: Some(address!(
@@ -163,6 +175,7 @@ lazy_static! {
 }
 
 lazy_static! {
+    /// The `GOERLI_ADDRESSES` struct holds the Uniswap contract addresses for the Goerli Testnet.
     pub static ref GOERLI_ADDRESSES: ChainAddresses = {
         ChainAddresses {
             v1_mixed_route_quoter_address: Some(address!(
@@ -174,10 +187,12 @@ lazy_static! {
 }
 
 lazy_static! {
+    /// The `OPTIMISM_ADDRESSES` struct holds the Uniswap contract addresses for the Optimism network.
     pub static ref OPTIMISM_ADDRESSES: ChainAddresses = ChainAddresses::default();
 }
 
 lazy_static! {
+    /// The `ARBITRUM_ONE_ADDRESSES` struct holds the Uniswap contract addresses for the Arbitrum One network.
     pub static ref ARBITUM_ONE_ADDRESSES: ChainAddresses = {
         ChainAddresses {
             multicall_address: address!("adF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB"),
@@ -187,6 +202,7 @@ lazy_static! {
     };
 }
 lazy_static! {
+    /// The `POLYGON_ADDRESSES` struct holds the Uniswap contract addresses for the Polygon network.
     pub static ref POLYGON_ADDRESSES: ChainAddresses = ChainAddresses::default();
 }
 
@@ -373,6 +389,11 @@ pub const ROOTSTOCK_ADDRESSES: ChainAddresses = ChainAddresses {
 };
 
 lazy_static! {
+    /// A map of chain IDs to their corresponding Uniswap contract addresses.
+    ///
+    /// This map is used to look up the addresses of various Uniswap contracts
+    /// for a given network. The keys in the map are the network IDs, and the values
+    /// are the corresponding contract addresses.
     pub static ref CHAIN_TO_ADDRESSES_MAP: ChainMap = {
         let mut new_map = ChainMap::new();
         new_map.insert(ChainId::BNB as u64, BNB_ADDRESSES);
@@ -485,11 +506,13 @@ pub static ref GOVERNANCE_BRAVO_ADDRESSES: AddressMap = {
 }
 
 lazy_static! {
+    /// The `TIMELOCK_ADDRESSES` struct holds the timelock contract addresses for various networks.
     pub static ref TIMELOCK_ADDRESSES: AddressMap =
         construct_same_address_map(address!("1a9C8182C09F50C8318d769245beA52c32BE35BC"), &[]);
 }
 
 lazy_static! {
+    /// The `MERKLE_DISTRIBUTOR_ADDRESS` struct holds the merkle distributor contract address for the mainnet.
     pub static ref MERKLE_DISTRIBUTOR_ADDRESS: AddressMap = {
         let mut new_map = AddressMap::new();
         new_map.insert(
@@ -501,6 +524,7 @@ lazy_static! {
 }
 
 lazy_static! {
+    /// The `ARGENT_WALLET_DETECTOR_ADDRESS` struct holds the Argent Wallet Detector contract address for the mainnet.
     pub static ref ARGENT_WALLET_DETECTOR_ADDRESS: AddressMap = {
         let mut new_map = AddressMap::new();
         new_map.insert(
@@ -512,6 +536,10 @@ lazy_static! {
 }
 
 lazy_static! {
+    /// The `QUOTER_ADDRESSES` struct holds the quoter contract addresses for various networks.
+    ///
+    /// This includes the addresses for the quoter contract on different networks.
+    /// Each field in the struct corresponds to a specific contract and its address on the network
     pub static ref QUOTER_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
         for chain_id in SUPPORTED_CHAINS {
@@ -528,6 +556,10 @@ lazy_static! {
 }
 
 lazy_static! {
+    /// The `NONFUNGIBLE_POSITION_MANAGER_ADDRESSES` struct holds the non-fungible position manager contract addresses for various networks.
+    ///
+    /// This includes the addresses for the non-fungible position manager contract on different networks.
+    /// Each field in the struct corresponds to a specific contract and its address on the network.
     pub static ref NONFUNGIBLE_POSITION_MANAGER_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
         for chain_id in SUPPORTED_CHAINS {
@@ -552,11 +584,19 @@ lazy_static! {
 }
 
 lazy_static! {
+    /// The `ENS_REGISTRAR_ADDRESSES` struct holds the ENS Registrar contract addresses for various networks.
+    ///
+    /// This includes the addresses for the ENS Registrar contract on different networks.
+    /// Each field in the struct corresponds to a specific contract and its address on the network.
     pub static ref ENS_REGISTRAR_ADDRESSES: AddressMap =
         construct_same_address_map(address!("00000000000C2E074eC69A0dFb2997BA6C7d2e1e"), &[]);
 }
 
 lazy_static! {
+    /// The `SOCKS_CONTROLLER_ADDRESSES` struct holds the SOCKS Controller contract addresses for various networks.
+    ///
+    /// This includes the addresses for the SOCKS Controller contract on different networks.
+    /// Each field in the struct corresponds to a specific contract and its address on the network.
     pub static ref SOCKS_CONTROLLER_ADDRESSES: AddressMap = {
         let mut new_map = AddressMap::new();
         new_map.insert(
@@ -568,6 +608,10 @@ lazy_static! {
 }
 
 lazy_static! {
+    /// The `TICK_LENS_ADDRESSES` struct holds the tick lens contract addresses for various networks.
+    ///
+    /// This includes the addresses for the tick lens contract on different networks.
+    /// Each field in the struct corresponds to a specific contract and its address on the network.
     pub static ref TICK_LENS_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
         for chain_id in SUPPORTED_CHAINS {
@@ -592,6 +636,10 @@ lazy_static! {
 }
 
 lazy_static! {
+    /// The `MIXED_ROUTE_QUOTER_V1_ADDRESSES` struct holds the mixed route quoter contract addresses for various networks.
+    ///
+    /// This includes the addresses for the mixed route quoter contract on different networks.
+    /// Each field in the struct corresponds to a specific contract and its address on the network.
     pub static ref MIXED_ROUTE_QUOTER_V1_ADDRESSES: ChainAddress = {
         let mut chain_add = ChainAddress::new();
         for chain_id in SUPPORTED_CHAINS {
@@ -615,6 +663,18 @@ lazy_static! {
     };
 }
 
+/// Returns the address of the Uniswap V2 Router contract for the specified chain.
+///
+/// If the chain ID is not found in the `CHAIN_TO_ADDRESSES_MAP`, it defaults to the
+/// address of the router contract on the Ethereum mainnet.
+///
+/// # Arguments
+///
+/// * `chain_id` - The ID of the chain for which to retrieve the router address.
+///
+/// # Returns
+///
+/// * `Address` - The address of the Uniswap V2 Router contract for the specified chain.
 pub fn swap_router02_address(chain_id: u64) -> Address {
     if CHAIN_TO_ADDRESSES_MAP.contains_key(&chain_id)
         && CHAIN_TO_ADDRESSES_MAP
