@@ -47,13 +47,15 @@ pub enum ChainId {
     ZORASEPOLIA = 999999999,
     /// The Rootstock network.
     ROOTSTOCK = 30,
+    /// The Blast network.
+    BLAST = 81457,
 }
 
 /// A list of `ChainId` constants representing the blockchain networks supported by the Uniswap SDK.
 ///
 /// This array includes all the `ChainId` variants that are supported by the SDK, making it easy to
 /// iterate over or check for supported chains.
-pub const SUPPORTED_CHAINS: [ChainId; 20] = [
+pub const SUPPORTED_CHAINS: [ChainId; 21] = [
     ChainId::MAINNET,
     ChainId::OPTIMISM,
     ChainId::OPTIMISMGOERLI,
@@ -74,6 +76,7 @@ pub const SUPPORTED_CHAINS: [ChainId; 20] = [
     ChainId::ZORA,
     ChainId::ZORASEPOLIA,
     ChainId::ROOTSTOCK,
+    ChainId::BLAST,
 ];
 
 /// Represents the names of native currencies supported by the Uniswap SDK.
@@ -95,4 +98,6 @@ pub enum NativeCurrencyName {
     AVAX,
     /// Rootstock's native currency.
     ROOTSTOCK,
+    /// Blast native currency.
+    BLAST,
 }
