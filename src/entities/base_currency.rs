@@ -2,6 +2,8 @@ use std::ops::Deref;
 
 use alloy_primitives::ChainId;
 
+/// `CurrencyLike` is a generic struct representing a currency with a specific chain ID,
+/// decimals, symbol, name, and additional metadata.
 #[derive(Clone, PartialEq, Debug)]
 
 /// `CurrencyLike` is a generic struct representing a currency with a specific chain ID,

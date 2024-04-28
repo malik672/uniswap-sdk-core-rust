@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+/// This enum represnets the two type of currencies i.e native and Token
 #[derive(Clone, PartialEq, Debug)]
 
 /// This enum represnets the two type of currencies i.e native and Token

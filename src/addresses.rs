@@ -4,9 +4,8 @@ type AddressMap = HashMap<u64, Address>;
 type ChainMap = HashMap<u64, ChainAddresses>;
 type ChainAddress = HashMap<u64, Address>;
 
-#[derive(Clone, Copy, Debug)]
-
 /// Represents the addresses of various core contracts of uniswap on a network.
+#[derive(Clone, Copy, Debug)]
 pub struct ChainAddresses {
     v3_core_factory_address: Address,
     multicall_address: Address,
@@ -176,7 +175,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    /// The `MAINNET_ADDRESSES` struct holds the Uniswap contract addresses for the Goerli Testnet.
+    /// The `GOERLI_ADDRESSES` struct holds the Uniswap contract addresses for the Goerli Testnet.
     pub static ref GOERLI_ADDRESSES: ChainAddresses = {
         ChainAddresses {
             v1_mixed_route_quoter_address: Some(address!(

@@ -3,6 +3,7 @@ use crate::prelude::*;
 /// Represents an ERC20 token with a unique address and some metadata.
 pub type Token = CurrencyLike<TokenMeta>;
 
+/// Represents the metadata for an ERC20 token, including its address and optional fees.
 #[derive(Clone, PartialEq, Debug)]
 
 /// Represents the metadata for an ERC20 token, including its address and optional fees.
@@ -45,7 +46,7 @@ impl CurrencyTrait for Token {
 }
 
 impl Token {
-    /// Creates a new `Token` with the given parameters.
+    /// Creates a new [`Token`] with the given parameters.
     ///
     /// # Arguments
     ///
@@ -59,7 +60,7 @@ impl Token {
     ///
     /// # Returns
     ///
-    /// A new `Token` instance.
+    /// A new [`Token`] instance.
     ///
     /// # Panics
     ///
