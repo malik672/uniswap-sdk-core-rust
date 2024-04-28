@@ -5,9 +5,6 @@ use alloy_primitives::ChainId;
 /// `CurrencyLike` is a generic struct representing a currency with a specific chain ID,
 /// decimals, symbol, name, and additional metadata.
 #[derive(Clone, PartialEq, Debug)]
-
-/// `CurrencyLike` is a generic struct representing a currency with a specific chain ID,
-/// decimals, symbol, name, and additional metadata.
 pub struct CurrencyLike<M> {
     /// The chain ID on which this currency resides
     pub chain_id: ChainId,

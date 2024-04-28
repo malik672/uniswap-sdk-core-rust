@@ -2,7 +2,7 @@
 use crate::prelude::*;
 use std::ops::{Add, Deref, Mul, Sub};
 
-/// struct to represent a fraction
+/// Struct representing a fraction with metadata
 #[derive(Clone, Debug)]
 pub struct FractionLike<M> {
     numerator: BigInt,
@@ -82,7 +82,7 @@ pub trait FractionBase<M>: Sized {
     /// Accessor method for retrieving metadata
     fn meta(&self) -> M;
 
-    /// Accessor method for retrieving metadata
+    /// Accessor method for retrieving numerator
     fn numerator(&self) -> BigInt;
 
     /// Accessor method for retrieving the denominator
@@ -102,7 +102,7 @@ pub trait FractionBase<M>: Sized {
         )
     }
 
-    /// Returns the inverted [`fraction`]
+    /// Returns the inverted fraction
     fn invert(&self) -> Self {
         Self::new(self.denominator(), self.numerator(), self.meta())
     }
