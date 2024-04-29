@@ -21,7 +21,7 @@ pub struct CurrencyLike<M> {
     /// Metadata associated with the currency
     pub meta: M,
 }
-   
+
 /// A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other
 /// chain-native currencies
 pub trait BaseCurrency: Clone {
