@@ -82,7 +82,7 @@ pub trait FractionBase<M>: Sized {
     /// Accessor method for retrieving metadata
     fn meta(&self) -> M;
 
-    /// Accessor method for retrieving the numerator
+    /// Accessor method for retrieving numerator
     fn numerator(&self) -> BigInt;
 
     /// Accessor method for retrieving the denominator

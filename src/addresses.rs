@@ -99,6 +99,10 @@ lazy_static! {
             ChainId::CELO as u64,
             address!("79a530c8e2fA8748B7B40dd3629C0520c2cCf03f"),
         );
+        m.insert(
+            ChainId::BLAST as u64,
+            address!("5C346464d33F90bABaf70dB6388507CC889C1070"),
+        );
         m
     };
 }
@@ -139,6 +143,10 @@ lazy_static! {
         m.insert(
             ChainId::POLYGON as u64,
             address!("edf6066a2b290c185783862c7f4776a2c8077ad1"),
+        );
+        m.insert(
+            ChainId::BLAST as u64,
+            address!("BB66Eb1c5e875933D44DAe661dbD80e5D9B03035"),
         );
         m
     };
@@ -388,6 +396,20 @@ pub const ROOTSTOCK_ADDRESSES: ChainAddresses = ChainAddresses {
     v1_mixed_route_quoter_address: None,
 };
 
+/// Blast addresses
+pub const BLAST_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory_address: address!("792edAdE80af5fC680d96a2eD80A44247D2Cf6Fd"),
+    multicall_address: address!("dC7f370de7631cE9e2c2e1DCDA6B3B5744Cf4705"),
+    quoter_address: address!("6Cdcd65e03c1CEc3730AeeCd45bc140D57A25C77"),
+    v3_migrator_address: Some(address!("15CA7043CD84C5D21Ae76Ba0A1A967d42c40ecE0")),
+    nonfungible_position_manager_address: Some(address!(
+        "B218e4f7cF0533d4696fDfC419A0023D33345F28"
+    )),
+    tick_lens_address: Some(address!("2E95185bCdD928a3e984B7e2D6560Ab1b17d7274")),
+    swap_router02_address: Some(address!("549FEB8c9bd4c12Ad2AB27022dA12492aC452B66")),
+    v1_mixed_route_quoter_address: None,
+};
+
 lazy_static! {
     /// A map of chain IDs to their corresponding Uniswap contract addresses.
     ///
@@ -418,6 +440,7 @@ lazy_static! {
         new_map.insert(ChainId::ZORA as u64, ZORA_ADDRESSES);
         new_map.insert(ChainId::ZORASEPOLIA as u64, ZORA_SEPOLIA_ADDRESSES);
         new_map.insert(ChainId::ROOTSTOCK as u64, ROOTSTOCK_ADDRESSES);
+        new_map.insert(ChainId::BLAST as u64, BLAST_ADDRESSES);
         new_map
     };
 }
@@ -757,6 +780,15 @@ mod tests {
         assert_eq!(
             address,
             address!("3bFA4769FB09eefC5a80d6E87c3B9C650f7Ae48E")
+        );
+    }
+
+    #[test]
+    fn test_swap_router_02_addresses_blast() {
+        let address = swap_router02_address(ChainId::BLAST as u64);
+        assert_eq!(
+            address,
+            address!("549FEB8c9bd4c12Ad2AB27022dA12492aC452B66")
         );
     }
 }
