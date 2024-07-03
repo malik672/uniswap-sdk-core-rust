@@ -23,6 +23,7 @@ pub use num_bigint::{BigInt, BigUint, ToBigInt, ToBigUint};
 pub use num_integer::Integer;
 pub use num_traits::{Num, ToPrimitive, Zero};
 pub use std::{
-    cmp::Ordering, collections::HashMap, num::NonZeroU64, ops::Div, str::FromStr, sync::Mutex,
+    cmp::Ordering, num::NonZeroU64, ops::Div, str::FromStr, sync::Mutex,
 };
+pub use rustc_hash::FxHashMap;
 pub use thiserror::Error;

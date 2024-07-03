@@ -1,8 +1,8 @@
 use crate::prelude::*;
 
-type AddressMap = HashMap<u64, Address>;
-type ChainMap = HashMap<u64, ChainAddresses>;
-type ChainAddress = HashMap<u64, Address>;
+type AddressMap = FxHashMap<u64, Address>;
+type ChainMap = FxHashMap<u64, ChainAddresses>;
+type ChainAddress = FxHashMap<u64, Address>;
 
 #[derive(Clone)]
 pub struct ChainAddresses {
@@ -21,7 +21,7 @@ pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, C
 pub fn construct_same_address_map(address: Address, additional_networks: &[ChainId]) -> AddressMap {
     let mut networks = DEFAULT_NETWORKS.to_vec();
     networks.extend_from_slice(additional_networks);
-    let mut map = AddressMap::new();
+    let mut map = AddressMap::default();
     for chain_id in networks {
         map.insert(chain_id as u64, address);
     }
@@ -247,7 +247,7 @@ pub fn base_goerli_addresses() -> ChainAddresses {
 
 lazy_static! {
     pub static ref CHAIN_TO_ADDRESSES_MAP: ChainMap = {
-        let mut new_map = ChainMap::new();
+        let mut new_map = ChainMap::default();
         new_map.insert(ChainId::BNB as u64, bnb_addresses());
 
         new_map.insert(ChainId::AVALANCHE as u64, avalanche_addresses());
@@ -272,7 +272,7 @@ lazy_static! {
 
 /// V3 Contract Addresses
 pub fn v3_factory_addresses() -> ChainAddress {
-    let mut chain_add = ChainAddress::new();
+    let mut chain_add = ChainAddress::default();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
             memo as u64,
@@ -287,7 +287,7 @@ pub fn v3_factory_addresses() -> ChainAddress {
 
 /// V3 Contract Addresses
 pub fn v3_migrator_addresses() -> ChainAddress {
-    let mut chain_add = ChainAddress::new();
+    let mut chain_add = ChainAddress::default();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
             memo as u64,
@@ -303,7 +303,7 @@ pub fn v3_migrator_addresses() -> ChainAddress {
 
 /// V3 Contract Addresses
 pub fn multicall_addresses() -> ChainAddress {
-    let mut chain_add = ChainAddress::new();
+    let mut chain_add = ChainAddress::default();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
             memo as u64,
@@ -323,7 +323,7 @@ pub fn governance_alpha_v0_addresses() -> AddressMap {
 
 /// The older V1 governance address
 pub fn governance_alpha_v1_addresses() -> AddressMap {
-    let mut new_map = AddressMap::new();
+    let mut new_map = AddressMap::default();
     new_map.insert(
         ChainId::MAINNET as u64,
         address!("C4e172459f1E7939D522503B81AFAaC1014CE6F6"),
@@ -333,7 +333,7 @@ pub fn governance_alpha_v1_addresses() -> AddressMap {
 
 /// The latest governor bravo that is currently admin of timelock
 pub fn governance_bravo_addresses() -> AddressMap {
-    let mut new_map = AddressMap::new();
+    let mut new_map = AddressMap::default();
     new_map.insert(
         ChainId::MAINNET as u64,
         address!("408ED6354d4973f66138C91495F2f2FCbd8724C3"),
@@ -346,7 +346,7 @@ pub fn timelock_addresses() -> AddressMap {
 }
 
 pub fn merkle_distributor_address() -> AddressMap {
-    let mut new_map = AddressMap::new();
+    let mut new_map = AddressMap::default();
     new_map.insert(
         ChainId::MAINNET as u64,
         address!("090D4613473dEE047c3f2706764f49E0821D256e"),
@@ -355,7 +355,7 @@ pub fn merkle_distributor_address() -> AddressMap {
 }
 
 pub fn argent_wallet_detector_address() -> AddressMap {
-    let mut new_map = AddressMap::new();
+    let mut new_map = AddressMap::default();
     new_map.insert(
         ChainId::MAINNET as u64,
         address!("eca4B0bDBf7c55E9b7925919d03CbF8Dc82537E8"),
@@ -364,7 +364,7 @@ pub fn argent_wallet_detector_address() -> AddressMap {
 }
 
 pub fn quoter_address() -> ChainAddress {
-    let mut chain_add = ChainAddress::new();
+    let mut chain_add = ChainAddress::default();
     for memo in SUPPORTED_CHAINS {
         chain_add.insert(
             memo as u64,
@@ -378,7 +378,7 @@ pub fn quoter_address() -> ChainAddress {
 }
 
 pub fn nonfungible_position_manager_address() -> ChainAddress {
-    let mut chain_add = ChainAddress::new();
+    let mut chain_add = ChainAddress::default();
     for memo in SUPPORTED_CHAINS {
         if CHAIN_TO_ADDRESSES_MAP
             .get(&(memo as u64))
@@ -404,7 +404,7 @@ pub fn ens_resgister_address_map() -> AddressMap {
 }
 
 pub fn socks_controller_addresses() -> AddressMap {
-    let mut new_map = AddressMap::new();
+    let mut new_map = AddressMap::default();
     new_map.insert(
         ChainId::MAINNET as u64,
         address!("65770b5283117639760beA3F867b69b3697a91dd"),
@@ -413,7 +413,7 @@ pub fn socks_controller_addresses() -> AddressMap {
 }
 
 pub fn tick_lens_addresses() -> ChainAddress {
-    let mut chain_add = ChainAddress::new();
+    let mut chain_add = ChainAddress::default();
     for memo in SUPPORTED_CHAINS {
         if CHAIN_TO_ADDRESSES_MAP
             .get(&(memo as u64))
@@ -435,7 +435,7 @@ pub fn tick_lens_addresses() -> ChainAddress {
 }
 
 pub fn v1_mixed_route_quoter_address() -> ChainAddress {
-    let mut chain_add = ChainAddress::new();
+    let mut chain_add = ChainAddress::default();
     for memo in SUPPORTED_CHAINS {
         if CHAIN_TO_ADDRESSES_MAP
             .get(&(memo as u64))

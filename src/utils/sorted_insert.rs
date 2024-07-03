@@ -53,7 +53,7 @@ mod tests {
     #[test]
     #[should_panic(expected = "max_size can't be equal to zero")]
     fn test_max_size_zero() {
-        let mut arr = Vec::new();
+        let mut arr = Vec::default();
         sorted_insert(&mut arr, 1, 0, cmp).unwrap();
     }
 
@@ -67,7 +67,7 @@ mod tests {
 
     #[test]
     fn test_add_if_empty() {
-        let mut arr = Vec::new();
+        let mut arr = Vec::default();
         assert_eq!(sorted_insert(&mut arr, 3, 2, cmp).unwrap(), None);
         assert_eq!(arr, vec![3]);
     }
@@ -109,7 +109,7 @@ mod tests {
 
     #[test]
     fn test_max_size_of_1_empty_add() {
-        let mut arr = Vec::new();
+        let mut arr = Vec::default();
         assert_eq!(sorted_insert(&mut arr, 3, 1, cmp).unwrap(), None);
         assert_eq!(arr, vec![3]);
     }

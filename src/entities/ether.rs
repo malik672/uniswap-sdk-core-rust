@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 // Lazy static cache for Ether instances
 lazy_static! {
-    static ref ETHER_CACHE: Mutex<HashMap<u64, Ether>> = Mutex::new(HashMap::new());
+    static ref ETHER_CACHE: Mutex<FxHashMap<u64, Ether>> = Mutex::default();
 }
 
 /// Ether is the main usage of a 'native' currency, i.e., for Ethereum mainnet and all testnets.
