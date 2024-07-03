@@ -5,7 +5,7 @@ use crate::{prelude::*, token};
 #[derive(Clone, PartialEq, Debug)]
 pub struct WETH9 {
     /// A mapping of chain IDs to corresponding WETH tokens.
-    tokens: HashMap<u64, Token>,
+    tokens: FxHashMap<u64, Token>,
 }
 
 /// Default implementation for [`WETH9`], creating an instance with predefined WETH tokens on
@@ -27,7 +27,7 @@ impl WETH9 {
     ///
     /// A new `WETH9` instance with predefined WETH tokens.
     pub fn new() -> Self {
-        let mut tokens = HashMap::new();
+        let mut tokens = FxHashMap::default();
 
         // Insert predefined WETH tokens for different chains.
         tokens.insert(

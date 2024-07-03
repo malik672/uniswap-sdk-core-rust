@@ -1,8 +1,8 @@
 use crate::prelude::*;
 
-type AddressMap = HashMap<u64, Address>;
-type ChainMap = HashMap<u64, ChainAddresses>;
-type ChainAddress = HashMap<u64, Address>;
+type AddressMap = FxHashMap<u64, Address>;
+type ChainMap = FxHashMap<u64, ChainAddresses>;
+type ChainAddress = FxHashMap<u64, Address>;
 
 /// Represents the addresses of various core contracts of uniswap on a network.
 #[derive(Clone, Copy, Debug)]
@@ -32,7 +32,7 @@ pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, C
 pub fn construct_same_address_map(address: Address, additional_networks: &[ChainId]) -> AddressMap {
     let mut networks = DEFAULT_NETWORKS.to_vec();
     networks.extend_from_slice(additional_networks);
-    let mut map = AddressMap::new();
+    let mut map = AddressMap::default();
     for chain_id in networks {
         map.insert(chain_id as u64, address);
     }
@@ -63,8 +63,8 @@ pub const V2_FACTORY_ADDRESS: Address = address!("5C69bEe701ef814a2B6a3EDD4B1652
 
 lazy_static! {
     /// A map of Uniswap V2 Factory addresses for various networks.
-    pub static ref V2_FACTORY_ADDRESSES: HashMap<u64, Address> = {
-        let mut m = HashMap::new();
+    pub static ref V2_FACTORY_ADDRESSES: FxHashMap<u64, Address> = {
+        let mut m = FxHashMap::default();
         m.insert(ChainId::MAINNET as u64, V2_FACTORY_ADDRESS);
         m.insert(ChainId::GOERLI as u64, V2_FACTORY_ADDRESS);
         m.insert(
@@ -116,8 +116,8 @@ lazy_static! {
     /// This map is used to look up the address of the Uniswap V2 Router contract
     /// for a given network. The keys in the map are the network IDs, and the values
     /// are the corresponding contract addresses.
-    pub static ref V2_ROUTER_ADDRESSES: HashMap<u64, Address> = {
-        let mut m = HashMap::new();
+    pub static ref V2_ROUTER_ADDRESSES: FxHashMap<u64, Address> = {
+        let mut m = FxHashMap::default();
         m.insert(ChainId::MAINNET as u64, V2_ROUTER_ADDRESS);
         m.insert(ChainId::GOERLI as u64, V2_ROUTER_ADDRESS);
         m.insert(
@@ -417,7 +417,7 @@ lazy_static! {
     /// for a given network. The keys in the map are the network IDs, and the values
     /// are the corresponding contract addresses.
     pub static ref CHAIN_TO_ADDRESSES_MAP: ChainMap = {
-        let mut new_map = ChainMap::new();
+        let mut new_map = ChainMap::default();
         new_map.insert(ChainId::BNB as u64, BNB_ADDRESSES);
 
         new_map.insert(ChainId::AVALANCHE as u64, AVALANCHE_ADDRESSES);
@@ -448,7 +448,7 @@ lazy_static! {
 lazy_static! {
     /// V3 Contract Addresses
     pub static ref V3_CORE_FACTORY_ADDRESSES: ChainAddress = {
-        let mut chain_add = ChainAddress::new();
+        let mut chain_add = ChainAddress::default();
         for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
                 chain_id as u64,
@@ -465,7 +465,7 @@ lazy_static! {
 lazy_static! {
     /// V3 Contract Addresses
     pub static ref V3_MIGRATOR_ADDRESSES: ChainAddress = {
-        let mut chain_add = ChainAddress::new();
+        let mut chain_add = ChainAddress::default();
         for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
                 chain_id as u64,
@@ -483,7 +483,7 @@ lazy_static! {
 lazy_static! {
     /// V3 Contract Addresses
     pub static ref MULTICALL_ADDRESSES: ChainAddress = {
-        let mut chain_add = ChainAddress::new();
+        let mut chain_add = ChainAddress::default();
         for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
                 chain_id as u64,
@@ -507,7 +507,7 @@ pub static ref GOVERNANCE_ALPHA_V0_ADDRESSES: AddressMap = {
 lazy_static! {
 /// The older V1 governance address
 pub static ref GOVERNANCE_ALPHA_V1_ADDRESSES: AddressMap = {
-    let mut new_map = AddressMap::new();
+    let mut new_map = AddressMap::default();
     new_map.insert(
         ChainId::MAINNET as u64,
         address!("C4e172459f1E7939D522503B81AFAaC1014CE6F6"),
@@ -519,7 +519,7 @@ pub static ref GOVERNANCE_ALPHA_V1_ADDRESSES: AddressMap = {
 lazy_static! {
 /// The latest governor bravo that is currently admin of timelock
 pub static ref GOVERNANCE_BRAVO_ADDRESSES: AddressMap = {
-    let mut new_map = AddressMap::new();
+    let mut new_map = AddressMap::default();
     new_map.insert(
         ChainId::MAINNET as u64,
         address!("408ED6354d4973f66138C91495F2f2FCbd8724C3"),
@@ -537,7 +537,7 @@ lazy_static! {
 lazy_static! {
     /// The `MERKLE_DISTRIBUTOR_ADDRESS` struct holds the merkle distributor contract address for the mainnet.
     pub static ref MERKLE_DISTRIBUTOR_ADDRESS: AddressMap = {
-        let mut new_map = AddressMap::new();
+        let mut new_map = AddressMap::default();
         new_map.insert(
             ChainId::MAINNET as u64,
             address!("090D4613473dEE047c3f2706764f49E0821D256e"),
@@ -549,7 +549,7 @@ lazy_static! {
 lazy_static! {
     /// The `ARGENT_WALLET_DETECTOR_ADDRESS` struct holds the Argent Wallet Detector contract address for the mainnet.
     pub static ref ARGENT_WALLET_DETECTOR_ADDRESS: AddressMap = {
-        let mut new_map = AddressMap::new();
+        let mut new_map = AddressMap::default();
         new_map.insert(
             ChainId::MAINNET as u64,
             address!("eca4B0bDBf7c55E9b7925919d03CbF8Dc82537E8"),
@@ -564,7 +564,7 @@ lazy_static! {
     /// This includes the addresses for the quoter contract on different networks.
     /// Each field in the struct corresponds to a specific contract and its address on the network
     pub static ref QUOTER_ADDRESSES: ChainAddress = {
-        let mut chain_add = ChainAddress::new();
+        let mut chain_add = ChainAddress::default();
         for chain_id in SUPPORTED_CHAINS {
             chain_add.insert(
                 chain_id as u64,
@@ -584,7 +584,7 @@ lazy_static! {
     /// This includes the addresses for the non-fungible position manager contract on different networks.
     /// Each field in the struct corresponds to a specific contract and its address on the network.
     pub static ref NONFUNGIBLE_POSITION_MANAGER_ADDRESSES: ChainAddress = {
-        let mut chain_add = ChainAddress::new();
+        let mut chain_add = ChainAddress::default();
         for chain_id in SUPPORTED_CHAINS {
             if CHAIN_TO_ADDRESSES_MAP
                 .get(&(chain_id as u64))
@@ -621,7 +621,7 @@ lazy_static! {
     /// This includes the addresses for the SOCKS Controller contract on different networks.
     /// Each field in the struct corresponds to a specific contract and its address on the network.
     pub static ref SOCKS_CONTROLLER_ADDRESSES: AddressMap = {
-        let mut new_map = AddressMap::new();
+        let mut new_map = AddressMap::default();
         new_map.insert(
             ChainId::MAINNET as u64,
             address!("65770b5283117639760beA3F867b69b3697a91dd"),
@@ -636,7 +636,7 @@ lazy_static! {
     /// This includes the addresses for the tick lens contract on different networks.
     /// Each field in the struct corresponds to a specific contract and its address on the network.
     pub static ref TICK_LENS_ADDRESSES: ChainAddress = {
-        let mut chain_add = ChainAddress::new();
+        let mut chain_add = ChainAddress::default();
         for chain_id in SUPPORTED_CHAINS {
             if CHAIN_TO_ADDRESSES_MAP
                 .get(&(chain_id as u64))
@@ -664,7 +664,7 @@ lazy_static! {
     /// This includes the addresses for the mixed route quoter contract on different networks.
     /// Each field in the struct corresponds to a specific contract and its address on the network.
     pub static ref MIXED_ROUTE_QUOTER_V1_ADDRESSES: ChainAddress = {
-        let mut chain_add = ChainAddress::new();
+        let mut chain_add = ChainAddress::default();
         for chain_id in SUPPORTED_CHAINS {
             if CHAIN_TO_ADDRESSES_MAP
                 .get(&(chain_id as u64))
