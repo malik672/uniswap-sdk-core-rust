@@ -23,7 +23,6 @@ pub use lazy_static::lazy_static;
 pub use num_bigint::{BigInt, BigUint, ToBigInt, ToBigUint};
 pub use num_integer::Integer;
 pub use num_traits::{Num, ToPrimitive, Zero};
-pub use std::{
-    cmp::Ordering, collections::HashMap, num::NonZeroU64, ops::Div, str::FromStr, sync::Mutex,
-};
+pub use rustc_hash::FxHashMap;
+pub use std::{cmp::Ordering, num::NonZeroU64, ops::Div, str::FromStr, sync::Mutex};
 pub use thiserror::Error;
