@@ -65,14 +65,14 @@ mod tests {
         );
 
         //is negative for more output
-        assert!(
+        assert_eq!(
             compute_price_impact(
                 Price::new(token.clone(), token_1.clone(), 10, 100),
                 CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
                 CurrencyAmount::from_raw_amount(token_1.clone(), 200).unwrap()
             )
-            .unwrap()
-                == Percent::new(-10000, 10000)
+            .unwrap(),
+            Percent::new(-10000, 10000)
         )
     }
 }

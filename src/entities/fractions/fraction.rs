@@ -345,15 +345,15 @@ mod tests {
     #[test]
     fn test_multiply() {
         assert_eq!(
-            (Fraction::new(1, 10) * Fraction::new(4, 12)),
+            Fraction::new(1, 10) * Fraction::new(4, 12),
             Fraction::new(4, 120)
         );
         assert_eq!(
-            (Fraction::new(1, 3) * Fraction::new(4, 12)),
+            Fraction::new(1, 3) * Fraction::new(4, 12),
             Fraction::new(4, 36)
         );
         assert_eq!(
-            (Fraction::new(5, 12) * Fraction::new(4, 12)),
+            Fraction::new(5, 12) * Fraction::new(4, 12),
             Fraction::new(20, 144)
         );
     }
