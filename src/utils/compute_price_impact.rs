@@ -14,18 +14,14 @@ pub fn compute_price_impact<TBase: CurrencyTrait, TQuote: CurrencyTrait>(
     input_amount: CurrencyAmount<TBase>,
     output_amount: CurrencyAmount<TQuote>,
 ) -> Result<Percent, Error> {
-    let quoted_output_amount = mid_price.quote(input_amount);
+    let quoted_output_amount = mid_price.quote(input_amount)?;
     // calculate price impact := (exactQuote - outputAmount) / exactQuote
-    let price_impact = match quoted_output_amount {
-        Ok(quoted_output_amount) => quoted_output_amount
-            .subtract(&output_amount)?
-            .divide(&quoted_output_amount),
-        Err(e) => Err(e),
-    };
-    let price_impact_clone = price_impact?;
+    let price_impact = quoted_output_amount
+        .subtract(&output_amount)?
+        .divide(&quoted_output_amount)?;
     Ok(Percent::new(
-        price_impact_clone.numerator(),
-        price_impact_clone.denominator(),
+        price_impact.numerator(),
+        price_impact.denominator(),
     ))
 }
 
