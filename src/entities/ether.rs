@@ -4,7 +4,7 @@ use crate::prelude::*;
 /// Represents the native currency of the blockchain.
 pub type Ether = CurrencyLike<()>;
 
-impl CurrencyTrait for Ether {
+impl Currency for Ether {
     /// Checks if the currency is native to the blockchain.
     fn is_native(&self) -> bool {
         true
@@ -16,7 +16,7 @@ impl CurrencyTrait for Ether {
     }
 
     /// Checks if the currency is equal to another currency.
-    fn equals(&self, other: &impl CurrencyTrait) -> bool {
+    fn equals(&self, other: &impl Currency) -> bool {
         match other.is_native() {
             true => self.chain_id() == other.chain_id(),
             _ => false,
@@ -66,11 +66,11 @@ mod tests {
 
     #[test]
     fn test_equals_returns_false_for_different_chains() {
-        assert!(!Ether::on_chain(1).equals(&Currency::NativeCurrency(Ether::on_chain(2))));
+        assert!(!Ether::on_chain(1).equals(&Ether::on_chain(2)));
     }
 
     #[test]
     fn test_equals_returns_true_for_same_chains() {
-        assert!(Ether::on_chain(1).equals(&Currency::NativeCurrency(Ether::on_chain(1))));
+        assert!(Ether::on_chain(1).equals(&Ether::on_chain(1)));
     }
 }

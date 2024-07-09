@@ -1,16 +1,7 @@
 use crate::prelude::*;
 
-/// This enum represnets the two type of currencies i.e native and Token
-#[derive(Clone, PartialEq, Debug)]
-pub enum Currency {
-    /// Represents a native currency.
-    NativeCurrency(Ether),
-    /// Represents a token.
-    Token(Token),
-}
-
 /// Trait for representing a currency in the Uniswap Core SDK.
-pub trait CurrencyTrait: BaseCurrency {
+pub trait Currency: BaseCurrency {
     /// Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
     fn is_native(&self) -> bool;
 
@@ -18,70 +9,10 @@ pub trait CurrencyTrait: BaseCurrency {
     fn address(&self) -> Address;
 
     /// Returns whether this currency is functionally equivalent to the other currency
-    fn equals(&self, other: &impl CurrencyTrait) -> bool;
+    fn equals(&self, other: &impl Currency) -> bool;
 
-    /// Returns a Token that represents the wrapped quivalent of the mative currency
+    /// Returns a Token that represents the wrapped equivalent of the native currency
     fn wrapped(&self) -> Token;
-}
-
-impl CurrencyTrait for Currency {
-    fn is_native(&self) -> bool {
-        match self {
-            Currency::NativeCurrency(_) => true,
-            Currency::Token(_) => false,
-        }
-    }
-
-    fn address(&self) -> Address {
-        match self {
-            Currency::NativeCurrency(native_currency) => native_currency.address(),
-            Currency::Token(token) => token.address(),
-        }
-    }
-
-    fn equals(&self, other: &impl CurrencyTrait) -> bool {
-        match self {
-            Currency::NativeCurrency(native_currency) => native_currency.equals(other),
-            Currency::Token(token) => token.equals(other),
-        }
-    }
-
-    fn wrapped(&self) -> Token {
-        match self {
-            Currency::NativeCurrency(native_currency) => native_currency.wrapped(),
-            Currency::Token(token) => token.clone(),
-        }
-    }
-}
-
-impl BaseCurrency for Currency {
-    fn chain_id(&self) -> u64 {
-        match self {
-            Currency::NativeCurrency(native_currency) => native_currency.chain_id(),
-            Currency::Token(token) => token.chain_id(),
-        }
-    }
-
-    fn decimals(&self) -> u8 {
-        match self {
-            Currency::NativeCurrency(native_currency) => native_currency.decimals(),
-            Currency::Token(token) => token.decimals(),
-        }
-    }
-
-    fn symbol(&self) -> Option<String> {
-        match self {
-            Currency::NativeCurrency(native_currency) => native_currency.symbol(),
-            Currency::Token(token) => token.symbol(),
-        }
-    }
-
-    fn name(&self) -> Option<String> {
-        match self {
-            Currency::NativeCurrency(native_currency) => native_currency.name(),
-            Currency::Token(token) => token.name(),
-        }
-    }
 }
 
 #[cfg(test)]

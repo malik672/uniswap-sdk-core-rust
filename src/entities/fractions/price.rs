@@ -8,8 +8,8 @@ pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
 #[derive(Clone, Debug, PartialEq)]
 pub struct PriceMeta<TBase, TQuote>
 where
-    TBase: CurrencyTrait,
-    TQuote: CurrencyTrait,
+    TBase: Currency,
+    TQuote: Currency,
 {
     /// The base currency for the price
     pub base_currency: TBase,
@@ -23,8 +23,8 @@ where
 
 impl<TBase, TQuote> Price<TBase, TQuote>
 where
-    TBase: CurrencyTrait,
-    TQuote: CurrencyTrait,
+    TBase: Currency,
+    TQuote: Currency,
 {
     /// Constructor for creating a new [`Price`] instance
     pub fn new(
@@ -75,7 +75,7 @@ where
 
     /// Multiply the price by another price, returning a new price.
     /// The other price must have the same base currency as this price's quote currency.
-    pub fn multiply<TOtherQuote: CurrencyTrait>(
+    pub fn multiply<TOtherQuote: Currency>(
         &self,
         other: &Price<TQuote, TOtherQuote>,
     ) -> Result<Price<TBase, TOtherQuote>, Error> {
@@ -141,9 +141,9 @@ mod test {
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
 
     lazy_static! {
-        static ref TOKEN0: Currency = Currency::Token(token!(1, ADDRESS_ZERO, 18));
-        static ref TOKEN0_6: Currency = Currency::Token(token!(1, ADDRESS_ZERO, 6));
-        static ref TOKEN1: Currency = Currency::Token(token!(1, ADDRESS_ONE, 18));
+        static ref TOKEN0: Token = token!(1, ADDRESS_ZERO, 18);
+        static ref TOKEN0_6: Token = token!(1, ADDRESS_ZERO, 6);
+        static ref TOKEN1: Token = token!(1, ADDRESS_ONE, 18);
     }
 
     #[test]

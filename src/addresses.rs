@@ -4,7 +4,7 @@ type AddressMap = FxHashMap<u64, Address>;
 type ChainMap = FxHashMap<u64, ChainAddresses>;
 type ChainAddress = FxHashMap<u64, Address>;
 
-/// Represents the addresses of various core contracts of uniswap on a network.
+/// Represents the addresses of various core contracts of Uniswap on a network.
 #[derive(Clone, Copy, Debug)]
 pub struct ChainAddresses {
     v3_core_factory_address: Address,
