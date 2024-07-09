@@ -2,7 +2,8 @@
 //!
 //! The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap
 //! decentralized exchange.
-//! #![cfg_attr(not(test), no_std)]
+//!
+#![cfg_attr(not(any(feature = "std", test)), no_std)]
 #![warn(
     missing_copy_implementations,
     missing_debug_implementations,
