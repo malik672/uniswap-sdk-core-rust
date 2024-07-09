@@ -17,7 +17,10 @@ pub use crate::{
     error::Error,
     utils::*,
 };
-pub use alloc::{string::String, vec::Vec};
+pub use alloc::{
+    string::{String, ToString},
+    vec::Vec,
+};
 pub use alloy_primitives::{address, Address};
 pub use bigdecimal::{BigDecimal, RoundingMode};
 pub use core::{
