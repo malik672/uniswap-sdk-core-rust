@@ -1,30 +1,29 @@
-use crate::prelude::*;
-
 /// Represents errors that can occur in the context of currency operations.
-#[derive(Debug, Error, Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "std", derive(thiserror::Error))]
 pub enum Error {
-    /// Triggers when compared Chain Ids do not match
-    #[error("Chain IDs do not match: {0} and {1}")]
+    /// Triggers when the compared chain ids do not match
+    #[cfg_attr(feature = "std", error("Chain IDs do not match: {0} and {1}"))]
     ChainIdMismatch(u64, u64),
 
-    /// Triggers when comapred addresses are the smae
-    #[error("Addresses are equal")]
+    /// Triggers when compared addresses are the same
+    #[cfg_attr(feature = "std", error("Addresses are equal"))]
     EqualAddresses,
 
     /// Triggers when it tries to exceed the max uint
-    #[error("amount has exceeded MAX_UINT256")]
+    #[cfg_attr(feature = "std", error("amount has exceeded MAX_UINT256"))]
     MaxUint,
 
     ///Triggers when the Compared values are not equal
-    #[error("not equal")]
+    #[cfg_attr(feature = "std", error("not equal"))]
     NotEqual(),
 
-    /// Triggers when The value is inccorrrect
-    #[error("incorrect")]
+    /// Triggers when The value is incorrect
+    #[cfg_attr(feature = "std", error("incorrect"))]
     Incorrect(),
 }
 
-#[cfg(test)]
+#[cfg(any(feature = "std", test))]
 mod tests {
     use super::*;
 

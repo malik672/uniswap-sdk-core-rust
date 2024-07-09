@@ -1,10 +1,5 @@
 use crate::prelude::*;
 
-// Lazy static cache for Ether instances
-lazy_static! {
-    static ref ETHER_CACHE: Mutex<FxHashMap<u64, Ether>> = Mutex::new(FxHashMap::default());
-}
-
 /// Ether is the main usage of a 'native' currency, i.e., for Ethereum mainnet and all testnets.
 /// Represents the native currency of the blockchain.
 pub type Ether = CurrencyLike<()>;
@@ -51,15 +46,7 @@ impl Ether {
 
     /// Retrieves or creates an [`Ether`] instance for the specified chain ID.
     pub fn on_chain(chain_id: u64) -> Self {
-        let mut cache = ETHER_CACHE.lock().unwrap();
-        match cache.get(&chain_id) {
-            Some(ether) => ether.clone(),
-            None => {
-                let ether = Ether::new(chain_id);
-                cache.insert(chain_id, ether.clone());
-                ether
-            }
-        }
+        Self::new(chain_id)
     }
 }
 

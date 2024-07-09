@@ -1,4 +1,4 @@
-// token_example.rs
+#![cfg(test)]
 
 // Import the Token struct from the Uniswap SDK-Core
 use crate::entities::token::Token;
