@@ -2,6 +2,7 @@
 //!
 //! The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap
 //! decentralized exchange.
+//! #![cfg_attr(not(test), no_std)]
 #![warn(
     missing_copy_implementations,
     missing_debug_implementations,
@@ -12,6 +13,7 @@
 #![cfg_attr(not(test), warn(unused_crate_dependencies))]
 #![deny(unused_must_use, rust_2018_idioms)]
 #![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
+extern crate alloc;
 
 /// Contains functionality related to All Contracts deployed and supported by the Uniswap SDK.
 pub mod addresses;

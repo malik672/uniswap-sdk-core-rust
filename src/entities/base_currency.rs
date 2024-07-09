@@ -1,6 +1,5 @@
-use std::ops::Deref;
-
 use alloy_primitives::ChainId;
+use crate::prelude::*;
 
 /// `CurrencyLike` is a generic struct representing a currency with a specific chain ID,
 /// decimals, symbol, name, and additional metadata.
