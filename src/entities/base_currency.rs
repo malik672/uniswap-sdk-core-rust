@@ -8,7 +8,7 @@ pub struct CurrencyLike<M> {
     /// The chain ID on which this currency resides
     pub chain_id: ChainId,
 
-    /// represents the deciamls for the prticular currency
+    /// The decimals for the particular currency
     pub decimals: u8,
 
     /// The symbol of the currency, i.e. a short textual non-unique identifier

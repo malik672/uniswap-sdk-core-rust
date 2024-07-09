@@ -14,7 +14,7 @@ pub struct TokenMeta {
     pub sell_fee_bps: Option<BigUint>,
 }
 
-impl CurrencyTrait for Token {
+impl Currency for Token {
     fn is_native(&self) -> bool {
         false
     }
@@ -27,10 +27,10 @@ impl CurrencyTrait for Token {
     ///
     /// # Arguments
     ///
-    /// * `other`: other token to compare
+    /// * `other`: another token to compare
     ///
     /// returns: bool
-    fn equals(&self, other: &impl CurrencyTrait) -> bool {
+    fn equals(&self, other: &impl Currency) -> bool {
         match other.is_native() {
             false => self.chain_id == other.chain_id() && self.address() == other.address(),
             _ => false,
@@ -93,7 +93,7 @@ impl Token {
     ///
     /// # Arguments
     ///
-    /// * `other`: other token to compare
+    /// * `other`: another token to compare
     pub fn sorts_before(&self, other: &Token) -> Result<bool, Error> {
         if self.chain_id != other.chain_id {
             return Err(Error::ChainIdMismatch(self.chain_id, other.chain_id));

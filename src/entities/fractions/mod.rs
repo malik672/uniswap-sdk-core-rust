@@ -4,6 +4,6 @@ pub mod currency_amount;
 pub mod fraction;
 /// A module represents a percentage.
 pub mod percent;
-/// A module represents' a price as a ratio between two currencies, with methods for arithmetic and
+/// A module represents a price as a ratio between two currencies, with methods for arithmetic and
 /// string conversions.
 pub mod price;

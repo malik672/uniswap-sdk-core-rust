@@ -3,7 +3,7 @@ pub use crate::{
     constants::*,
     entities::{
         base_currency::{BaseCurrency, CurrencyLike},
-        currency::{Currency, CurrencyTrait},
+        currency::Currency,
         ether::Ether,
         fractions::{
             currency_amount::CurrencyAmount,
