@@ -47,11 +47,11 @@ mod tests {
     #[test]
     fn test_add() {
         assert_eq!(
-            (Percent::new(1, 100) + Percent::new(2, 100)),
+            Percent::new(1, 100) + Percent::new(2, 100),
             Percent::new(3, 100)
         );
         assert_eq!(
-            (Percent::new(1, 25) + Percent::new(2, 100)),
+            Percent::new(1, 25) + Percent::new(2, 100),
             Percent::new(150, 2500)
         );
     }
@@ -59,11 +59,11 @@ mod tests {
     #[test]
     fn test_subtract() {
         assert_eq!(
-            (Percent::new(1, 100) - Percent::new(2, 100)),
+            Percent::new(1, 100) - Percent::new(2, 100),
             Percent::new(-1, 100)
         );
         assert_eq!(
-            (Percent::new(1, 25) - Percent::new(2, 100)),
+            Percent::new(1, 25) - Percent::new(2, 100),
             Percent::new(50, 2500)
         );
     }
@@ -71,11 +71,11 @@ mod tests {
     #[test]
     fn test_multiply() {
         assert_eq!(
-            (Percent::new(1, 100) * Percent::new(2, 100)),
+            Percent::new(1, 100) * Percent::new(2, 100),
             Percent::new(2, 10000)
         );
         assert_eq!(
-            (Percent::new(1, 25) * Percent::new(2, 100)),
+            Percent::new(1, 25) * Percent::new(2, 100),
             Percent::new(2, 2500)
         );
     }
@@ -83,11 +83,11 @@ mod tests {
     #[test]
     fn test_divide() {
         assert_eq!(
-            (Percent::new(1, 100) / Percent::new(2, 100)),
+            Percent::new(1, 100) / Percent::new(2, 100),
             Percent::new(100, 200)
         );
         assert_eq!(
-            (Percent::new(1, 25) / Percent::new(2, 100)),
+            Percent::new(1, 25) / Percent::new(2, 100),
             Percent::new(100, 50)
         );
     }

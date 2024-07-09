@@ -10,29 +10,10 @@ use num_traits::Signed;
 /// returns: BigInt
 pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
     if value.is_negative() {
-        return Err(Error::Incorrect());
+        Err(Error::Incorrect())
+    } else {
+        Ok(value.sqrt())
     }
-
-    // If the value is less than or equal to MAX_SAFE_INTEGER,
-    // we can safely convert it to an i64 and use the primitive sqrt function.
-    if let Some(safe_value) = value.to_i64() {
-        return Ok(((safe_value as f64).sqrt().floor() as i64)
-            .to_bigint()
-            .unwrap());
-    }
-
-    // Otherwise, we use the Babylonian method to calculate the square root.
-    let two = 2.to_bigint().unwrap();
-    let one = 1.to_bigint().unwrap();
-    let mut z = value.clone();
-    let mut x = (value / &two) + &one;
-
-    while x < z {
-        z.clone_from(&x);
-        x = ((value / &x) + &x) / &two;
-    }
-
-    Ok(z)
 }
 
 #[cfg(test)]
