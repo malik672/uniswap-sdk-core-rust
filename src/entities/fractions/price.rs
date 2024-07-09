@@ -174,11 +174,11 @@ mod test {
     #[test]
     fn test_quote_returns_correct_value() {
         let price = Price::new(TOKEN0.clone(), TOKEN1.clone(), 1, 5);
-        assert!(
+        assert_eq!(
             price
                 .quote(CurrencyAmount::from_raw_amount(TOKEN0.clone(), 10).unwrap())
-                .unwrap()
-                == CurrencyAmount::from_raw_amount(TOKEN1.clone(), 50).unwrap()
+                .unwrap(),
+            CurrencyAmount::from_raw_amount(TOKEN1.clone(), 50).unwrap()
         );
     }
 
@@ -199,7 +199,7 @@ mod test {
         let p = Price::new(TOKEN0_6.clone(), TOKEN1.clone(), 123, 456);
         assert_eq!(
             p.to_significant(4, Rounding::RoundDown).unwrap(),
-            "0.000000000003707"
+            "3.707E-12"
         );
     }
 
@@ -208,7 +208,7 @@ mod test {
         let p = Price::new(TOKEN0_6.clone(), TOKEN1.clone(), 456, 123);
         assert_eq!(
             p.to_significant(4, Rounding::RoundDown).unwrap(),
-            "0.0000000000002697"
+            "2.697E-13"
         );
     }
 

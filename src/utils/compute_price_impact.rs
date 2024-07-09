@@ -14,18 +14,14 @@ pub fn compute_price_impact<TBase: CurrencyTrait, TQuote: CurrencyTrait>(
     input_amount: CurrencyAmount<TBase>,
     output_amount: CurrencyAmount<TQuote>,
 ) -> Result<Percent, Error> {
-    let quoted_output_amount = mid_price.quote(input_amount);
+    let quoted_output_amount = mid_price.quote(input_amount)?;
     // calculate price impact := (exactQuote - outputAmount) / exactQuote
-    let price_impact = match quoted_output_amount {
-        Ok(quoted_output_amount) => quoted_output_amount
-            .subtract(&output_amount)?
-            .divide(&quoted_output_amount),
-        Err(e) => Err(e),
-    };
-    let price_impact_clone = price_impact?;
+    let price_impact = quoted_output_amount
+        .subtract(&output_amount)?
+        .divide(&quoted_output_amount)?;
     Ok(Percent::new(
-        price_impact_clone.numerator(),
-        price_impact_clone.denominator(),
+        price_impact.numerator(),
+        price_impact.denominator(),
     ))
 }
 
@@ -65,14 +61,14 @@ mod tests {
         );
 
         //is negative for more output
-        assert!(
+        assert_eq!(
             compute_price_impact(
                 Price::new(token.clone(), token_1.clone(), 10, 100),
                 CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
                 CurrencyAmount::from_raw_amount(token_1.clone(), 200).unwrap()
             )
-            .unwrap()
-                == Percent::new(-10000, 10000)
+            .unwrap(),
+            Percent::new(-10000, 10000)
         )
     }
 }
