@@ -1,4 +1,3 @@
-/// External crate dependencies
 use crate::prelude::*;
 use core::ops::{Add, Deref, Mul, Sub};
 

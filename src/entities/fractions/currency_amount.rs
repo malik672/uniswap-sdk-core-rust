@@ -6,14 +6,14 @@ pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
 
 /// Struct representing metadata about a currency
 #[derive(Clone, Debug, PartialEq)]
-pub struct CurrencyMeta<T: CurrencyTrait> {
+pub struct CurrencyMeta<T: Currency> {
     /// The currency associated with this metadata
     pub currency: T,
     /// The scale factor for the currency's decimal places
     pub decimal_scale: BigUint,
 }
 
-impl<T: CurrencyTrait> CurrencyAmount<T> {
+impl<T: Currency> CurrencyAmount<T> {
     /// Constructor method for creating a new currency amount
     fn new(
         currency: T,
@@ -151,8 +151,8 @@ mod tests {
 
     // Lazy static variables for testing currencies
     lazy_static! {
-        static ref TOKEN18: Currency = Currency::Token(token!(1, ADDRESS_ONE, 18));
-        static ref TOKEN0: Currency = Currency::Token(token!(1, ADDRESS_ONE, 0));
+        static ref TOKEN18: Token = token!(1, ADDRESS_ONE, 18);
+        static ref TOKEN0: Token = token!(1, ADDRESS_ONE, 0);
     }
 
     // Unit tests
@@ -174,10 +174,9 @@ mod tests {
     #[test]
     fn test_ether() {
         let ether = Ether::on_chain(1);
-        let amount =
-            CurrencyAmount::from_raw_amount(Currency::NativeCurrency(ether.clone()), 100).unwrap();
+        let amount = CurrencyAmount::from_raw_amount(ether.clone(), 100).unwrap();
         assert_eq!(amount.quotient(), 100.into());
-        assert!(amount.currency.equals(&Currency::NativeCurrency(ether)));
+        assert!(amount.currency.equals(&ether));
     }
 
     #[test]
