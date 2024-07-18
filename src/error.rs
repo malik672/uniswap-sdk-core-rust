@@ -23,7 +23,7 @@ pub enum Error {
     Incorrect(),
 }
 
-#[cfg(any(feature = "std", test))]
+#[cfg(all(feature = "std", test))]
 mod tests {
     use super::*;
 
