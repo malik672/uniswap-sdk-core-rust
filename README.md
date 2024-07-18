@@ -17,7 +17,7 @@ Add this to your Cargo.toml
 
 ```
 [dependencies]
-uniswap-sdk-core = "0.23.0";
+uniswap-sdk-core = "1.0.0-rc";
 ```
 
 And this to your code:
@@ -80,14 +80,19 @@ assuming the addresses are correctly set up for this comparison.
 Remember to replace "0x6B175474E89094C44Da98b954EedeAC495271d0F" with the actual address of the DAI token you're working
 with, and adjust the CHAIN_ID if you're working on a different network (e.g., a testnet).
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Contribution
 
 Contributions are welcome! If you find a bug or have suggestions for improvements, feel free to open an issue or submit
 a pull request on the [GitHub repository](https://github.com/malik672/uniswap-sdk-core-rust).
+
+## Note on `no_std`
+
+By default, this library does not depend on the standard library (`std`). However, the `std` feature can be enabled to
+use `thiserror` for error handling.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
