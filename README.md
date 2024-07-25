@@ -17,7 +17,7 @@ Add this to your Cargo.toml
 
 ```
 [dependencies]
-uniswap-sdk-core = "1.0.0-rc";
+uniswap-sdk-core = "1.0.0-rc"
 ```
 
 And this to your code:
@@ -36,7 +36,7 @@ the `token!` macro.
 // once. This can be useful if you are working with multiple parts of the library and want to avoid
 // having to import each dependency individually.
 // Import necessary preludes and types
-use uniswap_sdk_core::prelude::*;
+use uniswap_sdk_core::{prelude::*,token};
 
 fn main() {
     // Define the chain ID, address, decimals, symbol, and name for the token
@@ -58,7 +58,7 @@ fn main() {
     println!("Are the tokens equal? {}", dai_token.equals(&another_dai_token));
 
     // Example of sorting tokens
-    let another_token = token!(CHAIN_ID, "0x0000000000000000000000000000000000000002", DECIMALS, "ETH", "Ethereum");
+    let another_token = token!(CHAIN_ID, "0000000000000000000000000000000000000002", DECIMALS, "ETH", "Ethereum");
     match dai_token.sorts_before(&another_token) {
         Ok(true) => println!("DAI sorts before ETH"),
         Ok(false) => println!("DAI does not sort before ETH"),
