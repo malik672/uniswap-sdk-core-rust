@@ -80,7 +80,7 @@ where
         other: &Price<TQuote, TOtherQuote>,
     ) -> Result<Price<TBase, TOtherQuote>, Error> {
         if !self.quote_currency.equals(&other.base_currency) {
-            return Err(Error::NotEqual());
+            return Err(Error::NotEqual);
         }
 
         let fraction = self.as_fraction() * other.as_fraction();
@@ -98,7 +98,7 @@ where
         currency_amount: CurrencyAmount<TBase>,
     ) -> Result<CurrencyAmount<TQuote>, Error> {
         if !currency_amount.currency.equals(&self.base_currency) {
-            return Err(Error::NotEqual());
+            return Err(Error::NotEqual);
         }
         let fraction = self.as_fraction() * currency_amount.as_fraction();
         CurrencyAmount::from_fractional_amount(

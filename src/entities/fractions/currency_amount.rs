@@ -81,7 +81,7 @@ impl<T: Currency> CurrencyAmount<T> {
     /// Addition of another currency amount to the current amount
     pub fn add(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
-            return Err(Error::NotEqual());
+            return Err(Error::NotEqual);
         }
         let added = self.as_fraction() + other.as_fraction();
         Self::from_fractional_amount(
@@ -94,7 +94,7 @@ impl<T: Currency> CurrencyAmount<T> {
     /// Subtraction of another currency amount from the current amount
     pub fn subtract(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
-            return Err(Error::NotEqual());
+            return Err(Error::NotEqual);
         }
         let subtracted = self.as_fraction() - other.as_fraction();
         Self::from_fractional_amount(
@@ -117,7 +117,7 @@ impl<T: Currency> CurrencyAmount<T> {
     /// Convert the currency amount to a string with a fixed number of decimal places
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
         if decimal_places > self.currency.decimals() {
-            return Err(Error::NotEqual());
+            return Err(Error::NotEqual);
         }
 
         if decimal_places == 0 {

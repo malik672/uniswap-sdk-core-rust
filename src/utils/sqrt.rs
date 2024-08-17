@@ -10,7 +10,7 @@ use num_traits::Signed;
 /// returns: BigInt
 pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
     if value.is_negative() {
-        Err(Error::Incorrect())
+        Err(Error::Invalid)
     } else {
         Ok(value.sqrt())
     }
