@@ -9,11 +9,11 @@ pub fn sorted_insert<T: Clone>(
     comparator: fn(&T, &T) -> Ordering,
 ) -> Result<Option<T>, Error> {
     if max_size == 0 {
-        return Err(Error::Incorrect());
+        return Err(Error::Invalid);
     }
 
     if items.len() > max_size {
-        return Err(Error::Incorrect());
+        return Err(Error::Invalid);
     }
 
     let removed_item = if items.len() == max_size {

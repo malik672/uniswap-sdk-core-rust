@@ -2,25 +2,25 @@
 #[derive(Debug, Clone, Copy)]
 #[cfg_attr(feature = "std", derive(thiserror::Error))]
 pub enum Error {
-    /// Triggers when the compared chain ids do not match
-    #[cfg_attr(feature = "std", error("Chain IDs do not match: {0} and {1}"))]
+    /// Triggers when the compared chain IDs do not match.
+    #[cfg_attr(feature = "std", error("chain IDs do not match: {0} and {1}"))]
     ChainIdMismatch(u64, u64),
 
-    /// Triggers when compared addresses are the same
-    #[cfg_attr(feature = "std", error("Addresses are equal"))]
+    /// Triggers when compared addresses are the same.
+    #[cfg_attr(feature = "std", error("addresses are equal"))]
     EqualAddresses,
 
-    /// Triggers when it tries to exceed the max uint
+    /// Triggers when it tries to exceed the max uint.
     #[cfg_attr(feature = "std", error("amount has exceeded MAX_UINT256"))]
     MaxUint,
 
-    ///Triggers when the Compared values are not equal
+    /// Triggers when the compared values are not equal.
     #[cfg_attr(feature = "std", error("not equal"))]
-    NotEqual(),
+    NotEqual,
 
-    /// Triggers when The value is incorrect
-    #[cfg_attr(feature = "std", error("incorrect"))]
-    Incorrect(),
+    /// Triggers when the value is invalid.
+    #[cfg_attr(feature = "std", error("invalid"))]
+    Invalid,
 }
 
 #[cfg(all(feature = "std", test))]
@@ -31,14 +31,14 @@ mod tests {
     #[test]
     fn test_chain_id_mismatch_error() {
         let error = Error::ChainIdMismatch(1, 2);
-        assert_eq!(error.to_string(), "Chain IDs do not match: 1 and 2");
+        assert_eq!(error.to_string(), "chain IDs do not match: 1 and 2");
     }
 
     /// Test that `Error::EqualAddresses` displays the correct error message.
     #[test]
     fn test_equal_addresses_error() {
         let error = Error::EqualAddresses;
-        assert_eq!(error.to_string(), "Addresses are equal");
+        assert_eq!(error.to_string(), "addresses are equal");
     }
 
     /// Test that `Error::MaxUint` displays the correct error message.
@@ -51,14 +51,14 @@ mod tests {
     /// Test that `Error::NotEqual` displays the correct error message.
     #[test]
     fn test_not_equal_error() {
-        let error = Error::NotEqual();
+        let error = Error::NotEqual;
         assert_eq!(error.to_string(), "not equal");
     }
 
-    /// Test that `Error::Incorrect` displays the correct error message.
+    /// Test that `Error::Invalid` displays the correct error message.
     #[test]
     fn test_incorrect_error() {
-        let error = Error::Incorrect();
-        assert_eq!(error.to_string(), "incorrect");
+        let error = Error::Invalid;
+        assert_eq!(error.to_string(), "invalid");
     }
 }

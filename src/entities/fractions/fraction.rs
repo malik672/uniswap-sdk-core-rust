@@ -115,7 +115,7 @@ pub trait FractionBase<M>: Sized {
     /// strategy
     fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> Result<String, Error> {
         if significant_digits == 0 {
-            return Err(Error::Incorrect());
+            return Err(Error::Invalid);
         }
         let rounding_strategy = to_rounding_strategy(rounding);
         let quotient = self.to_decimal().with_precision_round(

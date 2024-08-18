@@ -7,9 +7,10 @@
 **A Custom Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized
 exchange.**
 
-> **Warning**
->
->   This is a custom Uniswap library
+## Note on `no_std`
+
+By default, this library does not depend on the standard library (`std`). However, the `std` feature can be enabled to
+use `thiserror` for error handling.
 
 ## Quickstart
 
@@ -17,7 +18,7 @@ Add this to your Cargo.toml
 
 ```
 [dependencies]
-uniswap-sdk-core = "1.0.0-rc"
+uniswap-sdk-core = "1.0.0"
 ```
 
 And this to your code:
@@ -36,7 +37,7 @@ the `token!` macro.
 // once. This can be useful if you are working with multiple parts of the library and want to avoid
 // having to import each dependency individually.
 // Import necessary preludes and types
-use uniswap_sdk_core::{prelude::*,token};
+use uniswap_sdk_core::{prelude::*, token};
 
 fn main() {
     // Define the chain ID, address, decimals, symbol, and name for the token
@@ -85,11 +86,6 @@ with, and adjust the CHAIN_ID if you're working on a different network (e.g., a 
 Contributions are welcome! If you find a bug or have suggestions for improvements, feel free to open an issue or submit
 a pull request on the [GitHub repository](https://github.com/malik672/uniswap-sdk-core-rust).
 
-## Note on `no_std`
-
-By default, this library does not depend on the standard library (`std`). However, the `std` feature can be enabled to
-use `thiserror` for error handling.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -103,6 +99,8 @@ provide similar functionality in the Rust programming language.
 
 - [Uniswap V3 SDK Rust](https://github.com/shuhuiluo/uniswap-v3-sdk-rs): Opinionated Rust implementation of the Uniswap
   V3 SDK with a focus on readability and performance
+- [Uniswap V2 SDK Rust](https://github.com/shuhuiluo/uniswap-v2-sdk-rs): Opinionated Rust implementation of the Uniswap
+  V2 SDK with a focus on readability and performance
 - ...
 
 *(If you want to add project to the list, dm or open a PR)*
