@@ -52,22 +52,22 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Multiplication of currency amount by another fractional amount
-    pub fn multiply<M>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
+    pub fn multiply<M: Clone>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let multiplied = self.as_fraction() * other.as_fraction();
         Self::from_fractional_amount(
             self.currency.clone(),
-            multiplied.numerator(),
-            multiplied.denominator(),
+            multiplied.numerator,
+            multiplied.denominator,
         )
     }
 
     /// Division of currency amount by another fractional amount
-    pub fn divide<M>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
+    pub fn divide<M: Clone>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let divided = self.as_fraction() / other.as_fraction();
         Self::from_fractional_amount(
             self.currency.clone(),
-            divided.numerator(),
-            divided.denominator(),
+            divided.numerator,
+            divided.denominator,
         )
     }
 
@@ -84,11 +84,7 @@ impl<T: Currency> CurrencyAmount<T> {
             return Err(Error::NotEqual);
         }
         let added = self.as_fraction() + other.as_fraction();
-        Self::from_fractional_amount(
-            self.currency.clone(),
-            added.numerator(),
-            added.denominator(),
-        )
+        Self::from_fractional_amount(self.currency.clone(), added.numerator, added.denominator)
     }
 
     /// Subtraction of another currency amount from the current amount
@@ -99,8 +95,8 @@ impl<T: Currency> CurrencyAmount<T> {
         let subtracted = self.as_fraction() - other.as_fraction();
         Self::from_fractional_amount(
             self.currency.clone(),
-            subtracted.numerator(),
-            subtracted.denominator(),
+            subtracted.numerator,
+            subtracted.denominator,
         )
     }
 
@@ -135,8 +131,8 @@ impl<T: Currency> CurrencyAmount<T> {
     pub fn wrapped(&self) -> Result<CurrencyAmount<Token>, Error> {
         CurrencyAmount::from_fractional_amount(
             self.currency.wrapped(),
-            self.numerator(),
-            self.denominator(),
+            self.numerator().clone(),
+            self.denominator().clone(),
         )
     }
 }
@@ -205,7 +201,7 @@ mod tests {
         let numerator: BigInt = MAX_UINT256.clone() + 2;
         let amount =
             CurrencyAmount::from_fractional_amount(TOKEN18.clone(), numerator.clone(), 2).unwrap();
-        assert_eq!(amount.numerator(), numerator);
+        assert_eq!(amount.numerator(), &numerator);
     }
 
     #[test]

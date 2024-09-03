@@ -8,6 +8,7 @@
     missing_debug_implementations,
     unreachable_pub,
     clippy::missing_const_for_fn,
+    clippy::redundant_clone,
     rustdoc::all
 )]
 #![cfg_attr(not(test), warn(unused_crate_dependencies))]

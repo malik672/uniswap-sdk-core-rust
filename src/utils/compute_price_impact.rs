@@ -20,8 +20,8 @@ pub fn compute_price_impact<TBase: Currency, TQuote: Currency>(
         .subtract(&output_amount)?
         .divide(&quoted_output_amount)?;
     Ok(Percent::new(
-        price_impact.numerator(),
-        price_impact.denominator(),
+        price_impact.numerator,
+        price_impact.denominator,
     ))
 }
 
