@@ -15,6 +15,7 @@ pub struct CurrencyMeta<T: Currency> {
 
 impl<T: Currency> CurrencyAmount<T> {
     /// Constructor method for creating a new currency amount
+    #[inline]
     fn new(
         currency: T,
         numerator: impl Into<BigInt>,
@@ -38,11 +39,13 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Returns a new currency amount instance from the unitless amount of token (raw amount)
+    #[inline]
     pub fn from_raw_amount(currency: T, raw_amount: impl Into<BigInt>) -> Result<Self, Error> {
         Self::new(currency, raw_amount, 1)
     }
 
     /// Construct a currency amount with a denominator that is not equal to 0
+    #[inline]
     pub fn from_fractional_amount(
         currency: T,
         numerator: impl Into<BigInt>,
@@ -52,6 +55,7 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Multiplication of currency amount by another fractional amount
+    #[inline]
     pub fn multiply<M: Clone>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let multiplied = self.as_fraction() * other.as_fraction();
         Self::from_fractional_amount(
@@ -62,6 +66,7 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Division of currency amount by another fractional amount
+    #[inline]
     pub fn divide<M: Clone>(&self, other: &impl FractionBase<M>) -> Result<Self, Error> {
         let divided = self.as_fraction() / other.as_fraction();
         Self::from_fractional_amount(
@@ -72,6 +77,7 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Convert the currency amount to a string with exact precision
+    #[inline]
     pub fn to_exact(&self) -> String {
         BigDecimal::from(self.quotient())
             .div(BigDecimal::from(BigInt::from(self.decimal_scale.clone())))
@@ -79,6 +85,7 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Addition of another currency amount to the current amount
+    #[inline]
     pub fn add(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
             return Err(Error::NotEqual);
@@ -88,6 +95,7 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Subtraction of another currency amount from the current amount
+    #[inline]
     pub fn subtract(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
             return Err(Error::NotEqual);
@@ -101,6 +109,7 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Convert the currency amount to a string with a specified number of significant digits
+    #[inline]
     pub fn to_significant(
         &self,
         significant_digits: u8,
@@ -111,6 +120,7 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Convert the currency amount to a string with a fixed number of decimal places
+    #[inline]
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
         if decimal_places > self.currency.decimals() {
             return Err(Error::NotEqual);
@@ -128,6 +138,7 @@ impl<T: Currency> CurrencyAmount<T> {
     }
 
     /// Wrap the currency amount if the currency is not native
+    #[inline]
     pub fn wrapped(&self) -> Result<CurrencyAmount<Token>, Error> {
         CurrencyAmount::from_fractional_amount(
             self.currency.wrapped(),

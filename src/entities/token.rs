@@ -15,10 +15,12 @@ pub struct TokenMeta {
 }
 
 impl Currency for Token {
+    #[inline]
     fn is_native(&self) -> bool {
         false
     }
 
+    #[inline]
     fn address(&self) -> Address {
         self.address
     }
@@ -30,6 +32,7 @@ impl Currency for Token {
     /// * `other`: another token to compare
     ///
     /// returns: bool
+    #[inline]
     fn equals(&self, other: &impl Currency) -> bool {
         match other.is_native() {
             false => self.chain_id == other.chain_id() && self.address() == other.address(),
@@ -37,6 +40,7 @@ impl Currency for Token {
         }
     }
 
+    #[inline]
     /// Return this token, which does not need to be wrapped
     fn wrapped(&self) -> Token {
         self.clone()
@@ -63,6 +67,7 @@ impl Token {
     /// # Panics
     ///
     /// Panics if `chain_id` is 0.
+    #[inline]
     pub const fn new(
         chain_id: u64,
         address: Address,
@@ -94,6 +99,7 @@ impl Token {
     /// # Arguments
     ///
     /// * `other`: another token to compare
+    #[inline]
     pub fn sorts_before(&self, other: &Token) -> Result<bool, Error> {
         if self.chain_id != other.chain_id {
             return Err(Error::ChainIdMismatch(self.chain_id, other.chain_id));
@@ -102,7 +108,7 @@ impl Token {
         if self.address() == other.address() {
             return Err(Error::EqualAddresses);
         }
-        Ok(self.address().lt(&other.address()))
+        Ok(self.address() < other.address())
     }
 }
 

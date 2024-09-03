@@ -9,6 +9,7 @@ use crate::prelude::*;
 /// * `outputAmount`: the output amount of the trade
 ///
 /// returns: Percent
+#[inline]
 pub fn compute_price_impact<TBase: Currency, TQuote: Currency>(
     mid_price: Price<TBase, TQuote>,
     input_amount: CurrencyAmount<TBase>,

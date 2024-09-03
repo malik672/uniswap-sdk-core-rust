@@ -38,18 +38,22 @@ pub trait BaseCurrency: Clone {
 }
 
 impl<M: Clone> BaseCurrency for CurrencyLike<M> {
+    #[inline]
     fn chain_id(&self) -> ChainId {
         self.chain_id
     }
 
+    #[inline]
     fn decimals(&self) -> u8 {
         self.decimals
     }
 
+    #[inline]
     fn symbol(&self) -> Option<&String> {
         self.symbol.as_ref()
     }
 
+    #[inline]
     fn name(&self) -> Option<&String> {
         self.name.as_ref()
     }
@@ -59,6 +63,7 @@ impl<M: Clone> BaseCurrency for CurrencyLike<M> {
 impl<M> Deref for CurrencyLike<M> {
     type Target = M;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         &self.meta
     }
