@@ -31,27 +31,31 @@ pub trait BaseCurrency: Clone {
     fn decimals(&self) -> u8;
 
     /// The symbol of the currency, i.e. a short textual non-unique identifier
-    fn symbol(&self) -> Option<String>;
+    fn symbol(&self) -> Option<&String>;
 
     /// The name of the currency, i.e. a descriptive textual non-unique identifier
-    fn name(&self) -> Option<String>;
+    fn name(&self) -> Option<&String>;
 }
 
 impl<M: Clone> BaseCurrency for CurrencyLike<M> {
+    #[inline]
     fn chain_id(&self) -> ChainId {
         self.chain_id
     }
 
+    #[inline]
     fn decimals(&self) -> u8 {
         self.decimals
     }
 
-    fn symbol(&self) -> Option<String> {
-        self.symbol.clone()
+    #[inline]
+    fn symbol(&self) -> Option<&String> {
+        self.symbol.as_ref()
     }
 
-    fn name(&self) -> Option<String> {
-        self.name.clone()
+    #[inline]
+    fn name(&self) -> Option<&String> {
+        self.name.as_ref()
     }
 }
 
@@ -59,6 +63,7 @@ impl<M: Clone> BaseCurrency for CurrencyLike<M> {
 impl<M> Deref for CurrencyLike<M> {
     type Target = M;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         &self.meta
     }

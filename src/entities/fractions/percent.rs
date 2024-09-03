@@ -13,12 +13,14 @@ pub type Percent = FractionLike<IsPercent>;
 
 impl Percent {
     /// Constructor for creating a new [`Percent`] instance
+    #[inline]
     pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
         FractionBase::new(numerator, denominator, IsPercent)
     }
 
     /// Converts the [`Percent`] to a string with a specified number of significant digits and
     /// rounding strategy
+    #[inline]
     pub fn to_significant(
         &self,
         significant_digits: u8,
@@ -32,6 +34,7 @@ impl Percent {
 
     /// Converts the [`Percent`] to a string with a fixed number of decimal places and rounding
     /// strategy
+    #[inline]
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the
         // result

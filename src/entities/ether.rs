@@ -6,16 +6,19 @@ pub type Ether = CurrencyLike<()>;
 
 impl Currency for Ether {
     /// Checks if the currency is native to the blockchain.
+    #[inline]
     fn is_native(&self) -> bool {
         true
     }
 
     /// Retrieves the address associated with the currency.
+    #[inline]
     fn address(&self) -> Address {
         self.wrapped().address()
     }
 
     /// Checks if the currency is equal to another currency.
+    #[inline]
     fn equals(&self, other: &impl Currency) -> bool {
         match other.is_native() {
             true => self.chain_id() == other.chain_id(),
@@ -24,6 +27,7 @@ impl Currency for Ether {
     }
 
     /// Returns the wrapped token representation of the currency.
+    #[inline]
     fn wrapped(&self) -> Token {
         match WETH9::default().get(self.chain_id()) {
             Some(weth9) => weth9.clone(),
@@ -34,6 +38,7 @@ impl Currency for Ether {
 
 impl Ether {
     /// Creates a new instance of [`Ether`] with the specified chain ID.
+    #[inline]
     pub fn new(chain_id: u64) -> Self {
         Self {
             chain_id,
@@ -45,6 +50,7 @@ impl Ether {
     }
 
     /// Retrieves or creates an [`Ether`] instance for the specified chain ID.
+    #[inline]
     pub fn on_chain(chain_id: u64) -> Self {
         Self::new(chain_id)
     }

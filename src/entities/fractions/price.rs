@@ -27,6 +27,7 @@ where
     TQuote: Currency,
 {
     /// Constructor for creating a new [`Price`] instance
+    #[inline]
     pub fn new(
         base_currency: TBase,
         quote_currency: TQuote,
@@ -50,6 +51,7 @@ where
     }
 
     /// Create a [`Price`] instance from currency amounts of the base and quote currencies
+    #[inline]
     pub fn from_currency_amounts(
         base_amount: CurrencyAmount<TBase>,
         quote_amount: CurrencyAmount<TQuote>,
@@ -58,12 +60,13 @@ where
         Self::new(
             base_amount.meta.currency,
             quote_amount.meta.currency,
-            res.denominator().clone(),
-            res.numerator().clone(),
+            res.denominator,
+            res.numerator,
         )
     }
 
     /// Flip the price, switching the base and quote currency
+    #[inline]
     pub fn invert(&self) -> Price<TQuote, TBase> {
         Price::new(
             self.quote_currency.clone(),
@@ -75,6 +78,7 @@ where
 
     /// Multiply the price by another price, returning a new price.
     /// The other price must have the same base currency as this price's quote currency.
+    #[inline]
     pub fn multiply<TOtherQuote: Currency>(
         &self,
         other: &Price<TQuote, TOtherQuote>,
@@ -87,12 +91,13 @@ where
         Ok(Price::new(
             self.base_currency.clone(),
             other.quote_currency.clone(),
-            fraction.denominator().clone(),
-            fraction.numerator().clone(),
+            fraction.denominator,
+            fraction.numerator,
         ))
     }
 
     /// Return the amount of quote currency corresponding to a given amount of the base currency
+    #[inline]
     pub fn quote(
         &self,
         currency_amount: CurrencyAmount<TBase>,
@@ -103,18 +108,20 @@ where
         let fraction = self.as_fraction() * currency_amount.as_fraction();
         CurrencyAmount::from_fractional_amount(
             self.quote_currency.clone(),
-            fraction.numerator().clone(),
-            fraction.denominator().clone(),
+            fraction.numerator,
+            fraction.denominator,
         )
     }
 
     /// Get the value scaled by decimals for formatting
+    #[inline]
     pub fn adjusted_for_decimals(&self) -> Fraction {
         self.as_fraction() * self.scalar.clone()
     }
 
     /// Converts the adjusted price to a string with a specified number of significant digits and
     /// rounding strategy
+    #[inline]
     pub fn to_significant(
         &self,
         significant_digits: u8,
@@ -126,6 +133,7 @@ where
 
     /// Converts the adjusted price to a string with a fixed number of decimal places and rounding
     /// strategy
+    #[inline]
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         self.adjusted_for_decimals()
             .to_fixed(decimal_places, rounding)
@@ -153,8 +161,8 @@ mod test {
             price.to_significant(5, Rounding::RoundDown).unwrap(),
             "54321"
         );
-        assert!(price.clone().base_currency.equals(&TOKEN0.clone()));
-        assert!(price.clone().quote_currency.equals(&TOKEN1.clone()));
+        assert!(price.base_currency.equals(&TOKEN0.clone()));
+        assert!(price.quote_currency.equals(&TOKEN1.clone()));
     }
 
     #[test]
@@ -167,8 +175,8 @@ mod test {
             price.to_significant(5, Rounding::RoundDown).unwrap(),
             "54321"
         );
-        assert!(price.clone().base_currency.equals(&TOKEN0.clone()));
-        assert!(price.clone().quote_currency.equals(&TOKEN1.clone()));
+        assert!(price.base_currency.equals(&TOKEN0.clone()));
+        assert!(price.quote_currency.equals(&TOKEN1.clone()));
     }
 
     #[test]

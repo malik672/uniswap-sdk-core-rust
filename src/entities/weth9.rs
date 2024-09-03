@@ -171,6 +171,7 @@ impl WETH9 {
     /// * `chain_id`: The chain ID for which to retrieve the WETH token.
     ///
     /// Returns: `Some(Token)` if the token exists, `None` otherwise.
+    #[inline]
     pub fn get(&self, chain_id: u64) -> Option<&Token> {
         self.tokens.get(&chain_id)
     }
