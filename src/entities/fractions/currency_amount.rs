@@ -23,7 +23,7 @@ impl<T: Currency> CurrencyAmount<T> {
         let numerator = numerator.into();
         let denominator = denominator.into();
         // Ensure the amount does not exceed MAX_UINT256
-        if !numerator.div_floor(&denominator).le(&MAX_UINT256) {
+        if numerator.div_floor(&denominator) > *MAX_UINT256 {
             return Err(Error::MaxUint);
         }
         let exponent = currency.decimals();

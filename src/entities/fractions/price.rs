@@ -58,8 +58,8 @@ where
         Self::new(
             base_amount.meta.currency,
             quote_amount.meta.currency,
-            res.denominator().clone(),
-            res.numerator().clone(),
+            res.denominator,
+            res.numerator,
         )
     }
 
@@ -87,8 +87,8 @@ where
         Ok(Price::new(
             self.base_currency.clone(),
             other.quote_currency.clone(),
-            fraction.denominator().clone(),
-            fraction.numerator().clone(),
+            fraction.denominator,
+            fraction.numerator,
         ))
     }
 
@@ -103,8 +103,8 @@ where
         let fraction = self.as_fraction() * currency_amount.as_fraction();
         CurrencyAmount::from_fractional_amount(
             self.quote_currency.clone(),
-            fraction.numerator().clone(),
-            fraction.denominator().clone(),
+            fraction.numerator,
+            fraction.denominator,
         )
     }
 
@@ -153,8 +153,8 @@ mod test {
             price.to_significant(5, Rounding::RoundDown).unwrap(),
             "54321"
         );
-        assert!(price.clone().base_currency.equals(&TOKEN0.clone()));
-        assert!(price.clone().quote_currency.equals(&TOKEN1.clone()));
+        assert!(price.base_currency.equals(&TOKEN0.clone()));
+        assert!(price.quote_currency.equals(&TOKEN1.clone()));
     }
 
     #[test]
@@ -167,8 +167,8 @@ mod test {
             price.to_significant(5, Rounding::RoundDown).unwrap(),
             "54321"
         );
-        assert!(price.clone().base_currency.equals(&TOKEN0.clone()));
-        assert!(price.clone().quote_currency.equals(&TOKEN1.clone()));
+        assert!(price.base_currency.equals(&TOKEN0.clone()));
+        assert!(price.quote_currency.equals(&TOKEN1.clone()));
     }
 
     #[test]

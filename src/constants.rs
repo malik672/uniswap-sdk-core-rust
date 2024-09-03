@@ -28,5 +28,5 @@ pub enum Rounding {
 lazy_static! {
     /// Represents the maximum amount contained in a uint256
     pub static ref MAX_UINT256: BigInt =
-        BigInt::from_bytes_be(Sign::Plus, &U256::MAX.to_be_bytes::<32>());
+        BigInt::from_biguint(Sign::Plus, BigUint::from_bytes_le(&U256::MAX.as_le_bytes()));
 }
