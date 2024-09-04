@@ -1,29 +1,15 @@
 use crate::prelude::*;
 use alloy_primitives::ChainId;
 
-/// `CurrencyLike` is a generic struct representing a currency with a specific chain ID,
-/// decimals, symbol, name, and additional metadata.
-#[derive(Clone, Debug, Hash, PartialEq, Eq)]
-pub struct CurrencyLike<M> {
-    /// The chain ID on which this currency resides
-    pub chain_id: ChainId,
-
-    /// The decimals for the particular currency
-    pub decimals: u8,
-
-    /// The symbol of the currency, i.e. a short textual non-unique identifier
-    pub symbol: Option<String>,
-
-    /// The name of the currency, i.e. a descriptive textual non-unique identifier
-    pub name: Option<String>,
-
-    /// Metadata associated with the currency
-    pub meta: M,
-}
-
 /// A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other
 /// chain-native currencies
-pub trait BaseCurrency: Clone {
+pub trait BaseCurrency {
+    /// Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
+    fn is_native(&self) -> bool;
+
+    /// Returns whether the currency is a token that is usable in Uniswap without wrapping
+    fn is_token(&self) -> bool;
+
     /// The chain ID on which this currency resides
     fn chain_id(&self) -> ChainId;
 
@@ -37,7 +23,17 @@ pub trait BaseCurrency: Clone {
     fn name(&self) -> Option<&String>;
 }
 
-impl<M: Clone> BaseCurrency for CurrencyLike<M> {
+impl<const IS_NATIVE: bool, M> BaseCurrency for CurrencyLike<IS_NATIVE, M> {
+    #[inline]
+    fn is_native(&self) -> bool {
+        IS_NATIVE
+    }
+
+    #[inline]
+    fn is_token(&self) -> bool {
+        !IS_NATIVE
+    }
+
     #[inline]
     fn chain_id(&self) -> ChainId {
         self.chain_id
@@ -56,15 +52,5 @@ impl<M: Clone> BaseCurrency for CurrencyLike<M> {
     #[inline]
     fn name(&self) -> Option<&String> {
         self.name.as_ref()
-    }
-}
-
-/// Implement [`Deref`] to allow direct access to the metadata of the currency
-impl<M> Deref for CurrencyLike<M> {
-    type Target = M;
-
-    #[inline]
-    fn deref(&self) -> &Self::Target {
-        &self.meta
     }
 }

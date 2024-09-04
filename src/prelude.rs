@@ -2,8 +2,8 @@ pub use crate::{
     chains::*,
     constants::*,
     entities::{
-        base_currency::{BaseCurrency, CurrencyLike},
-        currency::Currency,
+        base_currency::BaseCurrency,
+        currency::{Currency, CurrencyLike},
         ether::Ether,
         fractions::{
             currency_amount::CurrencyAmount,

@@ -2,15 +2,9 @@ use crate::prelude::*;
 
 /// Ether is the main usage of a 'native' currency, i.e., for Ethereum mainnet and all testnets.
 /// Represents the native currency of the blockchain.
-pub type Ether = CurrencyLike<Option<Token>>;
+pub type Ether = CurrencyLike<true, Option<Token>>;
 
 impl Currency for Ether {
-    /// Checks if the currency is native to the blockchain.
-    #[inline]
-    fn is_native(&self) -> bool {
-        true
-    }
-
     /// Retrieves the address associated with the currency.
     #[inline]
     fn address(&self) -> Address {
