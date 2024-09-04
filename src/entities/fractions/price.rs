@@ -5,7 +5,7 @@ use crate::prelude::*;
 pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
 
 /// Struct representing metadata for a [`Price`]
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct PriceMeta<TBase, TQuote>
 where
     TBase: Currency,

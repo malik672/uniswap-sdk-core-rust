@@ -4,7 +4,7 @@ use crate::prelude::*;
 pub type Token = CurrencyLike<TokenMeta>;
 
 /// Represents the metadata for an ERC20 token, including its address and optional fees.
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct TokenMeta {
     /// The address of the token.
     pub address: Address,

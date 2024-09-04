@@ -3,7 +3,7 @@ use alloy_primitives::U256;
 use num_bigint::Sign;
 
 /// Represents the various types of trades.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub enum TradeType {
     /// Indicates that the trade is based on an exact input amount.
     ExactInput,
@@ -13,7 +13,7 @@ pub enum TradeType {
 }
 
 /// Represents three various ways to round
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub enum Rounding {
     /// Rounds down to the nearest whole number.
     RoundDown,

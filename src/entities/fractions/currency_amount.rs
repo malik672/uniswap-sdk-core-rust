@@ -5,7 +5,7 @@ use crate::prelude::*;
 pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
 
 /// Struct representing metadata about a currency
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct CurrencyMeta<T: Currency> {
     /// The currency associated with this metadata
     pub currency: T,

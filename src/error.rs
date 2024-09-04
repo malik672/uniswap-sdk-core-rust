@@ -1,5 +1,5 @@
 /// Represents errors that can occur in the context of currency operations.
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(thiserror::Error))]
 pub enum Error {
     /// Triggers when the compared chain IDs do not match.

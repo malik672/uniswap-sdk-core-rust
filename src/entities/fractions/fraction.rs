@@ -1,5 +1,8 @@
 use crate::prelude::*;
-use core::ops::{Add, Deref, Mul, Sub};
+use core::{
+    hash::{Hash, Hasher},
+    ops::{Add, Deref, Mul, Sub},
+};
 
 /// Struct representing a fraction with metadata
 #[derive(Clone, Debug)]
@@ -202,6 +205,19 @@ where
     fn eq(&self, other: &Self) -> bool {
         self.numerator() * other.denominator() == other.numerator() * self.denominator()
             && self.meta() == other.meta()
+    }
+}
+
+impl<M> Hash for FractionLike<M>
+where
+    M: Clone + PartialEq + Hash,
+{
+    /// Hashes the fraction using the numerator, denominator, and metadata
+    #[inline]
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.numerator().hash(state);
+        self.denominator().hash(state);
+        self.meta().hash(state);
     }
 }
 
