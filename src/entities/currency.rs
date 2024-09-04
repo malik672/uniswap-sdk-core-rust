@@ -12,7 +12,7 @@ pub trait Currency: BaseCurrency {
     fn equals(&self, other: &impl Currency) -> bool;
 
     /// Returns a Token that represents the wrapped equivalent of the native currency
-    fn wrapped(&self) -> Token;
+    fn wrapped(&self) -> &Token;
 }
 
 #[cfg(test)]

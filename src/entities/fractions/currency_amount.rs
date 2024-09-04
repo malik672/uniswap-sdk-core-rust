@@ -141,7 +141,7 @@ impl<T: Currency> CurrencyAmount<T> {
     #[inline]
     pub fn wrapped(&self) -> Result<CurrencyAmount<Token>, Error> {
         CurrencyAmount::from_fractional_amount(
-            self.currency.wrapped(),
+            self.currency.wrapped().clone(),
             self.numerator().clone(),
             self.denominator().clone(),
         )

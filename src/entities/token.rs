@@ -34,16 +34,13 @@ impl Currency for Token {
     /// returns: bool
     #[inline]
     fn equals(&self, other: &impl Currency) -> bool {
-        match other.is_native() {
-            false => self.chain_id == other.chain_id() && self.address() == other.address(),
-            _ => false,
-        }
+        !other.is_native() && self.chain_id == other.chain_id() && self.address == other.address()
     }
 
     #[inline]
     /// Return this token, which does not need to be wrapped
-    fn wrapped(&self) -> Token {
-        self.clone()
+    fn wrapped(&self) -> &Token {
+        self
     }
 }
 
