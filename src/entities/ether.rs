@@ -4,6 +4,8 @@ use crate::prelude::*;
 /// Represents the native currency of the blockchain.
 pub type Ether = CurrencyLike<true, Option<Token>>;
 
+impl NativeCurrency for Ether {}
+
 impl Currency for Ether {
     /// Retrieves the address associated with the currency.
     #[inline]
