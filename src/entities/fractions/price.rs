@@ -5,7 +5,7 @@ use crate::prelude::*;
 pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
 
 /// Struct representing metadata for a [`Price`]
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct PriceMeta<TBase, TQuote>
 where
     TBase: Currency,
@@ -100,7 +100,7 @@ where
     #[inline]
     pub fn quote(
         &self,
-        currency_amount: CurrencyAmount<TBase>,
+        currency_amount: &CurrencyAmount<TBase>,
     ) -> Result<CurrencyAmount<TQuote>, Error> {
         if !currency_amount.currency.equals(&self.base_currency) {
             return Err(Error::NotEqual);
@@ -184,7 +184,7 @@ mod test {
         let price = Price::new(TOKEN0.clone(), TOKEN1.clone(), 1, 5);
         assert_eq!(
             price
-                .quote(CurrencyAmount::from_raw_amount(TOKEN0.clone(), 10).unwrap())
+                .quote(&CurrencyAmount::from_raw_amount(TOKEN0.clone(), 10).unwrap())
                 .unwrap(),
             CurrencyAmount::from_raw_amount(TOKEN1.clone(), 50).unwrap()
         );

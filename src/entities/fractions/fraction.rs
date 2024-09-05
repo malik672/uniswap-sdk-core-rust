@@ -1,5 +1,8 @@
 use crate::prelude::*;
-use core::ops::{Add, Deref, Mul, Sub};
+use core::{
+    hash::{Hash, Hasher},
+    ops::{Add, Deref, Mul, Sub},
+};
 
 /// Struct representing a fraction with metadata
 #[derive(Clone, Debug)]
@@ -14,7 +17,7 @@ impl<M: Default> Default for FractionLike<M> {
     #[inline]
     fn default() -> Self {
         Self {
-            numerator: BigInt::from(0),
+            numerator: BigInt::ZERO,
             denominator: BigInt::from(1),
             meta: M::default(),
         }
@@ -193,34 +196,35 @@ impl<M: Clone> FractionBase<M> for FractionLike<M> {
     }
 }
 
-impl<M> PartialEq for FractionLike<M>
-where
-    M: Clone + PartialEq,
-{
+impl<M: PartialEq> PartialEq for FractionLike<M> {
     /// Checks if the current fraction is equal to another fraction
     #[inline]
     fn eq(&self, other: &Self) -> bool {
-        self.numerator() * other.denominator() == other.numerator() * self.denominator()
-            && self.meta() == other.meta()
+        &self.numerator * &other.denominator == &other.numerator * &self.denominator
+            && self.meta == other.meta
     }
 }
 
-impl<M: Clone + PartialEq> Eq for FractionLike<M> {}
+impl<M: PartialEq> Eq for FractionLike<M> {}
 
-impl<M> Ord for FractionLike<M>
-where
-    M: Clone + PartialEq,
-{
+impl<M: Hash> Hash for FractionLike<M> {
+    /// Hashes the fraction using the numerator, denominator, and metadata
+    #[inline]
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.numerator.hash(state);
+        self.denominator.hash(state);
+        self.meta.hash(state);
+    }
+}
+
+impl<M: PartialEq> Ord for FractionLike<M> {
     #[inline]
     fn cmp(&self, other: &Self) -> Ordering {
-        (self.numerator() * other.denominator()).cmp(&(other.numerator() * self.denominator()))
+        (&self.numerator * &other.denominator).cmp(&(&other.numerator * &self.denominator))
     }
 }
 
-impl<M> PartialOrd<Self> for FractionLike<M>
-where
-    M: Clone + PartialEq,
-{
+impl<M: PartialEq> PartialOrd<Self> for FractionLike<M> {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))

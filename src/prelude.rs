@@ -2,8 +2,8 @@ pub use crate::{
     chains::*,
     constants::*,
     entities::{
-        base_currency::{BaseCurrency, CurrencyLike},
-        currency::Currency,
+        base_currency::BaseCurrency,
+        currency::{Currency, CurrencyLike},
         ether::Ether,
         fractions::{
             currency_amount::CurrencyAmount,
@@ -11,6 +11,7 @@ pub use crate::{
             percent::Percent,
             price::Price,
         },
+        native_currency::NativeCurrency,
         token::Token,
         weth9::WETH9,
     },

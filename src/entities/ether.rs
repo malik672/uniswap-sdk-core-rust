@@ -2,15 +2,11 @@ use crate::prelude::*;
 
 /// Ether is the main usage of a 'native' currency, i.e., for Ethereum mainnet and all testnets.
 /// Represents the native currency of the blockchain.
-pub type Ether = CurrencyLike<()>;
+pub type Ether = CurrencyLike<true, Option<Token>>;
+
+impl NativeCurrency for Ether {}
 
 impl Currency for Ether {
-    /// Checks if the currency is native to the blockchain.
-    #[inline]
-    fn is_native(&self) -> bool {
-        true
-    }
-
     /// Retrieves the address associated with the currency.
     #[inline]
     fn address(&self) -> Address {
@@ -20,17 +16,14 @@ impl Currency for Ether {
     /// Checks if the currency is equal to another currency.
     #[inline]
     fn equals(&self, other: &impl Currency) -> bool {
-        match other.is_native() {
-            true => self.chain_id() == other.chain_id(),
-            _ => false,
-        }
+        other.is_native() && self.chain_id() == other.chain_id()
     }
 
     /// Returns the wrapped token representation of the currency.
     #[inline]
-    fn wrapped(&self) -> Token {
-        match WETH9::default().get(self.chain_id()) {
-            Some(weth9) => weth9.clone(),
+    fn wrapped(&self) -> &Token {
+        match &self.meta {
+            Some(weth) => weth,
             None => panic!("WRAPPED"),
         }
     }
@@ -45,7 +38,7 @@ impl Ether {
             decimals: 18,
             symbol: Some("ETH".to_string()),
             name: Some("Ether".to_string()),
-            meta: (),
+            meta: WETH9::on_chain(chain_id),
         }
     }
 

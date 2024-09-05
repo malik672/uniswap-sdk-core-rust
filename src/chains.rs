@@ -1,7 +1,7 @@
 /// Represents the unique identifier for different blockchain networks supported by the Uniswap SDK.
 ///
 /// Each variant corresponds to a specific blockchain network, identified by its unique chain ID.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub enum ChainId {
     /// The Ethereum Mainnet.
     MAINNET = 1,
@@ -80,7 +80,7 @@ pub const SUPPORTED_CHAINS: [ChainId; 21] = [
 ];
 
 /// Represents the names of native currencies supported by the Uniswap SDK.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub enum NativeCurrencyName {
     /// Ethereum's native currency.
     ETHER,

@@ -5,7 +5,7 @@ type ChainMap = FxHashMap<u64, ChainAddresses>;
 type ChainAddress = FxHashMap<u64, Address>;
 
 /// Represents the addresses of various core contracts of Uniswap on a network.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct ChainAddresses {
     v3_core_factory_address: Address,
     multicall_address: Address,
@@ -41,7 +41,6 @@ pub fn construct_same_address_map(address: Address, additional_networks: &[Chain
 
 lazy_static! {
     /// The UNI_ADDRESSES struct holds a map of addresses for the UNI token on various networks.
-    #[derive(Debug, Clone, Copy)]
     pub static ref UNI_ADDRESSES: AddressMap = construct_same_address_map(
         address!("1f9840a85d5aF5bf1D1762F925BDADdC4201F984"),
         &[

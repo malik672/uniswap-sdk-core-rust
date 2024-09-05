@@ -12,13 +12,13 @@ use crate::prelude::*;
 #[inline]
 pub fn compute_price_impact<TBase: Currency, TQuote: Currency>(
     mid_price: Price<TBase, TQuote>,
-    input_amount: CurrencyAmount<TBase>,
-    output_amount: CurrencyAmount<TQuote>,
+    input_amount: &CurrencyAmount<TBase>,
+    output_amount: &CurrencyAmount<TQuote>,
 ) -> Result<Percent, Error> {
     let quoted_output_amount = mid_price.quote(input_amount)?;
     // calculate price impact := (exactQuote - outputAmount) / exactQuote
     let price_impact = quoted_output_amount
-        .subtract(&output_amount)?
+        .subtract(output_amount)?
         .divide(&quoted_output_amount)?;
     Ok(Percent::new(
         price_impact.numerator,
@@ -43,8 +43,8 @@ mod tests {
         assert!(
             compute_price_impact(
                 Price::new(Ether::on_chain(1), token.clone(), 10, 100),
-                CurrencyAmount::from_raw_amount(Ether::on_chain(1), 10).unwrap(),
-                CurrencyAmount::from_raw_amount(token.clone(), 100).unwrap()
+                &CurrencyAmount::from_raw_amount(Ether::on_chain(1), 10).unwrap(),
+                &CurrencyAmount::from_raw_amount(token.clone(), 100).unwrap()
             )
             .unwrap()
                 == Percent::default(),
@@ -54,8 +54,8 @@ mod tests {
         assert!(
             compute_price_impact(
                 Price::new(token.clone(), token_1.clone(), 10, 100),
-                CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
-                CurrencyAmount::from_raw_amount(token_1.clone(), 50).unwrap()
+                &CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
+                &CurrencyAmount::from_raw_amount(token_1.clone(), 50).unwrap()
             )
             .unwrap()
                 == Percent::new(5000, 10000),
@@ -65,8 +65,8 @@ mod tests {
         assert_eq!(
             compute_price_impact(
                 Price::new(token.clone(), token_1.clone(), 10, 100),
-                CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
-                CurrencyAmount::from_raw_amount(token_1.clone(), 200).unwrap()
+                &CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
+                &CurrencyAmount::from_raw_amount(token_1.clone(), 200).unwrap()
             )
             .unwrap(),
             Percent::new(-10000, 10000)

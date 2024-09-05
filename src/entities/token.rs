@@ -1,10 +1,10 @@
 use crate::prelude::*;
 
 /// Represents an ERC20 token with a unique address and some metadata.
-pub type Token = CurrencyLike<TokenMeta>;
+pub type Token = CurrencyLike<false, TokenMeta>;
 
 /// Represents the metadata for an ERC20 token, including its address and optional fees.
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct TokenMeta {
     /// The address of the token.
     pub address: Address,
@@ -15,11 +15,6 @@ pub struct TokenMeta {
 }
 
 impl Currency for Token {
-    #[inline]
-    fn is_native(&self) -> bool {
-        false
-    }
-
     #[inline]
     fn address(&self) -> Address {
         self.address
@@ -34,16 +29,13 @@ impl Currency for Token {
     /// returns: bool
     #[inline]
     fn equals(&self, other: &impl Currency) -> bool {
-        match other.is_native() {
-            false => self.chain_id == other.chain_id() && self.address() == other.address(),
-            _ => false,
-        }
+        other.is_token() && self.chain_id == other.chain_id() && self.address == other.address()
     }
 
     #[inline]
     /// Return this token, which does not need to be wrapped
-    fn wrapped(&self) -> Token {
-        self.clone()
+    fn wrapped(&self) -> &Token {
+        self
     }
 }
 
