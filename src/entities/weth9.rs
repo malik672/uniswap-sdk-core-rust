@@ -1,4 +1,5 @@
 use crate::{prelude::*, token};
+use alloc::vec;
 
 /// Represents the WETH9 contract and provides information about WETH tokens on different Ethereum
 /// chains.
@@ -28,20 +29,21 @@ impl WETH9 {
     /// A new `WETH9` instance with predefined WETH tokens.
     #[inline]
     pub fn new() -> Self {
-        let mut tokens = FxHashMap::default();
-        tokens.insert(1, Self::on_chain(1).unwrap());
-        tokens.insert(3, Self::on_chain(3).unwrap());
-        tokens.insert(4, Self::on_chain(4).unwrap());
-        tokens.insert(5, Self::on_chain(5).unwrap());
-        tokens.insert(42, Self::on_chain(42).unwrap());
-        tokens.insert(10, Self::on_chain(10).unwrap());
-        tokens.insert(69, Self::on_chain(69).unwrap());
-        tokens.insert(42161, Self::on_chain(42161).unwrap());
-        tokens.insert(421611, Self::on_chain(421611).unwrap());
-        tokens.insert(8453, Self::on_chain(8453).unwrap());
-        tokens.insert(56, Self::on_chain(56).unwrap());
-        tokens.insert(137, Self::on_chain(137).unwrap());
-        tokens.insert(43114, Self::on_chain(43114).unwrap());
+        let tokens = FxHashMap::from_iter(vec![
+            (1, Self::on_chain(1).unwrap()),
+            (3, Self::on_chain(3).unwrap()),
+            (4, Self::on_chain(4).unwrap()),
+            (5, Self::on_chain(5).unwrap()),
+            (42, Self::on_chain(42).unwrap()),
+            (10, Self::on_chain(10).unwrap()),
+            (69, Self::on_chain(69).unwrap()),
+            (42161, Self::on_chain(42161).unwrap()),
+            (421611, Self::on_chain(421611).unwrap()),
+            (8453, Self::on_chain(8453).unwrap()),
+            (56, Self::on_chain(56).unwrap()),
+            (137, Self::on_chain(137).unwrap()),
+            (43114, Self::on_chain(43114).unwrap()),
+        ]);
         Self { tokens }
     }
 
