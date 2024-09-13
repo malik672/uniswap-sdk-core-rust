@@ -1,3 +1,5 @@
+#![allow(non_camel_case_types)]
+
 /// Represents the unique identifier for different blockchain networks supported by the Uniswap SDK.
 ///
 /// Each variant corresponds to a specific blockchain network, identified by its unique chain ID.
@@ -12,23 +14,23 @@ pub enum ChainId {
     /// The Optimism network.
     OPTIMISM = 10,
     /// The Optimism Goerli Testnet.
-    OPTIMISMGOERLI = 420,
+    OPTIMISM_GOERLI = 420,
     /// The Optimism Sepolia Testnet.
-    OPTIMISMSEPOLIA = 11155420,
+    OPTIMISM_SEPOLIA = 11155420,
     /// The Arbitrum One network.
-    ARBITRUMONE = 42161,
+    ARBITRUM_ONE = 42161,
     /// The Arbitrum Goerli Testnet.
-    ARBITRUMGOERLI = 421613,
+    ARBITRUM_GOERLI = 421613,
     /// The Arbitrum Sepolia Testnet.
-    ARBITRUMSEPOLIA = 421614,
+    ARBITRUM_SEPOLIA = 421614,
     /// The Polygon network.
     POLYGON = 137,
     /// The Polygon Mumbai Testnet.
-    POLYGONMUMBAI = 80001,
+    POLYGON_MUMBAI = 80001,
     /// The Celo network.
     CELO = 42220,
     /// The Celo Alfajores Testnet.
-    CELOALFAJORES = 44787,
+    CELO_ALFAJORES = 44787,
     /// The Gnosis network.
     GNOSIS = 100,
     /// The Moonbeam network.
@@ -38,13 +40,13 @@ pub enum ChainId {
     /// The Avalanche network.
     AVALANCHE = 43114,
     /// The Base network.
-    BASEGOERLI = 84531,
+    BASE_GOERLI = 84531,
     /// The Base Goerli Testnet.
     BASE = 8453,
     /// The Zora network.
     ZORA = 7777777,
     /// The Zora Sepolia Testnet.
-    ZORASEPOLIA = 999999999,
+    ZORA_SEPOLIA = 999999999,
     /// The Rootstock network.
     ROOTSTOCK = 30,
     /// The Blast network.
@@ -58,23 +60,23 @@ pub enum ChainId {
 pub const SUPPORTED_CHAINS: [ChainId; 21] = [
     ChainId::MAINNET,
     ChainId::OPTIMISM,
-    ChainId::OPTIMISMGOERLI,
-    ChainId::OPTIMISMSEPOLIA,
-    ChainId::ARBITRUMONE,
-    ChainId::ARBITRUMGOERLI,
-    ChainId::ARBITRUMSEPOLIA,
+    ChainId::OPTIMISM_GOERLI,
+    ChainId::OPTIMISM_SEPOLIA,
+    ChainId::ARBITRUM_ONE,
+    ChainId::ARBITRUM_GOERLI,
+    ChainId::ARBITRUM_SEPOLIA,
     ChainId::POLYGON,
-    ChainId::POLYGONMUMBAI,
+    ChainId::POLYGON_MUMBAI,
     ChainId::GOERLI,
     ChainId::SEPOLIA,
-    ChainId::CELOALFAJORES,
+    ChainId::CELO_ALFAJORES,
     ChainId::CELO,
     ChainId::BNB,
     ChainId::AVALANCHE,
     ChainId::BASE,
-    ChainId::BASEGOERLI,
+    ChainId::BASE_GOERLI,
     ChainId::ZORA,
-    ChainId::ZORASEPOLIA,
+    ChainId::ZORA_SEPOLIA,
     ChainId::ROOTSTOCK,
     ChainId::BLAST,
 ];

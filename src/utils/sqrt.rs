@@ -8,6 +8,7 @@ use num_traits::Signed;
 /// * `value`: the value for which to compute the square root, rounded down
 ///
 /// returns: BigInt
+#[inline]
 pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
     if value.is_negative() {
         Err(Error::Invalid)

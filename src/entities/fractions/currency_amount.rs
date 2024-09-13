@@ -33,7 +33,7 @@ impl<T: Currency> CurrencyAmount<T> {
             denominator,
             CurrencyMeta {
                 currency,
-                decimal_scale: BigUint::from(10u64).pow(exponent as u32),
+                decimal_scale: BigUint::from(10_u64).pow(exponent as u32),
             },
         ))
     }

@@ -167,9 +167,7 @@ impl<M: Clone> FractionBase<M> for FractionLike<M> {
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self {
         let denominator = denominator.into();
         // Ensure the denominator is not zero
-        if denominator.is_zero() {
-            panic!("denominator is zero");
-        }
+        assert!(!denominator.is_zero(), "denominator is zero");
         Self {
             numerator: numerator.into(),
             denominator,

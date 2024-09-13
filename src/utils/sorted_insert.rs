@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 /// Given an array of items sorted by `comparator`, insert an item into its sort index and constrain
 /// the size to `maxSize` by removing the last item
+#[inline]
 pub fn sorted_insert<T: Clone>(
     items: &mut Vec<T>,
     add: T,

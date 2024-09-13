@@ -71,8 +71,8 @@ where
         Price::new(
             self.quote_currency.clone(),
             self.base_currency.clone(),
-            self.numerator().clone(),
-            self.denominator().clone(),
+            self.numerator.clone(),
+            self.denominator.clone(),
         )
     }
 
@@ -116,7 +116,7 @@ where
     /// Get the value scaled by decimals for formatting
     #[inline]
     pub fn adjusted_for_decimals(&self) -> Fraction {
-        self.as_fraction() * self.scalar.clone()
+        self.as_fraction() * &self.scalar
     }
 
     /// Converts the adjusted price to a string with a specified number of significant digits and
