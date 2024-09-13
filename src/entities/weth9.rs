@@ -12,6 +12,7 @@ pub struct WETH9 {
 /// Default implementation for [`WETH9`], creating an instance with predefined WETH tokens on
 /// various chains.
 impl Default for WETH9 {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
