@@ -69,9 +69,7 @@ impl Token {
         buy_fee_bps: Option<BigUint>,
         sell_fee_bps: Option<BigUint>,
     ) -> Self {
-        if chain_id == 0 {
-            panic!("chain id can't be zero");
-        }
+        assert!(chain_id != 0, "chain id can't be zero");
         Self {
             chain_id,
             decimals,

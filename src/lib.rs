@@ -9,16 +9,11 @@
     unreachable_pub,
     clippy::missing_const_for_fn,
     clippy::missing_inline_in_public_items,
-    // clippy::needless_pass_by_value,
+    clippy::needless_pass_by_value,
     clippy::redundant_clone,
-    // clippy::explicit_iter_loop,
-    // clippy::manual_assert,
+    clippy::manual_assert,
     // clippy::must_use_candidate,
-    // clippy::semicolon_if_nothing_returned,
-    // clippy::suspicious_operation_groupings,
-    // clippy::unseparated_literal_suffix,
-    // clippy::unused_self,
-    // clippy::use_debug,
+    clippy::unseparated_literal_suffix,
     rustdoc::all
 )]
 #![cfg_attr(not(test), warn(unused_crate_dependencies))]
