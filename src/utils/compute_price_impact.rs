@@ -11,7 +11,7 @@ use crate::prelude::*;
 /// returns: Percent
 #[inline]
 pub fn compute_price_impact<TBase: Currency, TQuote: Currency>(
-    mid_price: Price<TBase, TQuote>,
+    mid_price: &Price<TBase, TQuote>,
     input_amount: &CurrencyAmount<TBase>,
     output_amount: &CurrencyAmount<TQuote>,
 ) -> Result<Percent, Error> {
@@ -42,7 +42,7 @@ mod tests {
         //is correct for zero
         assert!(
             compute_price_impact(
-                Price::new(Ether::on_chain(1), token.clone(), 10, 100),
+                &Price::new(Ether::on_chain(1), token.clone(), 10, 100),
                 &CurrencyAmount::from_raw_amount(Ether::on_chain(1), 10).unwrap(),
                 &CurrencyAmount::from_raw_amount(token.clone(), 100).unwrap()
             )
@@ -53,7 +53,7 @@ mod tests {
         //is correct for half output
         assert!(
             compute_price_impact(
-                Price::new(token.clone(), token_1.clone(), 10, 100),
+                &Price::new(token.clone(), token_1.clone(), 10, 100),
                 &CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
                 &CurrencyAmount::from_raw_amount(token_1.clone(), 50).unwrap()
             )
@@ -64,9 +64,9 @@ mod tests {
         //is negative for more output
         assert_eq!(
             compute_price_impact(
-                Price::new(token.clone(), token_1.clone(), 10, 100),
-                &CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
-                &CurrencyAmount::from_raw_amount(token_1.clone(), 200).unwrap()
+                &Price::new(token.clone(), token_1.clone(), 10, 100),
+                &CurrencyAmount::from_raw_amount(token, 10).unwrap(),
+                &CurrencyAmount::from_raw_amount(token_1, 200).unwrap()
             )
             .unwrap(),
             Percent::new(-10000, 10000)

@@ -32,6 +32,7 @@ impl Currency for Ether {
 impl Ether {
     /// Creates a new instance of [`Ether`] with the specified chain ID.
     #[inline]
+    #[must_use]
     pub fn new(chain_id: u64) -> Self {
         Self {
             chain_id,
@@ -44,6 +45,7 @@ impl Ether {
 
     /// Retrieves or creates an [`Ether`] instance for the specified chain ID.
     #[inline]
+    #[must_use]
     pub fn on_chain(chain_id: u64) -> Self {
         Self::new(chain_id)
     }
