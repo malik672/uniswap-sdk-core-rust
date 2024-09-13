@@ -2,6 +2,7 @@
 //!
 //! The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap
 //! decentralized exchange.
+
 #![cfg_attr(not(any(feature = "std", test)), no_std)]
 #![warn(
     missing_copy_implementations,
@@ -12,7 +13,7 @@
     clippy::needless_pass_by_value,
     clippy::redundant_clone,
     clippy::manual_assert,
-    // clippy::must_use_candidate,
+    clippy::must_use_candidate,
     clippy::unseparated_literal_suffix,
     rustdoc::all
 )]

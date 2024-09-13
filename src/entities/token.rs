@@ -60,6 +60,7 @@ impl Token {
     ///
     /// Panics if `chain_id` is 0.
     #[inline]
+    #[must_use]
     pub const fn new(
         chain_id: u64,
         address: Address,

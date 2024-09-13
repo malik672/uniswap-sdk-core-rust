@@ -35,6 +35,7 @@ impl Percent {
     /// Converts the [`Percent`] to a string with a fixed number of decimal places and rounding
     /// strategy
     #[inline]
+    #[must_use]
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
         // Convert the Percent to a simple Fraction, multiply by 100, and then call to_fixed on the
         // result

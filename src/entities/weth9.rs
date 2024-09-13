@@ -29,6 +29,7 @@ impl WETH9 {
     ///
     /// A new `WETH9` instance with predefined WETH tokens.
     #[inline]
+    #[must_use]
     pub fn new() -> Self {
         let tokens = FxHashMap::from_iter(vec![
             (1, Self::on_chain(1).unwrap()),
@@ -56,6 +57,7 @@ impl WETH9 {
     ///
     /// Returns: `Some(Token)` if the token exists, `None` otherwise.
     #[inline]
+    #[must_use]
     pub fn on_chain(chain_id: u64) -> Option<Token> {
         match chain_id {
             1 => Some(token!(
@@ -161,6 +163,7 @@ impl WETH9 {
     ///
     /// Returns: `Some(Token)` if the token exists, `None` otherwise.
     #[inline]
+    #[must_use]
     pub fn get(&self, chain_id: u64) -> Option<&Token> {
         self.tokens.get(&chain_id)
     }
