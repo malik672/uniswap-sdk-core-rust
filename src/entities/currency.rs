@@ -3,7 +3,10 @@ use crate::prelude::*;
 /// Trait for representing a currency in the Uniswap Core SDK.
 pub trait Currency: BaseCurrency + Clone {
     /// Returns the address of the currency.
-    fn address(&self) -> Address;
+    #[inline]
+    fn address(&self) -> Address {
+        self.wrapped().address
+    }
 
     /// Returns whether this currency is functionally equivalent to the other currency
     fn equals(&self, other: &impl Currency) -> bool;

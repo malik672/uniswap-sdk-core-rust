@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 /// Represents the native currency of the chain on which it resides
-pub trait NativeCurrency: Currency {
+pub trait NativeCurrency: BaseCurrency {
     #[inline]
     fn is_native(&self) -> bool {
         true
@@ -12,3 +12,5 @@ pub trait NativeCurrency: Currency {
         false
     }
 }
+
+impl<M> NativeCurrency for CurrencyLike<true, M> {}

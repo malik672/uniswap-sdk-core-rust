@@ -4,22 +4,12 @@ use crate::prelude::*;
 /// Represents the native currency of the blockchain.
 pub type Ether = CurrencyLike<true, Option<Token>>;
 
-impl NativeCurrency for Ether {}
-
 impl Currency for Ether {
-    /// Retrieves the address associated with the currency.
-    #[inline]
-    fn address(&self) -> Address {
-        self.wrapped().address()
-    }
-
-    /// Checks if the currency is equal to another currency.
     #[inline]
     fn equals(&self, other: &impl Currency) -> bool {
         other.is_native() && self.chain_id() == other.chain_id()
     }
 
-    /// Returns the wrapped token representation of the currency.
     #[inline]
     fn wrapped(&self) -> &Token {
         match &self.meta {

@@ -16,24 +16,11 @@ pub struct TokenMeta {
 
 impl Currency for Token {
     #[inline]
-    fn address(&self) -> Address {
-        self.address
-    }
-
-    /// Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
-    ///
-    /// # Arguments
-    ///
-    /// * `other`: another token to compare
-    ///
-    /// returns: bool
-    #[inline]
     fn equals(&self, other: &impl Currency) -> bool {
         other.is_token() && self.chain_id == other.chain_id() && self.address == other.address()
     }
 
     #[inline]
-    /// Return this token, which does not need to be wrapped
     fn wrapped(&self) -> &Token {
         self
     }
