@@ -23,34 +23,42 @@ pub trait BaseCurrency {
     fn name(&self) -> Option<&String>;
 }
 
-impl<const IS_NATIVE: bool, M> BaseCurrency for CurrencyLike<IS_NATIVE, M> {
-    #[inline]
-    fn is_native(&self) -> bool {
-        IS_NATIVE
-    }
+macro_rules! impl_base_currency {
+    ($($currency:ty),*) => {
+        $(
+            impl<const IS_NATIVE: bool, M> BaseCurrency for $currency {
+                #[inline]
+                fn is_native(&self) -> bool {
+                    IS_NATIVE
+                }
 
-    #[inline]
-    fn is_token(&self) -> bool {
-        !IS_NATIVE
-    }
+                #[inline]
+                fn is_token(&self) -> bool {
+                    !IS_NATIVE
+                }
 
-    #[inline]
-    fn chain_id(&self) -> ChainId {
-        self.chain_id
-    }
+                #[inline]
+                fn chain_id(&self) -> ChainId {
+                    self.chain_id
+                }
 
-    #[inline]
-    fn decimals(&self) -> u8 {
-        self.decimals
-    }
+                #[inline]
+                fn decimals(&self) -> u8 {
+                    self.decimals
+                }
 
-    #[inline]
-    fn symbol(&self) -> Option<&String> {
-        self.symbol.as_ref()
-    }
+                #[inline]
+                fn symbol(&self) -> Option<&String> {
+                    self.symbol.as_ref()
+                }
 
-    #[inline]
-    fn name(&self) -> Option<&String> {
-        self.name.as_ref()
-    }
+                #[inline]
+                fn name(&self) -> Option<&String> {
+                    self.name.as_ref()
+                }
+            }
+        )*
+    };
 }
+
+impl_base_currency!(CurrencyLike<IS_NATIVE, M>, &CurrencyLike<IS_NATIVE, M>);
