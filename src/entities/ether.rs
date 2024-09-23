@@ -4,20 +4,28 @@ use crate::prelude::*;
 /// Represents the native currency of the blockchain.
 pub type Ether = CurrencyLike<true, Option<Token>>;
 
-impl Currency for Ether {
-    #[inline]
-    fn equals(&self, other: &impl Currency) -> bool {
-        other.is_native() && self.chain_id() == other.chain_id()
-    }
+macro_rules! impl_currency {
+    ($($ether:ty),*) => {
+        $(
+            impl Currency for $ether {
+                #[inline]
+                fn equals(&self, other: &impl Currency) -> bool {
+                    other.is_native() && self.chain_id() == other.chain_id()
+                }
 
-    #[inline]
-    fn wrapped(&self) -> &Token {
-        match &self.meta {
-            Some(weth) => weth,
-            None => panic!("WRAPPED"),
-        }
-    }
+                #[inline]
+                fn wrapped(&self) -> &Token {
+                    match &self.meta {
+                        Some(weth) => weth,
+                        None => panic!("WRAPPED"),
+                    }
+                }
+            }
+        )*
+    };
 }
+
+impl_currency!(Ether, &Ether);
 
 impl Ether {
     /// Creates a new instance of [`Ether`] with the specified chain ID.

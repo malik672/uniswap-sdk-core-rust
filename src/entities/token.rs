@@ -14,17 +14,25 @@ pub struct TokenMeta {
     pub sell_fee_bps: Option<BigUint>,
 }
 
-impl Currency for Token {
-    #[inline]
-    fn equals(&self, other: &impl Currency) -> bool {
-        other.is_token() && self.chain_id == other.chain_id() && self.address == other.address()
-    }
+macro_rules! impl_currency {
+    ($($token:ty),*) => {
+        $(
+            impl Currency for $token {
+                #[inline]
+                fn equals(&self, other: &impl Currency) -> bool {
+                    other.is_token() && self.chain_id == other.chain_id() && self.address == other.address()
+                }
 
-    #[inline]
-    fn wrapped(&self) -> &Token {
-        self
-    }
+                #[inline]
+                fn wrapped(&self) -> &Token {
+                    self
+                }
+            }
+        )*
+    };
 }
+
+impl_currency!(Token, &Token);
 
 impl Token {
     /// Creates a new [`Token`] with the given parameters.

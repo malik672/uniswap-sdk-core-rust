@@ -139,9 +139,9 @@ impl<T: Currency> CurrencyAmount<T> {
 
     /// Wrap the currency amount if the currency is not native
     #[inline]
-    pub fn wrapped(&self) -> Result<CurrencyAmount<Token>, Error> {
+    pub fn wrapped(&self) -> Result<CurrencyAmount<&Token>, Error> {
         CurrencyAmount::from_fractional_amount(
-            self.currency.wrapped().clone(),
+            self.currency.wrapped(),
             self.numerator().clone(),
             self.denominator().clone(),
         )
