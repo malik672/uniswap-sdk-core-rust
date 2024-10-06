@@ -39,12 +39,19 @@ impl WETH9 {
             (42, Self::on_chain(42).unwrap()),
             (10, Self::on_chain(10).unwrap()),
             (69, Self::on_chain(69).unwrap()),
+            (11155420, Self::on_chain(11155420).unwrap()),
             (42161, Self::on_chain(42161).unwrap()),
             (421611, Self::on_chain(421611).unwrap()),
+            (421614, Self::on_chain(421614).unwrap()),
             (8453, Self::on_chain(8453).unwrap()),
             (56, Self::on_chain(56).unwrap()),
             (137, Self::on_chain(137).unwrap()),
             (43114, Self::on_chain(43114).unwrap()),
+            (7777777, Self::on_chain(7777777).unwrap()),
+            (81457, Self::on_chain(81457).unwrap()),
+            (324, Self::on_chain(324).unwrap()),
+            (480, Self::on_chain(480).unwrap()),
+            (1301, Self::on_chain(1301).unwrap()),
         ]);
         Self { tokens }
     }
@@ -109,6 +116,13 @@ impl WETH9 {
                 "WETH",
                 "Wrapped Ether"
             )),
+            11155420 => Some(token!(
+                11155420,
+                "4200000000000000000000000000000000000006",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
             42161 => Some(token!(
                 42161,
                 "82aF49447D8a07e3bd95BD0d56f35241523fBab1",
@@ -119,6 +133,13 @@ impl WETH9 {
             421611 => Some(token!(
                 421611,
                 "B47e6A5f8b33b3F17603C83a0535A9dcD7E32681",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            421614 => Some(token!(
+                421614,
+                "980B62Da83eFf3D4576C647993b0c1D7faf17c73",
                 18,
                 "WETH",
                 "Wrapped Ether"
@@ -150,6 +171,41 @@ impl WETH9 {
                 18,
                 "WAVAX",
                 "Wrapped AVAX"
+            )),
+            7777777 => Some(token!(
+                7777777,
+                "4200000000000000000000000000000000000006",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            81457 => Some(token!(
+                81457,
+                "4300000000000000000000000000000000000004",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            324 => Some(token!(
+                324,
+                "5AEa5775959fBC2557Cc8789bC1bf90A239D9a91",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            480 => Some(token!(
+                480,
+                "4200000000000000000000000000000000000006",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            1301 => Some(token!(
+                1301,
+                "4200000000000000000000000000000000000006",
+                18,
+                "WETH",
+                "Wrapped Ether"
             )),
             _ => None,
         }
