@@ -3,7 +3,21 @@ use alloy_primitives::ChainId;
 
 /// A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other
 /// chain-native currencies
-pub trait BaseCurrency {
+pub trait BaseCurrency: BaseCurrencyCore + Clone {
+    /// Returns the address of the currency.
+    #[inline]
+    fn address(&self) -> Address {
+        self.wrapped().address
+    }
+
+    /// Returns whether this currency is functionally equivalent to the other currency
+    fn equals(&self, other: &impl BaseCurrency) -> bool;
+
+    /// Returns a Token that represents the wrapped equivalent of the native currency
+    fn wrapped(&self) -> &Token;
+}
+
+pub trait BaseCurrencyCore {
     /// Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
     fn is_native(&self) -> bool;
 
@@ -23,10 +37,10 @@ pub trait BaseCurrency {
     fn name(&self) -> Option<&String>;
 }
 
-macro_rules! impl_base_currency {
+macro_rules! impl_base_currency_core {
     ($($currency:ty),*) => {
         $(
-            impl<const IS_NATIVE: bool, M> BaseCurrency for $currency {
+            impl<const IS_NATIVE: bool, M> BaseCurrencyCore for $currency {
                 #[inline]
                 fn is_native(&self) -> bool {
                     IS_NATIVE
@@ -61,4 +75,4 @@ macro_rules! impl_base_currency {
     };
 }
 
-impl_base_currency!(CurrencyLike<IS_NATIVE, M>, &CurrencyLike<IS_NATIVE, M>);
+impl_base_currency_core!(CurrencyLike<IS_NATIVE, M>, &CurrencyLike<IS_NATIVE, M>);

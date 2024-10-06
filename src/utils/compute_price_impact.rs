@@ -10,7 +10,7 @@ use crate::prelude::*;
 ///
 /// returns: Percent
 #[inline]
-pub fn compute_price_impact<TBase: Currency, TQuote: Currency>(
+pub fn compute_price_impact<TBase: BaseCurrency, TQuote: BaseCurrency>(
     mid_price: &Price<TBase, TQuote>,
     input_amount: &CurrencyAmount<TBase>,
     output_amount: &CurrencyAmount<TQuote>,

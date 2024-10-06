@@ -4,12 +4,12 @@ use crate::prelude::*;
 /// Represents the native currency of the blockchain.
 pub type Ether = CurrencyLike<true, Option<Token>>;
 
-macro_rules! impl_currency {
+macro_rules! impl_base_currency {
     ($($ether:ty),*) => {
         $(
-            impl Currency for $ether {
+            impl BaseCurrency for $ether {
                 #[inline]
-                fn equals(&self, other: &impl Currency) -> bool {
+                fn equals(&self, other: &impl BaseCurrency) -> bool {
                     other.is_native() && self.chain_id() == other.chain_id()
                 }
 
@@ -25,7 +25,7 @@ macro_rules! impl_currency {
     };
 }
 
-impl_currency!(Ether, &Ether);
+impl_base_currency!(Ether, &Ether);
 
 impl Ether {
     /// Creates a new instance of [`Ether`] with the specified chain ID.

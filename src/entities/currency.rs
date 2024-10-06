@@ -1,18 +1,10 @@
 use crate::prelude::*;
+use alloy_primitives::ChainId;
 
-/// Trait for representing a currency in the Uniswap Core SDK.
-pub trait Currency: BaseCurrency + Clone {
-    /// Returns the address of the currency.
-    #[inline]
-    fn address(&self) -> Address {
-        self.wrapped().address
-    }
-
-    /// Returns whether this currency is functionally equivalent to the other currency
-    fn equals(&self, other: &impl Currency) -> bool;
-
-    /// Returns a Token that represents the wrapped equivalent of the native currency
-    fn wrapped(&self) -> &Token;
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
+pub enum Currency {
+    NativeCurrency(Ether),
+    Token(Token),
 }
 
 /// [`CurrencyLike`] is a generic struct representing a currency with a specific chain ID,
@@ -20,7 +12,7 @@ pub trait Currency: BaseCurrency + Clone {
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct CurrencyLike<const IS_NATIVE: bool, M> {
     /// The chain ID on which this currency resides
-    pub chain_id: alloy_primitives::ChainId,
+    pub chain_id: ChainId,
 
     /// The decimals for the particular currency
     pub decimals: u8,
@@ -44,6 +36,65 @@ impl<const IS_NATIVE: bool, M> Deref for CurrencyLike<IS_NATIVE, M> {
         &self.meta
     }
 }
+
+macro_rules! match_currency_method {
+    ($method:ident, $return_type:ty) => {
+        #[inline]
+        fn $method(&self) -> $return_type {
+            match self {
+                Currency::NativeCurrency(ether) => ether.$method(),
+                Currency::Token(token) => token.$method(),
+            }
+        }
+    };
+}
+
+macro_rules! impl_base_currency_core {
+    ($($currency:ty),*) => {
+        $(
+            impl BaseCurrencyCore for $currency {
+                #[inline]
+                fn is_native(&self) -> bool {
+                    matches!(self, Currency::NativeCurrency(_))
+                }
+
+                #[inline]
+                fn is_token(&self) -> bool {
+                    matches!(self, Currency::Token(_))
+                }
+
+                match_currency_method!(chain_id, ChainId);
+
+                match_currency_method!(decimals, u8);
+
+                match_currency_method!(symbol, Option<&String>);
+
+                match_currency_method!(name, Option<&String>);
+            }
+        )*
+    };
+}
+
+macro_rules! impl_base_currency {
+    ($($currency:ty),*) => {
+        $(
+            impl BaseCurrency for $currency {
+                #[inline]
+                fn equals(&self, other: &impl BaseCurrency) -> bool {
+                    match self {
+                        Currency::NativeCurrency(ether) => ether.equals(other),
+                        Currency::Token(token) => token.equals(other),
+                    }
+                }
+
+                match_currency_method!(wrapped, &Token);
+            }
+        )*
+    };
+}
+
+impl_base_currency_core!(Currency, &Currency);
+impl_base_currency!(Currency, &Currency);
 
 #[cfg(test)]
 mod tests {

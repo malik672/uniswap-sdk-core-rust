@@ -8,8 +8,8 @@ pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct PriceMeta<TBase, TQuote>
 where
-    TBase: Currency,
-    TQuote: Currency,
+    TBase: BaseCurrency,
+    TQuote: BaseCurrency,
 {
     /// The base currency for the price
     pub base_currency: TBase,
@@ -23,8 +23,8 @@ where
 
 impl<TBase, TQuote> Price<TBase, TQuote>
 where
-    TBase: Currency,
-    TQuote: Currency,
+    TBase: BaseCurrency,
+    TQuote: BaseCurrency,
 {
     /// Constructor for creating a new [`Price`] instance
     #[inline]
@@ -79,7 +79,7 @@ where
     /// Multiply the price by another price, returning a new price.
     /// The other price must have the same base currency as this price's quote currency.
     #[inline]
-    pub fn multiply<TOtherQuote: Currency>(
+    pub fn multiply<TOtherQuote: BaseCurrency>(
         &self,
         other: &Price<TQuote, TOtherQuote>,
     ) -> Result<Price<TBase, TOtherQuote>, Error> {
