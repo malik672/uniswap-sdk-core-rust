@@ -1,4 +1,5 @@
 pub use crate::{
+    addresses::*,
     chains::*,
     constants::*,
     entities::{
