@@ -25,12 +25,7 @@ pub use alloc::{
 };
 pub use alloy_primitives::{address, Address};
 pub use bigdecimal::{BigDecimal, RoundingMode};
-pub use core::{
-    cmp::Ordering,
-    num::NonZeroU64,
-    ops::{Deref, Div},
-    str::FromStr,
-};
+pub use core::{cmp::Ordering, num::NonZeroU64, str::FromStr};
 pub use lazy_static::lazy_static;
 pub use num_bigint::{BigInt, BigUint, ToBigInt, ToBigUint};
 pub use num_integer::Integer;

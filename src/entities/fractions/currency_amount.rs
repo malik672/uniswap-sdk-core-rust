@@ -1,5 +1,5 @@
-/// External crate dependencies
 use crate::prelude::*;
+use core::ops::Div;
 
 /// Currency amount struct that represents a rational amount of a currency
 pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;

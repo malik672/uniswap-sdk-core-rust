@@ -1,4 +1,3 @@
-/// External crate dependencies
 use crate::prelude::*;
 
 /// Type alias for a Price, a [`FractionLike`] with metadata [`PriceMeta`]
