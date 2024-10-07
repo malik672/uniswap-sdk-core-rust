@@ -1,15 +1,17 @@
 use crate::prelude::*;
 use core::{
     hash::{Hash, Hasher},
-    ops::{Add, Deref, Mul, Sub},
+    ops::{Add, Div, Mul, Sub},
 };
+use derive_more::Deref;
 
 /// Struct representing a fraction with metadata
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deref)]
 pub struct FractionLike<M> {
     pub numerator: BigInt,
     pub denominator: BigInt,
     /// Metadata associated with the fraction
+    #[deref]
     pub meta: M,
 }
 
@@ -21,16 +23,6 @@ impl<M: Default> Default for FractionLike<M> {
             denominator: BigInt::from(1),
             meta: M::default(),
         }
-    }
-}
-
-/// Implement [`Deref`] to allow direct access to the metadata of the fraction
-impl<M> Deref for FractionLike<M> {
-    type Target = M;
-
-    #[inline]
-    fn deref(&self) -> &Self::Target {
-        &self.meta
     }
 }
 

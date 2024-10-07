@@ -9,6 +9,7 @@ license = "MIT"
 [dependencies]
 alloy-primitives = "0.8"
 bigdecimal = "0.4.5"
+derive_more = { version = "1.0.0", features = ["deref"] }
 eth_checksum = { version = "0.1.2", optional = true }
 lazy_static = "1.5"
 num-bigint = "0.4"

@@ -1,5 +1,6 @@
 use crate::prelude::*;
 use alloy_primitives::ChainId;
+use derive_more::Deref;
 
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub enum Currency {
@@ -9,7 +10,7 @@ pub enum Currency {
 
 /// [`CurrencyLike`] is a generic struct representing a currency with a specific chain ID,
 /// decimals, symbol, name, and additional metadata.
-#[derive(Clone, Debug, Hash, PartialEq, Eq)]
+#[derive(Clone, Debug, Hash, PartialEq, Eq, Deref)]
 pub struct CurrencyLike<const IS_NATIVE: bool, M> {
     /// The chain ID on which this currency resides
     pub chain_id: ChainId,
@@ -24,17 +25,8 @@ pub struct CurrencyLike<const IS_NATIVE: bool, M> {
     pub name: Option<String>,
 
     /// Metadata associated with the currency
+    #[deref]
     pub meta: M,
-}
-
-/// Implement [`Deref`] to allow direct access to the metadata of the currency
-impl<const IS_NATIVE: bool, M> Deref for CurrencyLike<IS_NATIVE, M> {
-    type Target = M;
-
-    #[inline]
-    fn deref(&self) -> &Self::Target {
-        &self.meta
-    }
 }
 
 macro_rules! match_currency_method {
