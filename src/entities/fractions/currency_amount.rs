@@ -25,7 +25,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
         let denominator = denominator.into();
         // Ensure the amount does not exceed MAX_UINT256
         if numerator.div_floor(&denominator) > *MAX_UINT256 {
-            return Err(Error::MaxUint);
+            return Err(Error::UintOverflow);
         }
         let exponent = currency.decimals();
         Ok(FractionBase::new(
@@ -88,7 +88,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
     #[inline]
     pub fn add(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
-            return Err(Error::NotEqual);
+            return Err(Error::CurrencyMismatch);
         }
         let added = self.as_fraction() + other.as_fraction();
         Self::from_fractional_amount(self.currency.clone(), added.numerator, added.denominator)
@@ -98,7 +98,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
     #[inline]
     pub fn subtract(&self, other: &Self) -> Result<Self, Error> {
         if !self.currency.equals(&other.currency) {
-            return Err(Error::NotEqual);
+            return Err(Error::CurrencyMismatch);
         }
         let subtracted = self.as_fraction() - other.as_fraction();
         Self::from_fractional_amount(
@@ -123,7 +123,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
     #[inline]
     pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
         if decimal_places > self.currency.decimals() {
-            return Err(Error::NotEqual);
+            return Err(Error::Invalid("DECIMALS"));
         }
 
         if decimal_places == 0 {

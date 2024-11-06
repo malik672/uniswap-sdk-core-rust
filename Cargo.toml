@@ -1,6 +1,6 @@
 [package]
 name = "uniswap-sdk-core"
-version = "3.0.0"
+version = "3.1.0"
 edition = "2021"
 authors = ["malik <aremumalik05@gmail.com>", "Shuhui Luo <twitter.com/aureliano_law>"]
 description = "The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange"
@@ -17,10 +17,10 @@ num-integer = "0.1"
 num-traits = "0.2"
 regex = { version = "1.11", optional = true }
 rustc-hash = "2.0"
-thiserror = { version = "1.0", optional = true }
+thiserror = { version = "2", default-features = false }
 
 [features]
-std = ["thiserror"]
+std = ["thiserror/std"]
 validate_parse_address = ["eth_checksum", "regex"]
 
 [lib]

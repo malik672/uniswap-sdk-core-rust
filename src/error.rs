@@ -1,64 +1,58 @@
-/// Represents errors that can occur in the context of currency operations.
-#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
-#[cfg_attr(feature = "std", derive(thiserror::Error))]
+/// Custom error types that are used throughout the SDK to handle various error conditions.
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, thiserror::Error)]
 pub enum Error {
     /// Triggers when the compared chain IDs do not match.
-    #[cfg_attr(feature = "std", error("chain IDs do not match: {0} and {1}"))]
+    #[error("chain IDs do not match: {0} and {1}")]
     ChainIdMismatch(u64, u64),
 
     /// Triggers when compared addresses are the same.
-    #[cfg_attr(feature = "std", error("addresses are equal"))]
+    #[error("addresses are equal")]
     EqualAddresses,
 
-    /// Triggers when it tries to exceed the max uint.
-    #[cfg_attr(feature = "std", error("amount has exceeded MAX_UINT256"))]
-    MaxUint,
+    /// Triggers when it tries to exceed [`alloy_primitives::U256::MAX`].
+    #[error("amount exceeds U256::MAX")]
+    UintOverflow,
 
-    /// Triggers when the compared values are not equal.
-    #[cfg_attr(feature = "std", error("not equal"))]
-    NotEqual,
+    /// Triggers when the currency values are not equal.
+    #[error("currency values are not equal")]
+    CurrencyMismatch,
 
     /// Triggers when the value is invalid.
-    #[cfg_attr(feature = "std", error("invalid"))]
-    Invalid,
+    #[error("{0}")]
+    Invalid(&'static str),
 }
 
 #[cfg(all(feature = "std", test))]
 mod tests {
     use super::*;
 
-    /// Test that `Error::ChainIdMismatch` displays the correct error message.
     #[test]
     fn test_chain_id_mismatch_error() {
         let error = Error::ChainIdMismatch(1, 2);
         assert_eq!(error.to_string(), "chain IDs do not match: 1 and 2");
     }
 
-    /// Test that `Error::EqualAddresses` displays the correct error message.
     #[test]
     fn test_equal_addresses_error() {
         let error = Error::EqualAddresses;
         assert_eq!(error.to_string(), "addresses are equal");
     }
 
-    /// Test that `Error::MaxUint` displays the correct error message.
     #[test]
     fn test_max_uint_error() {
-        let error = Error::MaxUint;
-        assert_eq!(error.to_string(), "amount has exceeded MAX_UINT256");
+        let error = Error::UintOverflow;
+        assert_eq!(error.to_string(), "amount exceeds U256::MAX");
     }
 
-    /// Test that `Error::NotEqual` displays the correct error message.
     #[test]
     fn test_not_equal_error() {
-        let error = Error::NotEqual;
-        assert_eq!(error.to_string(), "not equal");
+        let error = Error::CurrencyMismatch;
+        assert_eq!(error.to_string(), "currency values are not equal");
     }
 
-    /// Test that `Error::Invalid` displays the correct error message.
     #[test]
     fn test_incorrect_error() {
-        let error = Error::Invalid;
+        let error = Error::Invalid("invalid");
         assert_eq!(error.to_string(), "invalid");
     }
 }
