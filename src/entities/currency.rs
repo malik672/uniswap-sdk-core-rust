@@ -1,8 +1,8 @@
 use crate::prelude::*;
 use alloy_primitives::ChainId;
-use derive_more::Deref;
+use derive_more::{Deref, From};
 
-#[derive(Clone, Debug, Hash, PartialEq, Eq)]
+#[derive(Clone, Debug, Hash, PartialEq, Eq, From)]
 pub enum Currency {
     NativeCurrency(Ether),
     Token(Token),
