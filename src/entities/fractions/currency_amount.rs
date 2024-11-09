@@ -117,7 +117,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
     ) -> Result<String, Error> {
         (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1)).to_significant(
             significant_digits,
-            Some(rounding.unwrap_or(Rounding::RoundDown)),
+            Some(rounding.unwrap_or_default()),
         )
     }
 
@@ -134,7 +134,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
         Ok(
             (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1)).to_fixed(
                 decimal_places,
-                Some(rounding.unwrap_or(Rounding::RoundDown)),
+                Some(rounding.unwrap_or_default()),
             ),
         )
     }
