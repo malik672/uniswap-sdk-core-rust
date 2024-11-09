@@ -115,10 +115,8 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
         significant_digits: u8,
         rounding: Option<Rounding>,
     ) -> Result<String, Error> {
-        (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1)).to_significant(
-            significant_digits,
-            Some(rounding.unwrap_or_default()),
-        )
+        (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1))
+            .to_significant(significant_digits, Some(rounding.unwrap_or_default()))
     }
 
     /// Convert the currency amount to a string with a fixed number of decimal places
@@ -132,10 +130,8 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
             return Err(Error::Invalid("DECIMALS"));
         }
         Ok(
-            (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1)).to_fixed(
-                decimal_places,
-                Some(rounding.unwrap_or_default()),
-            ),
+            (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1))
+                .to_fixed(decimal_places, Some(rounding.unwrap_or_default())),
         )
     }
 
