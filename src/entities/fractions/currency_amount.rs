@@ -113,27 +113,29 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
     pub fn to_significant(
         &self,
         significant_digits: u8,
-        rounding: Rounding,
+        rounding: Option<Rounding>,
     ) -> Result<String, Error> {
-        (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1))
-            .to_significant(significant_digits, rounding)
+        (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1)).to_significant(
+            significant_digits,
+            Some(rounding.unwrap_or(Rounding::RoundDown)),
+        )
     }
 
     /// Convert the currency amount to a string with a fixed number of decimal places
     #[inline]
-    pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> Result<String, Error> {
+    pub fn to_fixed(
+        &self,
+        decimal_places: u8,
+        rounding: Option<Rounding>,
+    ) -> Result<String, Error> {
         if decimal_places > self.currency.decimals() {
             return Err(Error::Invalid("DECIMALS"));
         }
-
-        if decimal_places == 0 {
-            // Directly convert the numerator to a string for zero decimal places
-            return Ok(self.numerator().to_string());
-        }
-
         Ok(
-            (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1))
-                .to_fixed(decimal_places, rounding),
+            (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1)).to_fixed(
+                decimal_places,
+                Some(rounding.unwrap_or(Rounding::RoundDown)),
+            ),
         )
     }
 
@@ -218,50 +220,38 @@ mod tests {
     #[test]
     fn to_fixed_decimals_exceeds_currency_decimals() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 1000).unwrap();
-        let _w = amount.to_fixed(3, Rounding::RoundDown);
+        let _w = amount.to_fixed(3, None);
         assert!(_w.is_err(), "DECIMALS");
     }
 
     #[test]
     fn to_fixed_0_decimals() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 123456).unwrap();
-        assert_eq!(amount.to_fixed(0, Rounding::RoundDown).unwrap(), "123456");
+        assert_eq!(amount.to_fixed(0, None).unwrap(), "123456");
     }
 
     #[test]
     fn to_fixed_18_decimals() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 1e15 as i64).unwrap();
-        assert_eq!(
-            amount.to_fixed(9, Rounding::RoundDown).unwrap(),
-            "0.001000000"
-        );
+        assert_eq!(amount.to_fixed(9, None).unwrap(), "0.001000000");
     }
 
     #[test]
     fn to_significant_does_not_throw() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 1000).unwrap();
-        assert_eq!(
-            amount.to_significant(3, Rounding::RoundDown).unwrap(),
-            "1000"
-        );
+        assert_eq!(amount.to_significant(3, None).unwrap(), "1000");
     }
 
     #[test]
     fn to_significant_0_decimals() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 123456).unwrap();
-        assert_eq!(
-            amount.to_significant(4, Rounding::RoundDown).unwrap(),
-            "123400"
-        );
+        assert_eq!(amount.to_significant(4, None).unwrap(), "123400");
     }
 
     #[test]
     fn to_significant_18_decimals() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), 1e15 as i64).unwrap();
-        assert_eq!(
-            amount.to_significant(9, Rounding::RoundDown).unwrap(),
-            "0.001"
-        );
+        assert_eq!(amount.to_significant(9, None).unwrap(), "0.001");
     }
 
     #[test]

@@ -85,7 +85,6 @@ where
         if !self.quote_currency.equals(&other.base_currency) {
             return Err(Error::CurrencyMismatch);
         }
-
         let fraction = self.as_fraction() * other.as_fraction();
         Ok(Price::new(
             self.base_currency.clone(),
@@ -124,7 +123,7 @@ where
     pub fn to_significant(
         &self,
         significant_digits: u8,
-        rounding: Rounding,
+        rounding: Option<Rounding>,
     ) -> Result<String, Error> {
         self.adjusted_for_decimals()
             .to_significant(significant_digits, rounding)
@@ -133,7 +132,7 @@ where
     /// Converts the adjusted price to a string with a fixed number of decimal places and rounding
     /// strategy
     #[inline]
-    pub fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
+    pub fn to_fixed(&self, decimal_places: u8, rounding: Option<Rounding>) -> String {
         self.adjusted_for_decimals()
             .to_fixed(decimal_places, rounding)
     }
@@ -153,29 +152,27 @@ mod test {
         static ref TOKEN1: Token = token!(1, ADDRESS_ONE, 18);
     }
 
-    #[test]
-    fn test_constructor_array_format_works() {
-        let price = Price::new(TOKEN0.clone(), TOKEN1.clone(), 1, 54321);
-        assert_eq!(
-            price.to_significant(5, Rounding::RoundDown).unwrap(),
-            "54321"
-        );
-        assert!(price.base_currency.equals(&TOKEN0.clone()));
-        assert!(price.quote_currency.equals(&TOKEN1.clone()));
-    }
+    mod constructor {
+        use super::*;
 
-    #[test]
-    fn test_constructor_object_format_works() {
-        let price = Price::from_currency_amounts(
-            CurrencyAmount::from_raw_amount(TOKEN0.clone(), 1).unwrap(),
-            CurrencyAmount::from_raw_amount(TOKEN1.clone(), 54321).unwrap(),
-        );
-        assert_eq!(
-            price.to_significant(5, Rounding::RoundDown).unwrap(),
-            "54321"
-        );
-        assert!(price.base_currency.equals(&TOKEN0.clone()));
-        assert!(price.quote_currency.equals(&TOKEN1.clone()));
+        #[test]
+        fn array_format_works() {
+            let price = Price::new(TOKEN0.clone(), TOKEN1.clone(), 1, 54321);
+            assert_eq!(price.to_significant(5, None).unwrap(), "54321");
+            assert!(price.base_currency.equals(&TOKEN0.clone()));
+            assert!(price.quote_currency.equals(&TOKEN1.clone()));
+        }
+
+        #[test]
+        fn object_format_works() {
+            let price = Price::from_currency_amounts(
+                CurrencyAmount::from_raw_amount(TOKEN0.clone(), 1).unwrap(),
+                CurrencyAmount::from_raw_amount(TOKEN1.clone(), 54321).unwrap(),
+            );
+            assert_eq!(price.to_significant(5, None).unwrap(), "54321");
+            assert!(price.base_currency.equals(&TOKEN0.clone()));
+            assert!(price.quote_currency.equals(&TOKEN1.clone()));
+        }
     }
 
     #[test]
@@ -189,42 +186,37 @@ mod test {
         );
     }
 
-    #[test]
-    fn test_to_significant_no_decimals() {
-        let p = Price::new(TOKEN0.clone(), TOKEN1.clone(), 123, 456);
-        assert_eq!(p.to_significant(4, Rounding::RoundDown).unwrap(), "3.707");
-    }
+    mod to_significant {
+        use super::*;
 
-    #[test]
-    fn test_to_significant_no_decimals_flip_ratio() {
-        let p = Price::new(TOKEN0.clone(), TOKEN1.clone(), 456, 123);
-        assert_eq!(p.to_significant(4, Rounding::RoundDown).unwrap(), "0.2697");
-    }
+        #[test]
+        fn no_decimals() {
+            let p = Price::new(TOKEN0.clone(), TOKEN1.clone(), 123, 456);
+            assert_eq!(p.to_significant(4, None).unwrap(), "3.707");
+        }
 
-    #[test]
-    fn test_to_significant_with_decimal_difference() {
-        let p = Price::new(TOKEN0_6.clone(), TOKEN1.clone(), 123, 456);
-        assert_eq!(
-            p.to_significant(4, Rounding::RoundDown).unwrap(),
-            "3.707E-12"
-        );
-    }
+        #[test]
+        fn no_decimals_flip_ratio() {
+            let p = Price::new(TOKEN0.clone(), TOKEN1.clone(), 456, 123);
+            assert_eq!(p.to_significant(4, None).unwrap(), "0.2697");
+        }
 
-    #[test]
-    fn test_to_significant_with_decimal_difference_flipped() {
-        let p = Price::new(TOKEN0_6.clone(), TOKEN1.clone(), 456, 123);
-        assert_eq!(
-            p.to_significant(4, Rounding::RoundDown).unwrap(),
-            "2.697E-13"
-        );
-    }
+        #[test]
+        fn with_decimal_difference() {
+            let p = Price::new(TOKEN0_6.clone(), TOKEN1.clone(), 123, 456);
+            assert_eq!(p.to_significant(4, None).unwrap(), "3.707E-12");
+        }
 
-    #[test]
-    fn test_to_significant_with_decimal_difference_flipped_base_quote_flipped() {
-        let p = Price::new(TOKEN1.clone(), TOKEN0_6.clone(), 456, 123);
-        assert_eq!(
-            p.to_significant(4, Rounding::RoundDown).unwrap(),
-            "269700000000"
-        );
+        #[test]
+        fn with_decimal_difference_flipped() {
+            let p = Price::new(TOKEN0_6.clone(), TOKEN1.clone(), 456, 123);
+            assert_eq!(p.to_significant(4, None).unwrap(), "2.697E-13");
+        }
+
+        #[test]
+        fn with_decimal_difference_flipped_base_quote_flipped() {
+            let p = Price::new(TOKEN1.clone(), TOKEN0_6.clone(), 456, 123);
+            assert_eq!(p.to_significant(4, None).unwrap(), "269700000000");
+        }
     }
 }
