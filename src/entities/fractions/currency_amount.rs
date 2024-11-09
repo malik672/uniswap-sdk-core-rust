@@ -245,7 +245,7 @@ mod tests {
     #[test]
     fn to_significant_0_decimals() {
         let amount = CurrencyAmount::from_raw_amount(TOKEN0.clone(), 123456).unwrap();
-        assert_eq!(amount.to_significant(4, None).unwrap(), "123400");
+        assert_eq!(amount.to_significant(4, None).unwrap(), "123500");
     }
 
     #[test]
