@@ -121,11 +121,15 @@ pub trait FractionBase<M: Clone>: Sized {
     /// Converts the fraction to a string with a specified number of significant digits and rounding
     /// strategy
     #[inline]
-    fn to_significant(&self, significant_digits: u8, rounding: Rounding) -> Result<String, Error> {
+    fn to_significant(
+        &self,
+        significant_digits: u8,
+        rounding: Option<Rounding>,
+    ) -> Result<String, Error> {
         if significant_digits == 0 {
             return Err(Error::Invalid("SIGNIFICANT_DIGITS"));
         }
-        let rounding_strategy = to_rounding_strategy(rounding);
+        let rounding_strategy = to_rounding_strategy(rounding.unwrap_or_default());
         let quotient = self.to_decimal().with_precision_round(
             NonZeroU64::new(significant_digits as u64).unwrap(),
             rounding_strategy,
@@ -137,8 +141,8 @@ pub trait FractionBase<M: Clone>: Sized {
     /// Converts the fraction to a string with a fixed number of decimal places and rounding
     /// strategy
     #[inline]
-    fn to_fixed(&self, decimal_places: u8, rounding: Rounding) -> String {
-        let rounding_strategy = to_rounding_strategy(rounding);
+    fn to_fixed(&self, decimal_places: u8, rounding: Option<Rounding>) -> String {
+        let rounding_strategy = to_rounding_strategy(rounding.unwrap_or_default());
         self.to_decimal()
             .with_scale_round(decimal_places as i64, rounding_strategy)
             .to_string()
@@ -158,7 +162,6 @@ impl<M: Clone> FractionBase<M> for FractionLike<M> {
     #[inline]
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self {
         let denominator = denominator.into();
-        // Ensure the denominator is not zero
         assert!(!denominator.is_zero(), "denominator is zero");
         Self {
             numerator: numerator.into(),
