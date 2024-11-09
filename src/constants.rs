@@ -16,10 +16,10 @@ pub enum TradeType {
 #[derive(Clone, Copy, Debug, Default, Hash, PartialEq, Eq)]
 pub enum Rounding {
     /// Rounds down to the nearest whole number.
-    #[default]
     RoundDown,
 
     /// Rounds to the nearest whole number, rounding halfway cases away from zero.
+    #[default]
     RoundHalfUp,
 
     /// Rounds up to the nearest whole number.
