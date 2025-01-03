@@ -1,5 +1,6 @@
 use crate::prelude::*;
 use alloy_primitives::U256;
+use lazy_static::lazy_static;
 use num_bigint::Sign;
 
 /// Represents the various types of trades.
