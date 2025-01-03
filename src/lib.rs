@@ -45,17 +45,11 @@ pub mod utils;
 /// making it easier to import them in other parts of your application.
 pub mod prelude {
     pub use crate::{addresses::*, chains::*, constants::*, entities::*, error::Error, utils::*};
-    pub use alloc::{
-        string::{String, ToString},
-        vec::Vec,
-    };
-    pub use alloy_primitives::{address, Address};
+
+    pub use alloc::{string::String, vec::Vec};
+    pub use alloy_primitives::{map::rustc_hash::FxHashMap, Address, Bytes, B256, U256};
     pub use bigdecimal::{BigDecimal, RoundingMode};
-    pub use core::{cmp::Ordering, num::NonZeroU64, str::FromStr};
-    pub use num_bigint::{BigInt, BigUint, ToBigInt, ToBigUint};
-    pub use num_integer::Integer;
-    pub use num_traits::{Num, ToPrimitive, Zero};
-    pub use rustc_hash::FxHashMap;
+    pub use num_bigint::{BigInt, BigUint};
 }
 
 /// Contains examples of how Uniswap sdk core can be used

@@ -1,9 +1,13 @@
 use crate::prelude::*;
+use alloc::string::ToString;
 use core::{
+    cmp::Ordering,
     hash::{Hash, Hasher},
+    num::NonZeroU64,
     ops::{Add, Div, Mul, Sub},
 };
 use derive_more::Deref;
+use num_integer::Integer;
 
 /// Struct representing a fraction with metadata
 #[derive(Clone, Debug, Deref)]
@@ -162,7 +166,7 @@ impl<M: Clone> FractionBase<M> for FractionLike<M> {
     #[inline]
     fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>, meta: M) -> Self {
         let denominator = denominator.into();
-        assert!(!denominator.is_zero(), "denominator is zero");
+        assert_ne!(denominator, BigInt::ZERO, "denominator is zero");
         Self {
             numerator: numerator.into(),
             denominator,

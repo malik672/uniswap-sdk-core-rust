@@ -1,5 +1,5 @@
 use crate::{prelude::*, token};
-use alloc::vec;
+use alloc::string::ToString;
 
 /// Represents the WETH9 contract and provides information about WETH tokens on different Ethereum
 /// chains.
@@ -31,7 +31,7 @@ impl WETH9 {
     #[inline]
     #[must_use]
     pub fn new() -> Self {
-        let tokens = FxHashMap::from_iter(vec![
+        let tokens = FxHashMap::from_iter([
             (1, Self::on_chain(1).unwrap()),
             (3, Self::on_chain(3).unwrap()),
             (4, Self::on_chain(4).unwrap()),

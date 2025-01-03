@@ -131,7 +131,7 @@ macro_rules! token {
     ($chain_id:expr, $address:literal, $decimals:expr) => {
         Token::new(
             $chain_id,
-            address!($address),
+            alloy_primitives::address!($address),
             $decimals,
             None,
             None,
@@ -153,7 +153,7 @@ macro_rules! token {
     ($chain_id:expr, $address:literal, $decimals:expr, $symbol:expr) => {
         Token::new(
             $chain_id,
-            address!($address),
+            alloy_primitives::address!($address),
             $decimals,
             Some($symbol.to_string()),
             None,
@@ -175,7 +175,7 @@ macro_rules! token {
     ($chain_id:expr, $address:literal, $decimals:expr, $symbol:expr, $name:expr) => {
         Token::new(
             $chain_id,
-            address!($address),
+            alloy_primitives::address!($address),
             $decimals,
             Some($symbol.to_string()),
             Some($name.to_string()),

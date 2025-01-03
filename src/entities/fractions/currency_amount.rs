@@ -1,5 +1,7 @@
 use crate::prelude::*;
+use alloc::string::ToString;
 use core::ops::Div;
+use num_integer::Integer;
 
 /// Currency amount struct that represents a rational amount of a currency
 pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
