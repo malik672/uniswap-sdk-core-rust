@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use lazy_static::lazy_static;
 
 lazy_static! {
     static ref ONE_HUNDRED: Fraction = Fraction::new(100, 1);

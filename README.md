@@ -7,18 +7,13 @@
 **A Custom Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized
 exchange.**
 
-## Note on `no_std`
-
-By default, this library does not depend on the standard library (`std`). However, the `std` feature can be enabled to
-use `thiserror` for error handling.
-
 ## Quickstart
 
 Add this to your Cargo.toml
 
 ```
 [dependencies]
-uniswap-sdk-core = "3.0.0"
+uniswap-sdk-core = "3.3.0"
 ```
 
 And this to your code:
@@ -27,10 +22,15 @@ And this to your code:
 use uniswap_sdk_core::prelude::*;
 ```
 
+## Note on `no_std`
+
+By default, this library does not depend on the standard library (`std`). However, the `std` feature can be enabled.
+
 ## Examples
 
-The code below shows an example of how to create a new `Token` instance for the DAI token on the Ethereum Mainnet using
-the `token!` macro.
+<details>
+  <summary>The code below shows an example of how to create a new `Token` instance for the DAI token on the Ethereum Mainnet using
+the `token!` macro.</summary>
 
 ```rust
 // The `prelude` module provides a convenient way to import a number of common dependencies at 
@@ -68,6 +68,8 @@ fn main() {
 }
 ```
 
+</details>
+
 This example demonstrates how to create a `Token` instance for DAI on the Ethereum Mainnet using the `token!` macro.
 
 It then prints the token's address and checks if it's a native token (which it isn't, so it prints false).
@@ -99,8 +101,8 @@ provide similar functionality in the Rust programming language.
 
 - [Uniswap V3 SDK Rust](https://github.com/shuhuiluo/uniswap-v3-sdk-rs): Opinionated Rust implementation of the Uniswap
   V3 SDK with a focus on readability and performance
-- [Uniswap V2 SDK Rust](https://github.com/shuhuiluo/uniswap-v2-sdk-rs): Opinionated Rust implementation of the Uniswap
-  V2 SDK with a focus on readability and performance
+- [Uniswap V4 SDK Rust](https://github.com/shuhuiluo/uniswap-v4-sdk-rs): Opinionated Rust implementation of the Uniswap
+  V4 SDK with a focus on readability and performance
 - ...
 
 *(If you want to add project to the list, dm or open a PR)*

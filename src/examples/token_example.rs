@@ -1,10 +1,8 @@
-#![cfg(test)]
-
-// Import the Token struct from the Uniswap SDK-Core
 use crate::entities::token::Token;
 
 /// This function demonstrates basic operations with the Token struct from the Uniswap SDK-Core.
-pub fn main() {
+#[test]
+fn main() {
     // Create a new Token instance for DAI
     let dai_token = Token::new(
         1, // Assuming chain_id is 1 for Ethereum mainnet

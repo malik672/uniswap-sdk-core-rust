@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use alloc::string::ToString;
 
 /// Ether is the main usage of a 'native' currency, i.e., for Ethereum mainnet and all testnets.
 /// Represents the native currency of the blockchain.

@@ -1,7 +1,8 @@
 use crate::prelude::*;
-use alloc::vec;
+use alloy_primitives::address;
+use lazy_static::lazy_static;
 
-type AddressMap = FxHashMap<u64, Address>;
+pub type AddressMap = FxHashMap<u64, Address>;
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct ChainAddresses {
@@ -52,7 +53,7 @@ pub const V2_FACTORY_ADDRESS: Address = address!("5C69bEe701ef814a2B6a3EDD4B1652
 
 lazy_static! {
     pub static ref V2_FACTORY_ADDRESSES: AddressMap = {
-        AddressMap::from_iter(vec![
+        AddressMap::from_iter([
             (ChainId::MAINNET as u64, V2_FACTORY_ADDRESS),
             (ChainId::GOERLI as u64, V2_FACTORY_ADDRESS),
             (
@@ -101,7 +102,7 @@ pub const V2_ROUTER_ADDRESS: Address = address!("7a250d5630B4cF539739dF2C5dAcb4c
 
 lazy_static! {
     pub static ref V2_ROUTER_ADDRESSES: AddressMap = {
-        AddressMap::from_iter(vec![
+        AddressMap::from_iter([
             (ChainId::MAINNET as u64, V2_ROUTER_ADDRESS),
             (ChainId::GOERLI as u64, V2_ROUTER_ADDRESS),
             (
@@ -381,7 +382,7 @@ lazy_static! {
     /// for a given network. The keys in the map are the network IDs, and the values
     /// are the corresponding contract addresses.
     pub static ref CHAIN_TO_ADDRESSES_MAP: FxHashMap<u64, ChainAddresses> = {
-        FxHashMap::from_iter(vec![
+        FxHashMap::from_iter([
             (ChainId::MAINNET as u64, MAINNET_ADDRESSES),
             (ChainId::OPTIMISM as u64, OPTIMISM_ADDRESSES),
             (ChainId::ARBITRUM_ONE as u64, ARBITUM_ONE_ADDRESSES),
@@ -447,7 +448,7 @@ lazy_static! {
 
 lazy_static! {
     /// The older V1 governance address
-    pub static ref GOVERNANCE_ALPHA_V1_ADDRESSES: AddressMap = AddressMap::from_iter(vec![(
+    pub static ref GOVERNANCE_ALPHA_V1_ADDRESSES: AddressMap = AddressMap::from_iter([(
         ChainId::MAINNET as u64,
         address!("C4e172459f1E7939D522503B81AFAaC1014CE6F6")
     )]);
@@ -455,7 +456,7 @@ lazy_static! {
 
 lazy_static! {
     /// The latest governor bravo that is currently admin of timelock
-    pub static ref GOVERNANCE_BRAVO_ADDRESSES: AddressMap = AddressMap::from_iter(vec![(
+    pub static ref GOVERNANCE_BRAVO_ADDRESSES: AddressMap = AddressMap::from_iter([(
         ChainId::MAINNET as u64,
         address!("408ED6354d4973f66138C91495F2f2FCbd8724C3")
     )]);
@@ -467,14 +468,14 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref MERKLE_DISTRIBUTOR_ADDRESS: AddressMap = AddressMap::from_iter(vec![(
+    pub static ref MERKLE_DISTRIBUTOR_ADDRESS: AddressMap = AddressMap::from_iter([(
         ChainId::MAINNET as u64,
         address!("090D4613473dEE047c3f2706764f49E0821D256e"),
     )]);
 }
 
 lazy_static! {
-    pub static ref ARGENT_WALLET_DETECTOR_ADDRESS: AddressMap = AddressMap::from_iter(vec![(
+    pub static ref ARGENT_WALLET_DETECTOR_ADDRESS: AddressMap = AddressMap::from_iter([(
         ChainId::MAINNET as u64,
         address!("eca4B0bDBf7c55E9b7925919d03CbF8Dc82537E8"),
     )]);
@@ -506,7 +507,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    pub static ref SOCKS_CONTROLLER_ADDRESSES: AddressMap = AddressMap::from_iter(vec![(
+    pub static ref SOCKS_CONTROLLER_ADDRESSES: AddressMap = AddressMap::from_iter([(
         ChainId::MAINNET as u64,
         address!("65770b5283117639760beA3F867b69b3697a91dd")
     )]);

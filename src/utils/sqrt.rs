@@ -1,5 +1,4 @@
 use crate::prelude::*;
-use num_traits::Signed;
 
 /// Computes floor(sqrt(value))
 ///
@@ -10,7 +9,7 @@ use num_traits::Signed;
 /// returns: BigInt
 #[inline]
 pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
-    if value.is_negative() {
+    if value < &BigInt::ZERO {
         Err(Error::Invalid("NEGATIVE"))
     } else {
         Ok(value.sqrt())
@@ -20,6 +19,7 @@ pub fn sqrt(value: &BigInt) -> Result<BigInt, Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use core::str::FromStr;
 
     #[test]
     fn test_sqrt_0_1000() {
