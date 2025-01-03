@@ -1,1 +1,1 @@
-pub mod token_example;
+mod token_example;

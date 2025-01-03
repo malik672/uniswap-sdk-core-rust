@@ -36,13 +36,28 @@ pub mod entities;
 /// This module defines custom error types that are used throughout the SDK to
 /// handle various error conditions.
 pub mod error;
+/// Contains utility functions and helpers used across the Uniswap SDK Core.
+pub mod utils;
+
 /// Contains commonly used items from the Uniswap SDK Core.
 ///
 /// This module re-exports items that are commonly used together,
 /// making it easier to import them in other parts of your application.
-pub mod prelude;
-/// Contains utility functions and helpers used across the Uniswap SDK Core.
-pub mod utils;
+pub mod prelude {
+    pub use crate::{addresses::*, chains::*, constants::*, entities::*, error::Error, utils::*};
+    pub use alloc::{
+        string::{String, ToString},
+        vec::Vec,
+    };
+    pub use alloy_primitives::{address, Address};
+    pub use bigdecimal::{BigDecimal, RoundingMode};
+    pub use core::{cmp::Ordering, num::NonZeroU64, str::FromStr};
+    pub use num_bigint::{BigInt, BigUint, ToBigInt, ToBigUint};
+    pub use num_integer::Integer;
+    pub use num_traits::{Num, ToPrimitive, Zero};
+    pub use rustc_hash::FxHashMap;
+}
 
 /// Contains examples of how Uniswap sdk core can be used
-pub mod examples;
+#[cfg(test)]
+mod examples;
