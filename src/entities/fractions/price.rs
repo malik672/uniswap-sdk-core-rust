@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use fastnum::i512;
 
 /// Type alias for a Price, a [`FractionLike`] with metadata [`PriceMeta`]
 pub type Price<TBase, TQuote> = FractionLike<PriceMeta<TBase, TQuote>>;
@@ -35,8 +36,8 @@ where
     ) -> Self {
         // Calculate scalar based on decimal places of base and quote currencies
         let scalar = Fraction::new(
-            BigInt::from(10).pow(base_currency.decimals() as u32),
-            BigInt::from(10).pow(quote_currency.decimals() as u32),
+            i512!(10).pow(base_currency.decimals() as u32),
+            i512!(10).pow(quote_currency.decimals() as u32),
         );
         FractionBase::new(
             numerator,
@@ -70,8 +71,8 @@ where
         Price::new(
             self.quote_currency.clone(),
             self.base_currency.clone(),
-            self.numerator.clone(),
-            self.denominator.clone(),
+            self.numerator,
+            self.denominator,
         )
     }
 

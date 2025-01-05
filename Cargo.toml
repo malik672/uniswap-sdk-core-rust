@@ -1,6 +1,6 @@
 [package]
 name = "uniswap-sdk-core"
-version = "3.3.0"
+version = "4.0.0-rc"
 edition = "2021"
 authors = ["malik <aremumalik05@gmail.com>", "Shuhui Luo <twitter.com/aureliano_law>"]
 description = "The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange"
@@ -8,17 +8,16 @@ license = "MIT"
 
 [dependencies]
 alloy-primitives = { version = ">=0.8.5", features = ["map-fxhash"] }
-bigdecimal = "0.4.5"
 derive_more = { version = "1.0.0", features = ["deref"] }
 eth_checksum = { version = "0.1.2", optional = true }
+fastnum = { version = "0.1.9", default-features = false, features = ["libm"] }
 lazy_static = "1.5"
-num-bigint = "0.4"
-num-integer = "0.1"
 regex = { version = "1.11", optional = true }
 thiserror = { version = "2", default-features = false }
 
 [features]
-std = ["thiserror/std"]
+default = []
+std = ["fastnum/std", "thiserror/std"]
 validate_parse_address = ["eth_checksum", "regex"]
 
 [lib]
