@@ -114,7 +114,7 @@ pub trait FractionBase<M: Clone>: Sized {
     /// Converts the fraction to a [`BigDecimal`]
     #[inline]
     fn to_decimal(&self) -> BigDecimal {
-        to_big_decimal(self.numerator()) / to_big_decimal(self.denominator())
+        self.numerator().to_big_decimal() / self.denominator().to_big_decimal()
     }
 
     /// Converts the fraction to a string with a specified number of significant digits and rounding
