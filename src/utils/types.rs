@@ -1,11 +1,14 @@
 use crate::prelude::{BigDecimal, BigInt, BigUint};
 use alloy_primitives::U256;
-use fastnum::decimal::Context;
+use fastnum::decimal::{Context, Sign};
 
 #[inline]
 #[must_use]
 pub const fn to_big_decimal(value: BigInt) -> BigDecimal {
-    BigDecimal::from_parts(value.to_bits(), 0, Context::default())
+    match value.is_negative() {
+        false => BigDecimal::from_parts(value.to_bits(), 0, Sign::Plus, Context::default()),
+        true => BigDecimal::from_parts(value.to_bits(), 0, Sign::Minus, Context::default()),
+    }
 }
 
 #[inline]

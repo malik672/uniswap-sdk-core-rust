@@ -51,7 +51,7 @@ pub mod prelude {
 
     pub type BigInt = fastnum::I512;
     pub type BigUint = fastnum::U512;
-    pub type BigDecimal = fastnum::UD512;
+    pub type BigDecimal = fastnum::D512;
     pub type RoundingMode = fastnum::decimal::RoundingMode;
 }
 
