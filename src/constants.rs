@@ -1,7 +1,5 @@
 use crate::prelude::*;
 use alloy_primitives::U256;
-use lazy_static::lazy_static;
-use num_bigint::Sign;
 
 /// Represents the various types of trades.
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
@@ -27,8 +25,5 @@ pub enum Rounding {
     RoundUp,
 }
 
-lazy_static! {
-    /// Represents the maximum amount contained in a uint256
-    pub static ref MAX_UINT256: BigInt =
-        BigInt::from_biguint(Sign::Plus, BigUint::from_bytes_le(&U256::MAX.as_le_bytes()));
-}
+/// Represents the maximum amount contained in a uint256
+pub const MAX_UINT256: BigInt = to_big_int(U256::MAX);

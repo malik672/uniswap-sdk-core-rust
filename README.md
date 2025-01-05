@@ -13,7 +13,7 @@ Add this to your Cargo.toml
 
 ```
 [dependencies]
-uniswap-sdk-core = "3.3.0"
+uniswap-sdk-core = "4.0.0"
 ```
 
 And this to your code:

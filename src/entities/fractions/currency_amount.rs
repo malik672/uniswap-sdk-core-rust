@@ -1,7 +1,6 @@
 use crate::prelude::*;
 use alloc::string::ToString;
-use core::ops::Div;
-use num_integer::Integer;
+use fastnum::i512;
 
 /// Currency amount struct that represents a rational amount of a currency
 pub type CurrencyAmount<T> = FractionLike<CurrencyMeta<T>>;
@@ -12,7 +11,7 @@ pub struct CurrencyMeta<T: BaseCurrency> {
     /// The currency associated with this metadata
     pub currency: T,
     /// The scale factor for the currency's decimal places
-    pub decimal_scale: BigUint,
+    pub decimal_scale: BigInt,
 }
 
 impl<T: BaseCurrency> CurrencyAmount<T> {
@@ -26,7 +25,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
         let numerator = numerator.into();
         let denominator = denominator.into();
         // Ensure the amount does not exceed MAX_UINT256
-        if numerator.div_floor(&denominator) > *MAX_UINT256 {
+        if numerator.div_floor(denominator) > MAX_UINT256 {
             return Err(Error::UintOverflow);
         }
         let exponent = currency.decimals();
@@ -35,7 +34,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
             denominator,
             CurrencyMeta {
                 currency,
-                decimal_scale: BigUint::from(10_u64).pow(exponent as u32),
+                decimal_scale: i512!(10).pow(exponent as u32),
             },
         ))
     }
@@ -81,8 +80,8 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
     /// Convert the currency amount to a string with exact precision
     #[inline]
     pub fn to_exact(&self) -> String {
-        BigDecimal::from(self.quotient())
-            .div(BigDecimal::from(BigInt::from(self.decimal_scale.clone())))
+        to_big_decimal(self.quotient())
+            .div(to_big_decimal(self.decimal_scale))
             .to_string()
     }
 
@@ -117,7 +116,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
         significant_digits: u8,
         rounding: Option<Rounding>,
     ) -> Result<String, Error> {
-        (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1)).to_significant(
+        (self.as_fraction() / Fraction::new(self.decimal_scale, 1)).to_significant(
             significant_digits,
             Some(rounding.unwrap_or(Rounding::RoundDown)),
         )
@@ -134,7 +133,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
             return Err(Error::Invalid("DECIMALS"));
         }
         Ok(
-            (self.as_fraction() / Fraction::new(self.decimal_scale.clone(), 1)).to_fixed(
+            (self.as_fraction() / Fraction::new(self.decimal_scale, 1)).to_fixed(
                 decimal_places,
                 Some(rounding.unwrap_or(Rounding::RoundDown)),
             ),
@@ -146,8 +145,8 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
     pub fn wrapped(&self) -> Result<CurrencyAmount<&Token>, Error> {
         CurrencyAmount::from_fractional_amount(
             self.currency.wrapped(),
-            self.numerator().clone(),
-            self.denominator().clone(),
+            self.numerator(),
+            self.denominator(),
         )
     }
 }
@@ -193,31 +192,30 @@ mod tests {
 
     #[test]
     fn test_token_amount_max_uint256() {
-        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), MAX_UINT256.clone()).unwrap();
+        let amount = CurrencyAmount::from_raw_amount(TOKEN18.clone(), MAX_UINT256).unwrap();
         assert_eq!(amount.quotient(), MAX_UINT256.clone());
     }
 
     #[test]
     #[should_panic(expected = "AMOUNT")]
     fn test_token_amount_exceeds_max_uint256() {
-        let _w = CurrencyAmount::from_raw_amount(TOKEN18.clone(), MAX_UINT256.clone() + 1);
+        let _w = CurrencyAmount::from_raw_amount(TOKEN18.clone(), MAX_UINT256 + BigInt::from(1));
         assert!(_w.is_ok(), "AMOUNT");
     }
 
     #[test]
     #[should_panic(expected = "AMOUNT")]
     fn test_token_amount_quotient_exceeds_max_uint256() {
-        let numerator: BigInt = (MAX_UINT256.clone() + 1) * 2;
+        let numerator: BigInt = (MAX_UINT256 + BigInt::from(1)) * BigInt::from(2);
         let _w = CurrencyAmount::from_fractional_amount(TOKEN18.clone(), numerator, 2);
         assert!(_w.is_ok(), "AMOUNT");
     }
 
     #[test]
     fn test_token_amount_numerator_gt_uint256() {
-        let numerator: BigInt = MAX_UINT256.clone() + 2;
-        let amount =
-            CurrencyAmount::from_fractional_amount(TOKEN18.clone(), numerator.clone(), 2).unwrap();
-        assert_eq!(amount.numerator(), &numerator);
+        let numerator: BigInt = MAX_UINT256 + BigInt::from(2);
+        let amount = CurrencyAmount::from_fractional_amount(TOKEN18.clone(), numerator, 2).unwrap();
+        assert_eq!(amount.numerator(), numerator);
     }
 
     #[test]

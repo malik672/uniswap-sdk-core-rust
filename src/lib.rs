@@ -49,10 +49,10 @@ pub mod prelude {
     pub use alloc::{string::String, vec::Vec};
     pub use alloy_primitives::{map::rustc_hash::FxHashMap, Address, Bytes, B256, U256};
 
-    pub type BigInt = num_bigint::BigInt;
-    pub type BigUint = num_bigint::BigUint;
-    pub type BigDecimal = bigdecimal::BigDecimal;
-    pub type RoundingMode = bigdecimal::RoundingMode;
+    pub type BigInt = fastnum::I512;
+    pub type BigUint = fastnum::U512;
+    pub type BigDecimal = fastnum::D512;
+    pub type RoundingMode = fastnum::decimal::RoundingMode;
 }
 
 /// Contains examples of how Uniswap sdk core can be used
