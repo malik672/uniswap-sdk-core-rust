@@ -80,8 +80,9 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
     /// Convert the currency amount to a string with exact precision
     #[inline]
     pub fn to_exact(&self) -> String {
-        to_big_decimal(self.quotient())
-            .div(to_big_decimal(self.decimal_scale))
+        self.quotient()
+            .to_big_decimal()
+            .div(self.decimal_scale.to_big_decimal())
             .to_string()
     }
 

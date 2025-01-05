@@ -26,4 +26,5 @@ pub enum Rounding {
 }
 
 /// Represents the maximum amount contained in a uint256
-pub const MAX_UINT256: BigInt = to_big_int(U256::MAX);
+pub const MAX_UINT256: BigInt =
+    BigInt::from_bits(BigUint::from_le_slice(&U256::MAX.to_le_bytes::<32>()).unwrap());
