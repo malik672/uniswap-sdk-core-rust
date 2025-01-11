@@ -1,7 +1,6 @@
 # Uniswap SDK Core Rust
 
-[![Unit Tests](https://github.com/malik672/uniswap-sdk-core-rust/workflows/Rust%20Tests/badge.svg)](https://github.com/malik672/uniswap-sdk-core-rust/actions?query=workflow%3A%22Rust+Tests%22)
-[![Lint](https://github.com/malik672/uniswap-sdk-core-rust/workflows/Rust%20Linting/badge.svg)](https://github.com/malik672/uniswap-sdk-core-rust/actions?query=workflow%3A%22Rust%20Linting%22)
+[![Rust CI](https://github.com/malik672/uniswap-sdk-core-rust/actions/workflows/rust.yml/badge.svg)](https://github.com/malik672/uniswap-sdk-core-rust/actions/workflows/rust.yml)
 ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/malik672/uniswap-sdk-core-rust?logo=rust&label=CodeRabbit&color=orange)
 [![docs.rs](https://img.shields.io/docsrs/uniswap-sdk-core)](https://docs.rs/uniswap-sdk-core/latest)
 [![crates.io](https://img.shields.io/crates/v/uniswap-sdk-core.svg)](https://crates.io/crates/uniswap-sdk-core)
