@@ -5,6 +5,11 @@ edition = "2021"
 authors = ["malik <aremumalik05@gmail.com>", "Shuhui Luo <twitter.com/aureliano_law>"]
 description = "The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange"
 license = "MIT"
+readme = "README.md"
+repository = "https://github.com/malik672/uniswap-sdk-core-rust"
+categories = ["cryptography::cryptocurrencies", "finance", "no-std"]
+keywords = ["sdk-core", "ethereum", "sdk"]
+exclude = [".github", ".gitignore", "rustfmt.toml"]
 
 [dependencies]
 alloy-primitives = { version = ">=0.8.5", features = ["map-fxhash"] }
