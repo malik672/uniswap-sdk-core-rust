@@ -1,12 +1,14 @@
 use crate::prelude::*;
 use alloc::string::ToString;
+use bnum::cast::CastFrom;
 use core::{
     cmp::Ordering,
     hash::{Hash, Hasher},
     ops::{Add, Div, Mul, Sub},
 };
 use derive_more::Deref;
-use fastnum::i512;
+use fastnum::{i512, I1024};
+use num_integer::Integer;
 
 /// Struct representing a fraction with metadata
 #[derive(Clone, Debug, Deref)]
@@ -194,7 +196,8 @@ impl<M: PartialEq> PartialEq for FractionLike<M> {
     /// Checks if the current fraction is equal to another fraction
     #[inline]
     fn eq(&self, other: &Self) -> bool {
-        self.numerator * other.denominator == other.numerator * self.denominator
+        I1024::cast_from(self.numerator) * I1024::cast_from(other.denominator)
+            == I1024::cast_from(other.numerator) * I1024::cast_from(self.denominator)
             && self.meta == other.meta
     }
 }
@@ -214,7 +217,8 @@ impl<M: Hash> Hash for FractionLike<M> {
 impl<M: PartialEq> Ord for FractionLike<M> {
     #[inline]
     fn cmp(&self, other: &Self) -> Ordering {
-        (self.numerator * other.denominator).cmp(&(other.numerator * self.denominator))
+        (I1024::cast_from(self.numerator) * I1024::cast_from(other.denominator))
+            .cmp(&(I1024::cast_from(other.numerator) * I1024::cast_from(self.denominator)))
     }
 }
 
@@ -233,15 +237,20 @@ macro_rules! impl_add_sub {
             #[inline]
             fn $method(self, other: $Rhs) -> Self::Output {
                 if self.denominator == other.denominator {
+                    let numerator = self.numerator $op other.numerator;
+                    let gcd = numerator.gcd(&self.denominator);
                     FractionBase::new(
-                        self.numerator $op other.numerator,
-                        self.denominator,
+                        numerator / gcd,
+                        self.denominator / gcd,
                         self.meta,
                     )
                 } else {
+                    let numerator = I1024::cast_from(self.numerator) * I1024::cast_from(other.denominator) $op I1024::cast_from(other.numerator) * I1024::cast_from(self.denominator);
+                    let denominator = I1024::cast_from(self.denominator) * I1024::cast_from(other.denominator);
+                    let gcd = numerator.gcd(&denominator);
                     FractionBase::new(
-                        self.numerator * other.denominator $op other.numerator * self.denominator,
-                        self.denominator * other.denominator,
+                        BigInt::cast_from(numerator / gcd),
+                        BigInt::cast_from(denominator / gcd),
                         self.meta,
                     )
                 }
@@ -262,9 +271,14 @@ macro_rules! impl_mul {
 
             #[inline]
             fn $method(self, other: $Rhs) -> Self::Output {
+                let numerator =
+                    I1024::cast_from(self.numerator) * I1024::cast_from(other.numerator);
+                let denominator =
+                    I1024::cast_from(self.denominator) * I1024::cast_from(other.denominator);
+                let gcd = numerator.gcd(&denominator);
                 FractionBase::new(
-                    self.numerator * other.numerator,
-                    self.denominator * other.denominator,
+                    BigInt::cast_from(numerator / gcd),
+                    BigInt::cast_from(denominator / gcd),
                     self.meta,
                 )
             }
@@ -282,9 +296,14 @@ macro_rules! impl_div {
 
             #[inline]
             fn $method(self, other: $Rhs) -> Self::Output {
+                let numerator =
+                    I1024::cast_from(self.numerator) * I1024::cast_from(other.denominator);
+                let denominator =
+                    I1024::cast_from(self.denominator) * I1024::cast_from(other.numerator);
+                let gcd = numerator.gcd(&denominator);
                 FractionBase::new(
-                    self.numerator * other.denominator,
-                    self.denominator * other.numerator,
+                    BigInt::cast_from(numerator / gcd),
+                    BigInt::cast_from(denominator / gcd),
                     self.meta,
                 )
             }
