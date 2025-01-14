@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use fastnum::i512;
+use num_integer::Roots;
 
 /// Computes floor(sqrt(value))
 ///
@@ -10,27 +10,17 @@ use fastnum::i512;
 /// returns: BigInt
 #[inline]
 pub fn sqrt(value: BigInt) -> Result<BigInt, Error> {
-    const ONE: BigInt = i512!(1);
-    const TWO: BigInt = i512!(2);
-    match value {
-        v if v < BigInt::ZERO => Err(Error::Invalid("NEGATIVE")),
-        BigInt::ZERO => Ok(BigInt::ZERO),
-        v if v <= TWO => Ok(ONE),
-        _ => {
-            let mut z = value;
-            let mut x = (value / TWO) + ONE;
-            while x < z {
-                z = x;
-                x = (value / x + x) / TWO;
-            }
-            Ok(z)
-        }
+    if value < BigInt::ZERO {
+        Err(Error::Invalid("NEGATIVE"))
+    } else {
+        Ok(value.sqrt())
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use fastnum::i512;
 
     #[test]
     fn test_sqrt_0_1000() {

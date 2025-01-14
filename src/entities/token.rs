@@ -142,7 +142,10 @@ macro_rules! token {
     ($chain_id:expr, $address:expr, $decimals:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string().parse::<Address>().unwrap(),
+            $address
+                .to_string()
+                .parse::<alloy_primitives::Address>()
+                .unwrap(),
             $decimals,
             None,
             None,
@@ -164,7 +167,10 @@ macro_rules! token {
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string().parse::<Address>().unwrap(),
+            $address
+                .to_string()
+                .parse::<alloy_primitives::Address>()
+                .unwrap(),
             $decimals,
             Some($symbol.to_string()),
             None,
@@ -186,7 +192,10 @@ macro_rules! token {
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr, $name:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string().parse::<Address>().unwrap(),
+            $address
+                .to_string()
+                .parse::<alloy_primitives::Address>()
+                .unwrap(),
             $decimals,
             Some($symbol.to_string()),
             Some($name.to_string()),

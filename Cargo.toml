@@ -15,8 +15,9 @@ exclude = [".github", ".gitignore", "rustfmt.toml"]
 alloy-primitives = { version = ">=0.8.5", features = ["map-fxhash"] }
 derive_more = { version = "1.0.0", features = ["deref"] }
 eth_checksum = { version = "0.1.2", optional = true }
-fastnum = { version = "0.1.9", default-features = false, features = ["libm"] }
+fastnum = { version = "0.1.9", default-features = false, features = ["libm", "numtraits"] }
 lazy_static = "1.5"
+num-integer = "0.1.46"
 regex = { version = "1.11", optional = true }
 thiserror = { version = "2", default-features = false }
 
