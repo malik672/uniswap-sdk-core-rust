@@ -49,6 +49,7 @@ pub mod prelude {
     pub use alloc::{string::String, vec::Vec};
     pub use alloy_primitives::{map::rustc_hash::FxHashMap, Address, Bytes, B256, U256};
     pub use bnum;
+    pub use fastnum;
     pub use num_integer::Integer;
 
     pub type BigInt = fastnum::I512;
