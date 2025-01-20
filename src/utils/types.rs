@@ -47,10 +47,26 @@ impl ToBig for BigUint {
     fn to_big_int(self) -> BigInt {
         BigInt::from_bits(self)
     }
+}
+
+impl ToBig for BigDecimal {
+    #[inline]
+    fn to_big_uint(self) -> BigUint {
+        self.round(0).digits()
+    }
+
+    #[inline]
+    fn to_big_int(self) -> BigInt {
+        let res = self.to_big_uint().to_big_int();
+        match self.is_negative() {
+            true => -res,
+            false => res,
+        }
+    }
 
     #[inline]
     fn to_big_decimal(self) -> BigDecimal {
-        BigDecimal::from_parts(self, 0, Sign::Plus, Context::default())
+        self
     }
 }
 
@@ -101,6 +117,7 @@ impl<const BITS: usize, const LIMBS: usize> FromBig for Signed<BITS, LIMBS> {
 mod tests {
     use super::*;
     use alloy_primitives::{I256, U256};
+    use fastnum::{dec512, i512, u512};
 
     #[test]
     fn test_uint_to_big() {
@@ -177,5 +194,22 @@ mod tests {
             x.to_big_uint() + (-x.to_big_int()).to_big_uint(),
             BigUint::from(1_u64) << 256
         );
+    }
+
+    #[test]
+    fn test_decimal_to_big() {
+        let x = dec512!(123456789012345678901234567890.123456789);
+        let y = u512!(123456789012345678901234567890);
+        let z = i512!(123456789012345678901234567890);
+        assert_eq!(x.to_big_uint(), y);
+        assert_eq!(x.to_big_int(), z);
+        assert_eq!(x.to_big_decimal(), x);
+
+        let x = -x;
+        let y = u512!(123456789012345678901234567890);
+        let z = i512!(-123456789012345678901234567890);
+        assert_eq!(x.to_big_uint(), y);
+        assert_eq!(x.to_big_int(), z);
+        assert_eq!(x.to_big_decimal(), x);
     }
 }
