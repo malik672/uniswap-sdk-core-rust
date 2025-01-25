@@ -150,6 +150,16 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
             self.denominator(),
         )
     }
+
+    /// Wrap the currency amount if the currency is not native
+    #[inline]
+    pub fn wrapped_owned(&self) -> Result<CurrencyAmount<Token>, Error> {
+        CurrencyAmount::from_fractional_amount(
+            self.currency.wrapped().clone(),
+            self.numerator(),
+            self.denominator(),
+        )
+    }
 }
 
 #[cfg(test)]
