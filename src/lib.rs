@@ -1,9 +1,5 @@
-//! # uniswap-sdk-core
-//!
-//! The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap
-//! decentralized exchange.
-
-#![cfg_attr(not(any(feature = "std", test)), no_std)]
+#![doc = include_str!("../README.md")]
+#![cfg_attr(not(feature = "std"), no_std)]
 #![warn(
     missing_copy_implementations,
     missing_debug_implementations,
@@ -46,8 +42,11 @@ pub mod utils;
 pub mod prelude {
     pub use crate::{addresses::*, chains::*, constants::*, entities::*, error::Error, utils::*};
 
-    pub use alloc::{string::String, vec::Vec};
-    pub use alloy_primitives::{map::rustc_hash::FxHashMap, Address, Bytes, B256, U256};
+    pub use alloc::{
+        string::{String, ToString},
+        vec::Vec,
+    };
+    pub use alloy_primitives::{map::HashMap, Address, Bytes, B256, U256};
 
     pub type BigInt = num_bigint::BigInt;
     pub type BigUint = num_bigint::BigUint;
@@ -56,5 +55,5 @@ pub mod prelude {
 }
 
 /// Contains examples of how Uniswap sdk core can be used
-#[cfg(test)]
+#[cfg(all(feature = "std", test))]
 mod examples;
