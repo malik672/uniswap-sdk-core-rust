@@ -1,6 +1,6 @@
 [package]
 name = "uniswap-sdk-core"
-version = "4.0.0-rc3"
+version = "4.0.0-rc4"
 edition = "2021"
 authors = ["malik <aremumalik05@gmail.com>", "Shuhui Luo <twitter.com/aureliano_law>"]
 description = "The Uniswap SDK Core in Rust provides essential functionality for interacting with the Uniswap decentralized exchange"
@@ -12,20 +12,18 @@ keywords = ["sdk-core", "ethereum", "sdk"]
 exclude = [".github", ".gitignore", "rustfmt.toml"]
 
 [dependencies]
-alloy-primitives = { version = ">=0.8.5", features = ["map-fxhash"] }
+alloy-primitives = { version = ">=0.8.5", default-features = false, features = ["map-fxhash"] }
 bnum = "0.12.0"
-derive_more = { version = "1.0.0", features = ["deref"] }
+derive_more = { version = "2", default-features = false, features = ["deref", "from"] }
 eth_checksum = { version = "0.1.2", optional = true }
-fastnum = { version = "0.1.9", default-features = false, features = ["libm", "numtraits"] }
+fastnum = { version = "0.1.11", default-features = false, features = ["numtraits"] }
 lazy_static = "1.5"
-num-integer = "0.1.46"
+num-integer = { version = "0.1", default-features = false }
+num-traits = { version = "0.2.19", default-features = false, features = ["libm"] }
 regex = { version = "1.11", optional = true }
 thiserror = { version = "2", default-features = false }
 
 [features]
 default = []
-std = ["fastnum/std", "thiserror/std"]
+std = ["alloy-primitives/std", "derive_more/std", "fastnum/std", "num-integer/std", "thiserror/std"]
 validate_parse_address = ["eth_checksum", "regex"]
-
-[lib]
-doctest = true

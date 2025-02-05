@@ -6,7 +6,7 @@ use alloc::string::ToString;
 #[derive(Clone, PartialEq, Debug)]
 pub struct WETH9 {
     /// A mapping of chain IDs to corresponding WETH tokens.
-    tokens: FxHashMap<u64, Token>,
+    tokens: HashMap<u64, Token>,
 }
 
 /// Default implementation for [`WETH9`], creating an instance with predefined WETH tokens on
@@ -31,7 +31,7 @@ impl WETH9 {
     #[inline]
     #[must_use]
     pub fn new() -> Self {
-        let tokens = FxHashMap::from_iter([
+        let tokens = HashMap::from_iter([
             (1, Self::on_chain(1).unwrap()),
             (3, Self::on_chain(3).unwrap()),
             (4, Self::on_chain(4).unwrap()),
