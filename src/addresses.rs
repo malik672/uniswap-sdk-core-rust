@@ -2,7 +2,7 @@ use crate::prelude::*;
 use alloy_primitives::address;
 use lazy_static::lazy_static;
 
-pub type AddressMap = FxHashMap<u64, Address>;
+pub type AddressMap = HashMap<u64, Address>;
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct ChainAddresses {
@@ -381,8 +381,8 @@ lazy_static! {
     /// This map is used to look up the addresses of various Uniswap contracts
     /// for a given network. The keys in the map are the network IDs, and the values
     /// are the corresponding contract addresses.
-    pub static ref CHAIN_TO_ADDRESSES_MAP: FxHashMap<u64, ChainAddresses> = {
-        FxHashMap::from_iter([
+    pub static ref CHAIN_TO_ADDRESSES_MAP: HashMap<u64, ChainAddresses> = {
+        HashMap::from_iter([
             (ChainId::MAINNET as u64, MAINNET_ADDRESSES),
             (ChainId::OPTIMISM as u64, OPTIMISM_ADDRESSES),
             (ChainId::ARBITRUM_ONE as u64, ARBITUM_ONE_ADDRESSES),
