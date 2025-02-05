@@ -37,6 +37,7 @@ pub fn sorted_insert<T: Clone>(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::vec;
 
     fn cmp(a: &i32, b: &i32) -> Ordering {
         a.cmp(b)
