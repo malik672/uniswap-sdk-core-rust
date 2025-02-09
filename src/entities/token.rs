@@ -4,14 +4,14 @@ use crate::prelude::*;
 pub type Token = CurrencyLike<false, TokenMeta>;
 
 /// Represents the metadata for an ERC20 token, including its address and optional fees.
-#[derive(Clone, Debug, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct TokenMeta {
     /// The address of the token.
     pub address: Address,
     /// The buy fee in basis points (bps) for the token.
-    pub buy_fee_bps: Option<BigUint>,
+    pub buy_fee_bps: u64,
     /// The sell fee in basis points (bps) for the token.
-    pub sell_fee_bps: Option<BigUint>,
+    pub sell_fee_bps: u64,
 }
 
 macro_rules! impl_base_currency {
@@ -62,8 +62,8 @@ impl Token {
         decimals: u8,
         symbol: Option<String>,
         name: Option<String>,
-        buy_fee_bps: Option<BigUint>,
-        sell_fee_bps: Option<BigUint>,
+        buy_fee_bps: u64,
+        sell_fee_bps: u64,
     ) -> Self {
         assert!(chain_id != 0, "chain id can't be zero");
         Self {
@@ -135,19 +135,22 @@ macro_rules! token {
             $decimals,
             None,
             None,
-            None,
-            None,
+            0,
+            0,
         )
     };
     ($chain_id:expr, $address:expr, $decimals:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string().parse::<Address>().unwrap(),
+            $address
+                .to_string()
+                .parse::<alloy_primitives::Address>()
+                .unwrap(),
             $decimals,
             None,
             None,
-            None,
-            None,
+            0,
+            0,
         )
     };
     ($chain_id:expr, $address:literal, $decimals:expr, $symbol:expr) => {
@@ -157,19 +160,22 @@ macro_rules! token {
             $decimals,
             Some($symbol.to_string()),
             None,
-            None,
-            None,
+            0,
+            0,
         )
     };
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string().parse::<Address>().unwrap(),
+            $address
+                .to_string()
+                .parse::<alloy_primitives::Address>()
+                .unwrap(),
             $decimals,
             Some($symbol.to_string()),
             None,
-            None,
-            None,
+            0,
+            0,
         )
     };
     ($chain_id:expr, $address:literal, $decimals:expr, $symbol:expr, $name:expr) => {
@@ -179,19 +185,22 @@ macro_rules! token {
             $decimals,
             Some($symbol.to_string()),
             Some($name.to_string()),
-            None,
-            None,
+            0,
+            0,
         )
     };
     ($chain_id:expr, $address:expr, $decimals:expr, $symbol:expr, $name:expr) => {
         Token::new(
             $chain_id,
-            $address.to_string().parse::<Address>().unwrap(),
+            $address
+                .to_string()
+                .parse::<alloy_primitives::Address>()
+                .unwrap(),
             $decimals,
             Some($symbol.to_string()),
             Some($name.to_string()),
-            None,
-            None,
+            0,
+            0,
         )
     };
 }

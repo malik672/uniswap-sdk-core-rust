@@ -12,8 +12,8 @@ fn main() {
         18, // Decimals for DAI
         Some("DAI".to_string()), // Symbol for DAI
         Some("Dai Stablecoin".to_string()), // Name for DAI
-        None, // Assuming no buy fee
-        None, // Assuming no sell fee
+        0, // Assuming no buy fee
+        0, // Assuming no sell fee
     );
 
     // Print the token's address and decimals
