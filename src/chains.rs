@@ -23,6 +23,7 @@ pub enum ChainId {
     BNB = 56,
     AVALANCHE = 43114,
     BASE_GOERLI = 84531,
+    BASE_SEPOLIA = 84532,
     BASE = 8453,
     ZORA = 7777777,
     ZORA_SEPOLIA = 999999999,
@@ -30,14 +31,16 @@ pub enum ChainId {
     BLAST = 81457,
     ZKSYNC = 324,
     WORLDCHAIN = 480,
-    ASTROCHAIN_SEPOLIA = 1301,
+    UNICHAIN_SEPOLIA = 1301,
+    UNICHAIN = 130,
+    MONAD_TESTNET = 10143,
 }
 
 /// A list of `ChainId` constants representing the blockchain networks supported by the Uniswap SDK.
 ///
 /// This array includes all the `ChainId` variants that are supported by the SDK, making it easy to
 /// iterate over or check for supported chains.
-pub const SUPPORTED_CHAINS: [ChainId; 24] = [
+pub const SUPPORTED_CHAINS: [ChainId; 27] = [
     ChainId::MAINNET,
     ChainId::OPTIMISM,
     ChainId::OPTIMISM_GOERLI,
@@ -55,11 +58,14 @@ pub const SUPPORTED_CHAINS: [ChainId; 24] = [
     ChainId::AVALANCHE,
     ChainId::BASE,
     ChainId::BASE_GOERLI,
+    ChainId::BASE_SEPOLIA,
     ChainId::ZORA,
     ChainId::ZORA_SEPOLIA,
     ChainId::ROOTSTOCK,
     ChainId::BLAST,
     ChainId::ZKSYNC,
     ChainId::WORLDCHAIN,
-    ChainId::ASTROCHAIN_SEPOLIA,
+    ChainId::UNICHAIN_SEPOLIA,
+    ChainId::UNICHAIN,
+    ChainId::MONAD_TESTNET,
 ];
