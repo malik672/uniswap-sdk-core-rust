@@ -33,6 +33,7 @@ impl WETH9 {
     pub fn new() -> Self {
         let tokens = HashMap::from_iter([
             (1, Self::on_chain(1).unwrap()),
+            (11155111, Self::on_chain(11155111).unwrap()),
             (3, Self::on_chain(3).unwrap()),
             (4, Self::on_chain(4).unwrap()),
             (5, Self::on_chain(5).unwrap()),
@@ -44,6 +45,7 @@ impl WETH9 {
             (421611, Self::on_chain(421611).unwrap()),
             (421614, Self::on_chain(421614).unwrap()),
             (8453, Self::on_chain(8453).unwrap()),
+            (84532, Self::on_chain(84532).unwrap()),
             (56, Self::on_chain(56).unwrap()),
             (137, Self::on_chain(137).unwrap()),
             (43114, Self::on_chain(43114).unwrap()),
@@ -52,6 +54,8 @@ impl WETH9 {
             (324, Self::on_chain(324).unwrap()),
             (480, Self::on_chain(480).unwrap()),
             (1301, Self::on_chain(1301).unwrap()),
+            (130, Self::on_chain(130).unwrap()),
+            (10143, Self::on_chain(10143).unwrap()),
         ]);
         Self { tokens }
     }
@@ -70,6 +74,13 @@ impl WETH9 {
             1 => Some(token!(
                 1,
                 "C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            11155111 => Some(token!(
+                11155111,
+                "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14",
                 18,
                 "WETH",
                 "Wrapped Ether"
@@ -151,6 +162,13 @@ impl WETH9 {
                 "WETH",
                 "Wrapped Ether"
             )),
+            84532 => Some(token!(
+                84532,
+                "0x4200000000000000000000000000000000000006",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
             56 => Some(token!(
                 56,
                 "bb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
@@ -206,6 +224,20 @@ impl WETH9 {
                 18,
                 "WETH",
                 "Wrapped Ether"
+            )),
+            130 => Some(token!(
+                130,
+                "0x4200000000000000000000000000000000000006",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            10143 => Some(token!(
+                10143,
+                "0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701",
+                18,
+                "WMON",
+                "Wrapped Monad"
             )),
             _ => None,
         }
