@@ -32,7 +32,7 @@ mod tests {
         bytes[12..32].copy_from_slice(USDCE.as_slice());
         bytes[44..64].copy_from_slice(WETH.as_slice());
         bytes[92..96].copy_from_slice(3000_u32.to_be_bytes().as_slice());
-        let salt = keccak256(&bytes);
+        let salt = keccak256(bytes);
         let result = compute_zksync_create2_address(
             address!("8FdA5a7a8dCA67BBcDd10F02Fa0649A937215422"),
             b256!("010013f177ea1fcbc4520f9a3ca7cd2d1d77959e05aa66484027cb38e712aeed"),

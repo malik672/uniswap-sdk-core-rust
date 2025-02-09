@@ -12,7 +12,7 @@ pub struct CurrencyMeta<T: BaseCurrency> {
     /// The currency associated with this metadata
     pub currency: T,
     /// The scale factor for the currency's decimal places
-    pub decimal_scale: BigUint,
+    pub decimal_scale: BigInt,
 }
 
 impl<T: BaseCurrency> CurrencyAmount<T> {
@@ -35,7 +35,7 @@ impl<T: BaseCurrency> CurrencyAmount<T> {
             denominator,
             CurrencyMeta {
                 currency,
-                decimal_scale: BigUint::from(10_u64).pow(exponent as u32),
+                decimal_scale: BigInt::from(10_u64).pow(exponent as u32),
             },
         ))
     }
