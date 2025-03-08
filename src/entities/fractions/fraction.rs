@@ -55,7 +55,7 @@ impl Fraction {
     }
 }
 
-/// Function to convert the custom Rounding enum to [`bigdecimal`]'s [`RoundingMode`]
+/// Function to convert the custom Rounding enum to [`RoundingMode`]
 #[inline]
 const fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
     match rounding {
