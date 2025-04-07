@@ -31,32 +31,15 @@ impl WETH9 {
     #[inline]
     #[must_use]
     pub fn new() -> Self {
-        let tokens = HashMap::from_iter([
-            (1, Self::on_chain(1).unwrap()),
-            (11155111, Self::on_chain(11155111).unwrap()),
-            (3, Self::on_chain(3).unwrap()),
-            (4, Self::on_chain(4).unwrap()),
-            (5, Self::on_chain(5).unwrap()),
-            (42, Self::on_chain(42).unwrap()),
-            (10, Self::on_chain(10).unwrap()),
-            (69, Self::on_chain(69).unwrap()),
-            (11155420, Self::on_chain(11155420).unwrap()),
-            (42161, Self::on_chain(42161).unwrap()),
-            (421611, Self::on_chain(421611).unwrap()),
-            (421614, Self::on_chain(421614).unwrap()),
-            (8453, Self::on_chain(8453).unwrap()),
-            (84532, Self::on_chain(84532).unwrap()),
-            (56, Self::on_chain(56).unwrap()),
-            (137, Self::on_chain(137).unwrap()),
-            (43114, Self::on_chain(43114).unwrap()),
-            (7777777, Self::on_chain(7777777).unwrap()),
-            (81457, Self::on_chain(81457).unwrap()),
-            (324, Self::on_chain(324).unwrap()),
-            (480, Self::on_chain(480).unwrap()),
-            (1301, Self::on_chain(1301).unwrap()),
-            (130, Self::on_chain(130).unwrap()),
-            (10143, Self::on_chain(10143).unwrap()),
-        ]);
+        const CHAIN_IDS: [u64; 24] = [
+            1, 11155111, 3, 4, 5, 42, 10, 69, 11155420, 42161, 421611, 421614, 8453, 84532, 56,
+            137, 43114, 7777777, 81457, 324, 480, 1301, 130, 10143,
+        ];
+        let tokens = HashMap::from_iter(
+            CHAIN_IDS
+                .into_iter()
+                .map(|chain_id| (chain_id, Self::on_chain(chain_id).unwrap())),
+        );
         Self { tokens }
     }
 
