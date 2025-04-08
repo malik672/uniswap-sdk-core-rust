@@ -14,7 +14,7 @@ Add this to your Cargo.toml
 
 ```toml
 [dependencies]
-uniswap-sdk-core = "4.0.0"
+uniswap-sdk-core = "5.0.0"
 ```
 
 And this to your code:
@@ -35,7 +35,7 @@ the `token!` macro.
 <details>
   <summary>Click to expand</summary>
 
-```rust
+```rust,ignore
 // Import necessary preludes and token macro
 use uniswap_sdk_core::{prelude::*, token};
 
