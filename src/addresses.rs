@@ -6,21 +6,21 @@ pub type AddressMap = HashMap<u64, Address>;
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct ChainAddresses {
-    v3_core_factory: Address,
-    multicall: Address,
-    quoter: Address,
-    quoter_v2: Address,
-    v3_migrator: Option<Address>,
-    nonfungible_position_manager: Address,
-    tick_lens: Option<Address>,
-    swap_router02: Option<Address>,
-    mixed_route_quoter_v1: Option<Address>,
-    mixed_route_quoter_v2: Option<Address>,
+    pub v3_core_factory: Address,
+    pub multicall: Address,
+    pub quoter: Address,
+    pub quoter_v2: Address,
+    pub v3_migrator: Option<Address>,
+    pub nonfungible_position_manager: Address,
+    pub tick_lens: Option<Address>,
+    pub swap_router02: Option<Address>,
+    pub mixed_route_quoter_v1: Option<Address>,
+    pub mixed_route_quoter_v2: Option<Address>,
 
-    v4_pool_manager: Option<Address>,
-    v4_position_manager: Option<Address>,
-    v4_state_view: Option<Address>,
-    v4_quoter: Option<Address>,
+    pub v4_pool_manager: Option<Address>,
+    pub v4_position_manager: Option<Address>,
+    pub v4_state_view: Option<Address>,
+    pub v4_quoter: Option<Address>,
 }
 
 pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
@@ -109,6 +109,10 @@ lazy_static! {
                 ChainId::MONAD_TESTNET as u64,
                 address!("0x733e88f248b742db6c14c0b1713af5ad7fdd59d0"),
             ),
+            (
+                ChainId::SONEIUM as u64,
+                address!("0x97febbc2adbd5644ba22736e962564b23f5828ce"),
+            ),
         ])
     };
 }
@@ -168,14 +172,22 @@ lazy_static! {
                 ChainId::MONAD_TESTNET as u64,
                 address!("0xfb8e1c3b833f9e67a71c859a132cf783b645e436"),
             ),
+            (
+                ChainId::SONEIUM as u64,
+                address!("0x273f68c234fa55b550b40e563c4a488e0d334320"),
+            ),
         ])
     };
 }
 
+/// Choose not to impl `Default` for `ChainAddresses` to avoid "[E0379]: functions in trait impls
+/// cannot be declared const"
 impl ChainAddresses {
     /// Networks that share most of the same addresses i.e. Mainnet, Goerli, Optimism, Arbitrum,
     /// Polygon
-    const fn default() -> Self {
+    #[inline]
+    #[must_use]
+    pub const fn default() -> Self {
         Self {
             v3_core_factory: address!("0x1F98431c8aD98523631AE4a59f267346ea31F984"),
             multicall: address!("0x1F98415757620B543A52E61c46B32eB19261F984"),
@@ -524,6 +536,22 @@ const MONAD_TESTNET_ADDRESSES: ChainAddresses = ChainAddresses {
     ..ChainAddresses::default()
 };
 
+const SONEIUM_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0x42ae7ec7ff020412639d443e245d936429fbe717"),
+    multicall: address!("0x8ad5ef2f2508288d2de66f04dd883ad5f4ef62b2"),
+    quoter: address!("0x3e6c707d0125226ff60f291b6bd1404634f00aba"),
+    v3_migrator: Some(address!("0xa107580f73bd797bd8b87ff24e98346d99f93ddb")),
+    nonfungible_position_manager: address!("0x56c1205b0244332011c1e866f4ea5384eb6bfa2c"),
+    tick_lens: Some(address!("0xcd08eefb928c86499e6235ac155906bb7c4dc41a")),
+    swap_router02: Some(address!("0x7e40db01736f88464e5f4e42394f3d5bbb6705b9")),
+
+    v4_pool_manager: Some(address!("0x360e68faccca8ca495c1b759fd9eee466db9fb32")),
+    v4_position_manager: Some(address!("0x1b35d13a2e2528f192637f14b05f0dc0e7deb566")),
+    v4_state_view: Some(address!("0x76fd297e2d437cd7f76d50f01afe6160f86e9990")),
+    v4_quoter: Some(address!("0x3972c00f7ed4885e145823eb7c655375d275a1c5")),
+    ..ChainAddresses::default()
+};
+
 lazy_static! {
     /// A map of chain IDs to their corresponding Uniswap contract addresses.
     ///
@@ -559,6 +587,7 @@ lazy_static! {
             (ChainId::UNICHAIN_SEPOLIA as u64, UNICHAIN_SEPOLIA_ADDRESSES),
             (ChainId::UNICHAIN as u64, UNICHAIN_ADDRESSES),
             (ChainId::MONAD_TESTNET as u64, MONAD_TESTNET_ADDRESSES),
+            (ChainId::SONEIUM as u64, SONEIUM_ADDRESSES),
         ])
     };
 }
