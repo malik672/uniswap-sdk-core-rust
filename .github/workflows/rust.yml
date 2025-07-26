@@ -8,6 +8,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  MSRV: 1.85
 
 jobs:
   lint:
@@ -16,8 +17,6 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
       - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
@@ -42,10 +41,11 @@ jobs:
     name: Rust Tests
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      matrix:
+        rust-version: [ '1.85', 'stable' ]
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
       - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
@@ -53,14 +53,19 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
+          key: ${{ runner.os }}-cargo-${{ matrix.rust-version }}-${{ hashFiles('**/Cargo.toml') }}
           restore-keys: |
-            ${{ runner.os }}-cargo-registry-
+            ${{ runner.os }}-cargo-${{ matrix.rust-version }}-
+            ${{ runner.os }}-cargo-
+      - name: Install Rust ${{ matrix.rust-version }}
+        run: |
+          if [ "${{ matrix.rust-version }}" != "stable" ]; then
+            rustup install ${{ matrix.rust-version }} --profile minimal
+          fi
       - name: Build
-        run: cargo build
-      - name: Run tests for default feature
-        run: cargo test
-      - name: Run tests for std feature
-        run: cargo test --features std
-      - name: Run doc tests
-        run: cargo test --doc --all-features
+        run: cargo +${{ matrix.rust-version }} build
+      - name: Run tests
+        run: |
+          cargo +${{ matrix.rust-version }} test
+          cargo +${{ matrix.rust-version }} test --features std
+          cargo +${{ matrix.rust-version }} test --doc --all-features

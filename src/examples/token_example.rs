@@ -22,5 +22,5 @@ fn main() {
 
     // Convert a token chain id
     let token_id = dai_token.chain_id;
-    println!("token_id {}", token_id);
+    println!("token_id {token_id}");
 }
