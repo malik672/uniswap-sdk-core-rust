@@ -18,6 +18,7 @@
 #![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
 
 extern crate alloc;
+use num_traits as _;
 
 /// Contains functionality related to All Contracts deployed and supported by the Uniswap SDK.
 pub mod addresses;
@@ -46,7 +47,8 @@ pub mod prelude {
         string::{String, ToString},
         vec::Vec,
     };
-    pub use alloy_primitives::{map::HashMap, Address, Bytes, B256, U256};
+    pub use alloy_primitives::{Address, B256, Bytes, U256, map::HashMap};
+    pub use num_integer::Integer;
 
     pub type BigInt = num_bigint::BigInt;
     pub type BigUint = num_bigint::BigUint;

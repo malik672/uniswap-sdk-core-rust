@@ -39,7 +39,7 @@ mod tests {
         let token = token!(4, address_zero, 25, "Test", "Te");
         let token_1 = token!(3, address_one, 25, "Test", "Te");
 
-        //is correct for zero
+        // is correct for zero
         assert!(
             compute_price_impact(
                 &Price::new(Ether::on_chain(1), token.clone(), 10, 100),
@@ -50,7 +50,7 @@ mod tests {
                 == Percent::default(),
         );
 
-        //is correct for half output
+        // is correct for half output
         assert!(
             compute_price_impact(
                 &Price::new(token.clone(), token_1.clone(), 10, 100),
@@ -61,7 +61,7 @@ mod tests {
                 == Percent::new(5000, 10000),
         );
 
-        //is negative for more output
+        // is negative for more output
         assert_eq!(
             compute_price_impact(
                 &Price::new(token.clone(), token_1.clone(), 10, 100),
