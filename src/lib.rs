@@ -47,7 +47,7 @@ pub mod prelude {
         string::{String, ToString},
         vec::Vec,
     };
-    pub use alloy_primitives::{map::HashMap, Address, Bytes, B256, U256};
+    pub use alloy_primitives::{Address, B256, Bytes, U256, map::HashMap};
     pub use bnum;
     pub use fastnum;
     pub use num_integer::Integer;

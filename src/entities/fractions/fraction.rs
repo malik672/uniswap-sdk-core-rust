@@ -7,7 +7,7 @@ use core::{
     ops::{Add, Div, Mul, Sub},
 };
 use derive_more::Deref;
-use fastnum::{i512, I1024};
+use fastnum::{I1024, i512};
 use num_integer::Integer;
 
 /// Struct representing a fraction with metadata
