@@ -19,8 +19,7 @@ pub fn check_valid_ethereum_address(ethereum_address: &str) -> Result<&str, Stri
         Ok(ethereum_address)
     } else {
         Err(format!(
-            "{} is not a valid Ethereum address.",
-            ethereum_address
+            "{ethereum_address} is not a valid Ethereum address."
         ))
     }
 }
@@ -74,8 +73,7 @@ mod tests {
         assert_eq!(
             validate_and_parse_address(invalid_address),
             Err(format!(
-                "{} is not a valid Ethereum address.",
-                invalid_address
+                "{invalid_address} is not a valid Ethereum address."
             ))
         );
     }

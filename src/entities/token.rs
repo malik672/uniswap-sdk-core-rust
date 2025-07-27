@@ -221,9 +221,11 @@ mod tests {
         let token_1 = token!(2, ADDRESS_TWO, 18, "Test", "Te");
 
         assert!(token.address().eq(&ADDRESS_ONE.parse::<Address>().unwrap()));
-        assert!(token_1
-            .address()
-            .eq(&ADDRESS_TWO.parse::<Address>().unwrap()));
+        assert!(
+            token_1
+                .address()
+                .eq(&ADDRESS_TWO.parse::<Address>().unwrap())
+        );
     }
 
     #[test]
