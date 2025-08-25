@@ -54,7 +54,7 @@ impl Fraction {
     }
 }
 
-/// Function to convert the custom Rounding enum to [`bigdecimal`]'s [`RoundingMode`]
+/// Function to convert the custom Rounding enum to [`RoundingMode`]
 #[inline]
 const fn to_rounding_strategy(rounding: Rounding) -> RoundingMode {
     match rounding {
@@ -228,143 +228,75 @@ impl<M: PartialEq> PartialOrd<Self> for FractionLike<M> {
     }
 }
 
-impl<M: Clone> Add for FractionLike<M> {
-    type Output = Self;
+macro_rules! impl_add_sub {
+    ($trait:ident, $method:ident, $op:tt, $Rhs:ty) => {
+        impl<M: Clone> $trait<$Rhs> for FractionLike<M> {
+            type Output = Self;
 
-    #[inline]
-    fn add(self, other: Self) -> Self::Output {
-        if self.denominator == other.denominator {
-            FractionBase::new(
-                self.numerator + other.numerator,
-                self.denominator,
-                self.meta,
-            )
-        } else {
-            FractionBase::new(
-                self.numerator * &other.denominator + other.numerator * &self.denominator,
-                self.denominator * other.denominator,
-                self.meta,
-            )
+            #[inline]
+            fn $method(self, other: $Rhs) -> Self::Output {
+                if self.denominator == other.denominator {
+                    FractionBase::new(
+                        self.numerator $op &other.numerator,
+                        self.denominator,
+                        self.meta,
+                    )
+                } else {
+                    FractionBase::new(
+                        self.numerator * &other.denominator $op &other.numerator * &self.denominator,
+                        self.denominator * &other.denominator,
+                        self.meta,
+                    )
+                }
+            }
         }
-    }
+    };
 }
 
-impl<M: Clone> Add<&Self> for FractionLike<M> {
-    type Output = Self;
+impl_add_sub!(Add, add, +, Self);
+impl_add_sub!(Add, add, +, &Self);
+impl_add_sub!(Sub, sub, -, Self);
+impl_add_sub!(Sub, sub, -, &Self);
 
-    #[inline]
-    fn add(self, other: &Self) -> Self::Output {
-        if self.denominator == other.denominator {
-            FractionBase::new(
-                self.numerator + &other.numerator,
-                self.denominator,
-                self.meta,
-            )
-        } else {
-            FractionBase::new(
-                self.numerator * &other.denominator + &other.numerator * &self.denominator,
-                self.denominator * &other.denominator,
-                self.meta,
-            )
+macro_rules! impl_mul {
+    ($trait:ident, $method:ident, $Rhs:ty) => {
+        impl<M: Clone> $trait<$Rhs> for FractionLike<M> {
+            type Output = Self;
+
+            #[inline]
+            fn $method(self, other: $Rhs) -> Self::Output {
+                FractionBase::new(
+                    self.numerator * &other.numerator,
+                    self.denominator * &other.denominator,
+                    self.meta,
+                )
+            }
         }
-    }
+    };
 }
 
-impl<M: Clone> Sub for FractionLike<M> {
-    type Output = Self;
+impl_mul!(Mul, mul, Self);
+impl_mul!(Mul, mul, &Self);
 
-    #[inline]
-    fn sub(self, other: Self) -> Self::Output {
-        if self.denominator == other.denominator {
-            FractionBase::new(
-                self.numerator - other.numerator,
-                self.denominator,
-                self.meta,
-            )
-        } else {
-            FractionBase::new(
-                self.numerator * &other.denominator - other.numerator * &self.denominator,
-                self.denominator * other.denominator,
-                self.meta,
-            )
+macro_rules! impl_div {
+    ($trait:ident, $method:ident, $Rhs:ty) => {
+        impl<M: Clone> $trait<$Rhs> for FractionLike<M> {
+            type Output = Self;
+
+            #[inline]
+            fn $method(self, other: $Rhs) -> Self::Output {
+                FractionBase::new(
+                    self.numerator * &other.denominator,
+                    self.denominator * &other.numerator,
+                    self.meta,
+                )
+            }
         }
-    }
+    };
 }
 
-impl<M: Clone> Sub<&Self> for FractionLike<M> {
-    type Output = Self;
-
-    #[inline]
-    fn sub(self, other: &Self) -> Self::Output {
-        if self.denominator == other.denominator {
-            FractionBase::new(
-                self.numerator - &other.numerator,
-                self.denominator,
-                self.meta,
-            )
-        } else {
-            FractionBase::new(
-                self.numerator * &other.denominator - &other.numerator * &self.denominator,
-                self.denominator * &other.denominator,
-                self.meta,
-            )
-        }
-    }
-}
-
-impl<M: Clone> Mul for FractionLike<M> {
-    type Output = Self;
-
-    #[inline]
-    fn mul(self, other: Self) -> Self::Output {
-        FractionBase::new(
-            self.numerator * other.numerator,
-            self.denominator * other.denominator,
-            self.meta,
-        )
-    }
-}
-
-impl<M: Clone> Mul<&Self> for FractionLike<M> {
-    type Output = Self;
-
-    #[inline]
-    fn mul(self, other: &Self) -> Self::Output {
-        FractionBase::new(
-            self.numerator * &other.numerator,
-            self.denominator * &other.denominator,
-            self.meta,
-        )
-    }
-}
-
-impl<M: Clone> Div for FractionLike<M> {
-    type Output = Self;
-
-    /// There's little to no possibility of an error, so unwrap can be used
-    #[inline]
-    fn div(self, other: Self) -> Self::Output {
-        FractionBase::new(
-            self.numerator * other.denominator,
-            self.denominator * other.numerator,
-            self.meta,
-        )
-    }
-}
-
-impl<M: Clone> Div<&Self> for FractionLike<M> {
-    type Output = Self;
-
-    /// There's little to no possibility of an error, so unwrap can be used
-    #[inline]
-    fn div(self, other: &Self) -> Self::Output {
-        FractionBase::new(
-            self.numerator * &other.denominator,
-            self.denominator * &other.numerator,
-            self.meta,
-        )
-    }
-}
+impl_div!(Div, div, Self);
+impl_div!(Div, div, &Self);
 
 #[cfg(test)]
 mod tests {

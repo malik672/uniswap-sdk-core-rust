@@ -13,7 +13,7 @@ Add this to your Cargo.toml
 
 ```toml
 [dependencies]
-uniswap-sdk-core = "3.7.1"
+uniswap-sdk-core = "3.8.0"
 ```
 
 And this to your code:
@@ -21,6 +21,17 @@ And this to your code:
 ```rust
 use uniswap_sdk_core::prelude::*;
 ```
+
+## Supported Rust Versions (MSRV)
+
+<!--
+When updating this, also update:
+- clippy.toml
+- Cargo.toml
+- .github/workflows/rust.yml
+-->
+
+The current MSRV (minimum supported rust version) is 1.85.
 
 ## Note on `no_std`
 

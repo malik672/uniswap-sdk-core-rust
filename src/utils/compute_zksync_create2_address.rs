@@ -1,4 +1,4 @@
-use alloy_primitives::{keccak256, Address, Bytes, B256};
+use alloy_primitives::{Address, B256, Bytes, keccak256};
 
 #[inline]
 #[must_use]
