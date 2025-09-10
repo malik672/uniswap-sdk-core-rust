@@ -13,15 +13,12 @@ pub trait ToBig: Sized {
     #[inline]
     fn to_big_decimal(self) -> BigDecimal {
         let x = self.to_big_int();
-        BigDecimal::from_parts(
-            x.to_bits(),
-            0,
-            match x.is_negative() {
-                false => Sign::Plus,
-                true => Sign::Minus,
-            },
-            Context::default(),
-        )
+        let sign = match x.is_negative() {
+            false => Sign::Plus,
+            true => Sign::Minus,
+        };
+        let x = x.unsigned_abs();
+        BigDecimal::from_parts(x, 0, sign, Context::default())
     }
 }
 
@@ -211,5 +208,16 @@ mod tests {
         assert_eq!(x.to_big_uint(), y);
         assert_eq!(x.to_big_int(), z);
         assert_eq!(x.to_big_decimal(), x);
+    }
+
+    #[test]
+    fn test_big_to_decimal() {
+        let u = u512!(12345678901234567890123456789012345678901234567890123456789012345678);
+        let d = dec512!(12345678901234567890123456789012345678901234567890123456789012345678);
+        assert_eq!(u.to_big_decimal(), d);
+
+        let i = i512!(-12345678901234567890123456789012345678901234567890123456789012345678);
+        let d = -d;
+        assert_eq!(i.to_big_decimal(), d);
     }
 }
