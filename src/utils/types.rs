@@ -13,12 +13,15 @@ pub trait ToBig: Sized {
     #[inline]
     fn to_big_decimal(self) -> BigDecimal {
         let x = self.to_big_int();
-        let sign = match x.is_negative() {
-            false => Sign::Plus,
-            true => Sign::Minus,
-        };
-        let x = x.unsigned_abs();
-        BigDecimal::from_parts(x, 0, sign, Context::default())
+        BigDecimal::from_parts(
+            x.unsigned_abs(),
+            0,
+            match x.is_negative() {
+                false => Sign::Plus,
+                true => Sign::Minus,
+            },
+            Context::default(),
+        )
     }
 }
 
@@ -116,13 +119,38 @@ mod tests {
     use alloy_primitives::{I256, U256};
     use fastnum::{dec512, i512, u512};
 
+    /// Construct BigUint from U256 limbs (little-endian)
+    fn biguint_from_limbs(limbs: [u64; 4]) -> BigUint {
+        BigUint::from(limbs[0])
+            + (BigUint::from(limbs[1]) << 64)
+            + (BigUint::from(limbs[2]) << 128)
+            + (BigUint::from(limbs[3]) << 192)
+    }
+
+    /// Construct BigInt from limbs as unsigned value (little-endian)
+    fn bigint_from_limbs_unsigned(limbs: [u64; 4]) -> BigInt {
+        BigInt::from(limbs[0])
+            + (BigInt::from(limbs[1]) << 64)
+            + (BigInt::from(limbs[2]) << 128)
+            + (BigInt::from(limbs[3]) << 192)
+    }
+
+    /// Construct BigInt from I256 limbs using two's complement (little-endian)
+    fn bigint_from_signed_limbs(limbs: [u64; 4]) -> BigInt {
+        let raw = bigint_from_limbs_unsigned(limbs);
+        // Check if high bit is set (negative in two's complement)
+        if limbs[3] & 0x8000_0000_0000_0000 != 0 {
+            // Convert from two's complement: subtract 2^256
+            raw - (BigInt::from(1) << 256)
+        } else {
+            raw
+        }
+    }
+
     #[test]
     fn test_uint_to_big() {
         let x = U256::from_limbs([1, 2, 3, 4]);
-        let y = BigUint::from(1_u64)
-            + (BigUint::from(2_u64) << 64)
-            + (BigUint::from(3_u64) << 128)
-            + (BigUint::from(4_u64) << 192);
+        let y = biguint_from_limbs([1, 2, 3, 4]);
         assert_eq!(x.to_big_uint(), y);
         assert_eq!(x.to_big_int(), y.to_big_int());
         assert_eq!(x.to_big_decimal(), y.to_big_decimal());
@@ -136,11 +164,8 @@ mod tests {
 
     #[test]
     fn test_signed_to_big() {
-        let x = I256::from_raw(U256::from_limbs([1, 2, 3, 4]));
-        let y: BigInt = BigInt::from(1)
-            + (BigInt::from(2) << 64)
-            + (BigInt::from(3) << 128)
-            + (BigInt::from(4) << 192);
+        let x = I256::from_limbs([1, 2, 3, 4]);
+        let y = bigint_from_signed_limbs([1, 2, 3, 4]);
         assert_eq!(x.to_big_uint(), y.to_big_uint());
         assert_eq!(x.to_big_int(), y);
         assert_eq!(x.to_big_decimal(), y.to_big_decimal());
@@ -180,7 +205,7 @@ mod tests {
 
     #[test]
     fn test_signed_from_big() {
-        let x = I256::from_raw(U256::from_limbs([1, 2, 3, 4]));
+        let x = I256::from_limbs([1, 2, 3, 4]);
         assert_eq!(I256::from_big_uint(x.to_big_uint()), x);
         assert_eq!(I256::from_big_int(x.to_big_int()), x);
 
@@ -219,5 +244,107 @@ mod tests {
         let i = i512!(-12345678901234567890123456789012345678901234567890123456789012345678);
         let d = -d;
         assert_eq!(i.to_big_decimal(), d);
+    }
+
+    #[test]
+    fn test_zero() {
+        let x = U256::ZERO;
+        assert_eq!(x.to_big_uint(), BigUint::from(0_u64));
+        assert_eq!(x.to_big_int(), BigInt::from(0));
+        assert_eq!(U256::from_big_uint(x.to_big_uint()), x);
+    }
+
+    #[test]
+    fn test_max() {
+        let x = U256::MAX;
+        let expected = (BigUint::from(1_u64) << 256) - BigUint::from(1_u64);
+        assert_eq!(x.to_big_uint(), expected);
+        assert_eq!(U256::from_big_uint(x.to_big_uint()), x);
+    }
+
+    #[test]
+    fn test_signed_boundaries() {
+        // I256::MIN has high bit set: [0, 0, 0, 0x8000_0000_0000_0000]
+        let x = I256::from_limbs([0, 0, 0, 0x8000_0000_0000_0000]);
+        assert_eq!(x, I256::MIN);
+        assert_eq!(I256::from_big_int(x.to_big_int()), x);
+
+        // I256::MAX: [MAX, MAX, MAX, 0x7FFF_FFFF_FFFF_FFFF]
+        let y = I256::from_limbs([u64::MAX, u64::MAX, u64::MAX, 0x7FFF_FFFF_FFFF_FFFF]);
+        assert_eq!(y, I256::MAX);
+        assert_eq!(I256::from_big_int(y.to_big_int()), y);
+    }
+
+    #[test]
+    fn test_negative_one() {
+        let neg_one = I256::MINUS_ONE;
+        assert_eq!(neg_one.to_big_int(), BigInt::from(-1));
+        assert_eq!(I256::from_big_int(neg_one.to_big_int()), neg_one);
+    }
+
+    // Property-based tests using proptest
+    mod proptests {
+        use super::*;
+        use proptest::prelude::*;
+
+        proptest! {
+            #[test]
+            fn prop_u256_to_big_uint(limbs in prop::array::uniform4(any::<u64>())) {
+                let x = U256::from_limbs(limbs);
+                let expected = biguint_from_limbs(limbs);
+                prop_assert_eq!(x.to_big_uint(), expected);
+            }
+
+            #[test]
+            fn prop_u256_to_big_int(limbs in prop::array::uniform4(any::<u64>())) {
+                let x = U256::from_limbs(limbs);
+                let expected = bigint_from_limbs_unsigned(limbs);
+                prop_assert_eq!(x.to_big_int(), expected);
+            }
+
+            #[test]
+            fn prop_u256_to_big_decimal(limbs in prop::array::uniform4(any::<u64>())) {
+                let x = U256::from_limbs(limbs);
+                let expected = biguint_from_limbs(limbs).to_big_decimal();
+                prop_assert_eq!(x.to_big_decimal(), expected);
+            }
+
+            #[test]
+            fn prop_i256_to_big_int(limbs in prop::array::uniform4(any::<u64>())) {
+                let x = I256::from_limbs(limbs);
+                let expected = bigint_from_signed_limbs(limbs);
+                prop_assert_eq!(x.to_big_int(), expected);
+            }
+
+            #[test]
+            fn prop_i256_to_big_uint(limbs in prop::array::uniform4(any::<u64>())) {
+                let x = I256::from_limbs(limbs);
+                // I256::to_big_uint() returns the raw underlying U256 bits, not the signed value
+                let expected = biguint_from_limbs(limbs);
+                prop_assert_eq!(x.to_big_uint(), expected);
+            }
+
+            #[test]
+            fn prop_i256_to_big_decimal(limbs in prop::array::uniform4(any::<u64>())) {
+                let x = I256::from_limbs(limbs);
+                let expected = bigint_from_signed_limbs(limbs).to_big_decimal();
+                prop_assert_eq!(x.to_big_decimal(), expected);
+            }
+
+            // Round-trip tests
+            #[test]
+            fn prop_u256_roundtrip(limbs in prop::array::uniform4(any::<u64>())) {
+                let x = U256::from_limbs(limbs);
+                prop_assert_eq!(U256::from_big_uint(x.to_big_uint()), x);
+                prop_assert_eq!(U256::from_big_int(x.to_big_int()), x);
+            }
+
+            #[test]
+            fn prop_i256_roundtrip(limbs in prop::array::uniform4(any::<u64>())) {
+                let x = I256::from_limbs(limbs);
+                prop_assert_eq!(I256::from_big_uint(x.to_big_uint()), x);
+                prop_assert_eq!(I256::from_big_int(x.to_big_int()), x);
+            }
+        }
     }
 }
