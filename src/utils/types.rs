@@ -16,9 +16,10 @@ pub trait ToBig: Sized {
         BigDecimal::from_parts(
             x.unsigned_abs(),
             0,
-            match x.is_negative() {
-                false => Sign::Plus,
-                true => Sign::Minus,
+            if x.is_negative() {
+                Sign::Minus
+            } else {
+                Sign::Plus
             },
             Context::default(),
         )
