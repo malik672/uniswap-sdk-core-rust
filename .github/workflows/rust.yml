@@ -65,6 +65,8 @@ jobs:
       - name: Build
         run: cargo +${{ matrix.rust-version }} build
       - name: Run tests
+        env:
+          PROPTEST_CASES: 4096
         run: |
           cargo +${{ matrix.rust-version }} test
           cargo +${{ matrix.rust-version }} test --features std
