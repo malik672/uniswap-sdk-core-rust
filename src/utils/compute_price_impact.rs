@@ -7,8 +7,6 @@ use crate::prelude::*;
 /// * `midPrice`: mid price before the trade
 /// * `inputAmount`: the input amount of the trade
 /// * `outputAmount`: the output amount of the trade
-///
-/// returns: Percent
 #[inline]
 pub fn compute_price_impact<TBase: BaseCurrency, TQuote: BaseCurrency>(
     mid_price: &Price<TBase, TQuote>,
@@ -39,29 +37,29 @@ mod tests {
         let token = token!(4, address_zero, 25, "Test", "Te");
         let token_1 = token!(3, address_one, 25, "Test", "Te");
 
-        //is correct for zero
-        assert!(
+        // is correct for zero
+        assert_eq!(
             compute_price_impact(
                 &Price::new(Ether::on_chain(1), token.clone(), 10, 100),
                 &CurrencyAmount::from_raw_amount(Ether::on_chain(1), 10).unwrap(),
                 &CurrencyAmount::from_raw_amount(token.clone(), 100).unwrap()
             )
-            .unwrap()
-                == Percent::default(),
+            .unwrap(),
+            Percent::ZERO,
         );
 
-        //is correct for half output
-        assert!(
+        // is correct for half output
+        assert_eq!(
             compute_price_impact(
                 &Price::new(token.clone(), token_1.clone(), 10, 100),
                 &CurrencyAmount::from_raw_amount(token.clone(), 10).unwrap(),
                 &CurrencyAmount::from_raw_amount(token_1.clone(), 50).unwrap()
             )
-            .unwrap()
-                == Percent::new(5000, 10000),
+            .unwrap(),
+            Percent::new(5000, 10000)
         );
 
-        //is negative for more output
+        // is negative for more output
         assert_eq!(
             compute_price_impact(
                 &Price::new(token.clone(), token_1.clone(), 10, 100),
