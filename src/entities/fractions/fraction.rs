@@ -7,7 +7,7 @@ use core::{
     ops::{Add, Div, Mul, Sub},
 };
 use derive_more::Deref;
-use fastnum::{I1024, i512};
+use fastnum::I1024;
 use num_integer::Integer;
 
 /// Struct representing a fraction with metadata
@@ -25,7 +25,7 @@ impl<M: Default> Default for FractionLike<M> {
     fn default() -> Self {
         Self {
             numerator: BigInt::ZERO,
-            denominator: i512!(1),
+            denominator: BigInt::ONE,
             meta: M::default(),
         }
     }
@@ -35,6 +35,18 @@ impl<M: Default> Default for FractionLike<M> {
 pub type Fraction = FractionLike<()>;
 
 impl Fraction {
+    pub const ZERO: Fraction = Fraction {
+        numerator: BigInt::ZERO,
+        denominator: BigInt::ONE,
+        meta: (),
+    };
+
+    pub const ONE: Fraction = Fraction {
+        numerator: BigInt::ONE,
+        denominator: BigInt::ONE,
+        meta: (),
+    };
+
     /// Creates a new `Fraction` instance with the given numerator and denominator.
     ///
     /// # Arguments
@@ -328,7 +340,7 @@ mod tests {
     #[test]
     fn test_remainder() {
         assert_eq!(Fraction::new(8, 3).remainder(), Fraction::new(2, 3));
-        assert_eq!(Fraction::new(12, 4).remainder(), Fraction::default());
+        assert_eq!(Fraction::new(12, 4).remainder(), Fraction::ZERO);
         assert_eq!(Fraction::new(16, 5).remainder(), Fraction::new(1, 5));
     }
 

@@ -1,9 +1,11 @@
 use crate::prelude::*;
-use lazy_static::lazy_static;
+use fastnum::i512;
 
-lazy_static! {
-    static ref ONE_HUNDRED: Fraction = Fraction::new(100, 1);
-}
+const ONE_HUNDRED: Fraction = Fraction {
+    numerator: i512!(100),
+    denominator: BigInt::ONE,
+    meta: (),
+};
 
 /// Unit struct to distinguish between a fraction and a percent
 #[derive(Clone, Copy, Debug, Default, Hash, PartialEq, Eq)]
@@ -13,6 +15,12 @@ pub struct IsPercent;
 pub type Percent = FractionLike<IsPercent>;
 
 impl Percent {
+    pub const ZERO: Percent = Percent {
+        numerator: BigInt::ZERO,
+        denominator: BigInt::ONE,
+        meta: IsPercent,
+    };
+
     /// Constructor for creating a new [`Percent`] instance
     #[inline]
     pub fn new(numerator: impl Into<BigInt>, denominator: impl Into<BigInt>) -> Self {
@@ -27,8 +35,7 @@ impl Percent {
         significant_digits: u8,
         rounding: Option<Rounding>,
     ) -> Result<String, Error> {
-        (self.as_fraction() * ONE_HUNDRED.as_fraction())
-            .to_significant(significant_digits, rounding)
+        (self.as_fraction() * ONE_HUNDRED).to_significant(significant_digits, rounding)
     }
 
     /// Converts the [`Percent`] to a string with a fixed number of decimal places and rounding
@@ -36,7 +43,7 @@ impl Percent {
     #[inline]
     #[must_use]
     pub fn to_fixed(&self, decimal_places: u8, rounding: Option<Rounding>) -> String {
-        (self.as_fraction() * ONE_HUNDRED.as_fraction()).to_fixed(decimal_places, rounding)
+        (self.as_fraction() * ONE_HUNDRED).to_fixed(decimal_places, rounding)
     }
 }
 
