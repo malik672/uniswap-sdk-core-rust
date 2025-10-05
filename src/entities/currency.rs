@@ -102,28 +102,32 @@ mod tests {
         static ref TOKEN1: Token = token!(1, ADDRESS_ONE, 18);
     }
 
-    #[test]
-    fn equals_ether_on_same_chains_is_ether() {
-        assert!(Ether::on_chain(1).equals(&Ether::on_chain(1)));
-    }
+    mod equals {
+        use super::*;
 
-    #[test]
-    fn equals_ether_is_not_token0() {
-        assert!(!Ether::on_chain(1).equals(&TOKEN0.clone()));
-    }
+        #[test]
+        fn ether_on_same_chains_is_ether() {
+            assert!(Ether::on_chain(1).equals(&Ether::on_chain(1)));
+        }
 
-    #[test]
-    fn equals_token1_is_not_token0() {
-        assert!(!TOKEN1.equals(&TOKEN0.clone()));
-    }
+        #[test]
+        fn ether_is_not_token0() {
+            assert!(!Ether::on_chain(1).equals(&TOKEN0.clone()));
+        }
 
-    #[test]
-    fn equals_token0_is_token0() {
-        assert!(TOKEN0.equals(&TOKEN0.clone()));
-    }
+        #[test]
+        fn token1_is_not_token0() {
+            assert!(!TOKEN1.equals(&TOKEN0.clone()));
+        }
 
-    #[test]
-    fn equals_token0_is_equal_to_another_token0() {
-        assert!(TOKEN0.equals(&token!(1, ADDRESS_ZERO, 18, "symbol", "name")));
+        #[test]
+        fn token0_is_token0() {
+            assert!(TOKEN0.equals(&TOKEN0.clone()));
+        }
+
+        #[test]
+        fn token0_is_equal_to_another_token0() {
+            assert!(TOKEN0.equals(&token!(1, ADDRESS_ZERO, 18, "symbol", "name")));
+        }
     }
 }

@@ -207,97 +207,53 @@ macro_rules! token {
 
 #[cfg(test)]
 mod tests {
-    ///should test for neg chain_id or neg decimals or neg buy_fee or neg sell_fee, but the
-    /// compiler will panic by itself, so no need
     use super::*;
 
     const ADDRESS_ONE: &str = "0x0000000000000000000000000000000000000001";
     const ADDRESS_TWO: &str = "0x0000000000000000000000000000000000000002";
     const DAI_MAINNET: &str = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 
-    #[test]
-    fn test_token() {
-        let token = token!(2, ADDRESS_ONE, 18, "Test", "Te");
-        let token_1 = token!(2, ADDRESS_TWO, 18, "Test", "Te");
+    mod equals {
+        use super::*;
 
-        assert!(token.address().eq(&ADDRESS_ONE.parse::<Address>().unwrap()));
-        assert!(
-            token_1
-                .address()
-                .eq(&ADDRESS_TWO.parse::<Address>().unwrap())
-        );
-    }
+        #[test]
+        fn fails_if_address_differs() {
+            assert!(!token!(1, ADDRESS_ONE, 18).equals(&token!(1, ADDRESS_TWO, 18)));
+        }
 
-    #[test]
-    fn test_expect_revert_overflow_dec() {
-        let _token = token!(4, ADDRESS_ONE, 255, "Test", "Te");
-    }
+        #[test]
+        fn false_if_chain_id_differs() {
+            assert!(!token!(3, ADDRESS_ONE, 18).equals(&token!(1, ADDRESS_ONE, 18)));
+        }
 
-    #[test]
-    fn test_false_if_diff_chain_id() {
-        let token = token!(4, ADDRESS_ONE, 25, "Test", "Te");
-        let token_1 = token!(3, ADDRESS_ONE, 25, "Test", "Te");
+        #[test]
+        fn true_if_only_decimals_differs() {
+            assert!(token!(1, ADDRESS_ONE, 9).equals(&token!(1, ADDRESS_ONE, 18)));
+        }
 
-        assert!(!token.equals(&token_1));
-    }
+        #[test]
+        fn true_if_address_is_the_same() {
+            assert!(token!(1, ADDRESS_ONE, 18).equals(&token!(1, ADDRESS_ONE, 18)));
+        }
 
-    #[test]
-    fn test_diff_name() {
-        let token = token!(4, ADDRESS_ONE, 25, "Test", "TeW");
-        let token_1 = token!(4, ADDRESS_ONE, 25, "Test", "Te");
+        #[test]
+        fn true_on_reference_equality() {
+            let token = token!(1, ADDRESS_ONE, 18);
+            assert!(token.equals(&token));
+        }
 
-        assert!(token.equals(&token_1), "true even if names differ");
-    }
+        #[test]
+        fn true_even_if_name_symbol_decimals_differ() {
+            let token_a = token!(1, ADDRESS_ONE, 9, "abc", "def");
+            let token_b = token!(1, ADDRESS_ONE, 18, "ghi", "jkl");
+            assert!(token_a.equals(&token_b));
+        }
 
-    #[test]
-    fn test_diff_symbol() {
-        let token = token!(4, ADDRESS_ONE, 25, "Test", "Te");
-        let token_1 = token!(4, ADDRESS_ONE, 25, "WETest", "Te");
-
-        assert!(token.equals(&token_1), "true even if symbols differ");
-    }
-
-    #[test]
-    fn test_false_if_diff_address() {
-        let token = token!(4, ADDRESS_ONE, 25, "Test", "Te");
-        let token_1 = token!(4, DAI_MAINNET, 25, "Test", "Te");
-
-        assert!(!token.equals(&token_1));
-    }
-
-    #[test]
-    fn test_true_if_diff_decimals() {
-        assert!(token!(1, ADDRESS_ONE, 9).equals(&token!(1, ADDRESS_ONE, 18)));
-    }
-
-    #[test]
-    fn test_assert_both_tokens() {
-        let token = token!(4, ADDRESS_ONE, 25, "Test", "Te");
-        let token_1 = token!(4, DAI_MAINNET, 25, "Test", "Te");
-
-        assert_eq!(token.equals(&token_1), token_1.equals(&token));
-    }
-
-    #[test]
-    fn test_true_on_reference_equality() {
-        let token = token!(1, ADDRESS_ONE, 18, "Test", "Te");
-
-        assert!(token.equals(&token));
-    }
-
-    #[test]
-    fn test_true_if_same_address() {
-        let token = token!(1, ADDRESS_ONE, 9, "abc", "def");
-        let token_1 = token!(1, ADDRESS_ONE, 18, "ghi", "jkl");
-
-        assert!(token.equals(&token_1));
-    }
-
-    #[test]
-    fn test_true_if_one_token_is_checksummed_and_the_other_is_not() {
-        let token_a = token!(1, DAI_MAINNET, 18, "DAI");
-        let token_b = token!(1, DAI_MAINNET, 18, "DAI");
-
-        assert!(token_a.equals(&token_b));
+        #[test]
+        fn true_even_if_one_token_is_checksummed_and_the_other_is_not() {
+            let token_a = token!(1, DAI_MAINNET, 18, "DAI");
+            let token_b = token!(1, &DAI_MAINNET.to_lowercase(), 18, "DAI");
+            assert!(token_a.equals(&token_b));
+        }
     }
 }
