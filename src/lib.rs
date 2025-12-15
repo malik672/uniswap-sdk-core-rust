@@ -15,7 +15,7 @@
 )]
 #![cfg_attr(not(test), warn(unused_crate_dependencies))]
 #![deny(unused_must_use, rust_2018_idioms)]
-#![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 extern crate alloc;
 use num_traits as _;
@@ -48,7 +48,6 @@ pub mod prelude {
         vec::Vec,
     };
     pub use alloy_primitives::{Address, B256, Bytes, U256, map::HashMap};
-    pub use bnum;
     pub use fastnum;
     pub use num_integer::Integer;
 

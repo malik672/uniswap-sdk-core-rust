@@ -208,18 +208,17 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "AMOUNT")]
     fn test_token_amount_exceeds_max_uint256() {
-        let _w = CurrencyAmount::from_raw_amount(TOKEN18.clone(), MAX_UINT256 + BigInt::from(1));
-        assert!(_w.is_ok(), "AMOUNT");
+        let result =
+            CurrencyAmount::from_raw_amount(TOKEN18.clone(), MAX_UINT256 + BigInt::from(1));
+        assert!(matches!(result, Err(Error::UintOverflow)));
     }
 
     #[test]
-    #[should_panic(expected = "AMOUNT")]
     fn test_token_amount_quotient_exceeds_max_uint256() {
         let numerator: BigInt = (MAX_UINT256 + BigInt::from(1)) * BigInt::from(2);
-        let _w = CurrencyAmount::from_fractional_amount(TOKEN18.clone(), numerator, 2);
-        assert!(_w.is_ok(), "AMOUNT");
+        let result = CurrencyAmount::from_fractional_amount(TOKEN18.clone(), numerator, 2);
+        assert!(matches!(result, Err(Error::UintOverflow)));
     }
 
     #[test]

@@ -180,7 +180,7 @@ lazy_static! {
     };
 }
 
-/// Choose not to impl `Default` for `ChainAddresses` to avoid "[E0379]: functions in trait impls
+/// Choose not to impl `Default` for `ChainAddresses` to avoid "E0379: functions in trait impls
 /// cannot be declared const"
 impl ChainAddresses {
     /// Networks that share most of the same addresses i.e. Mainnet, Goerli, Optimism, Arbitrum,
