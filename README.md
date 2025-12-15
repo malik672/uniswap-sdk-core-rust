@@ -13,7 +13,7 @@ Add this to your Cargo.toml
 
 ```toml
 [dependencies]
-uniswap-sdk-core = "5.3.0"
+uniswap-sdk-core = "5.4.0"
 ```
 
 And this to your code:
@@ -31,7 +31,7 @@ When updating this, also update:
 - .github/workflows/rust.yml
 -->
 
-The current MSRV (minimum supported rust version) is 1.85.
+The current MSRV (minimum supported rust version) is 1.89.
 
 ## Note on `no_std`
 

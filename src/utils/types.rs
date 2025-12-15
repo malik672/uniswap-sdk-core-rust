@@ -130,10 +130,7 @@ mod tests {
 
     /// Construct BigInt from limbs as unsigned value (little-endian)
     fn bigint_from_limbs_unsigned(limbs: [u64; 4]) -> BigInt {
-        BigInt::from(limbs[0])
-            + (BigInt::from(limbs[1]) << 64)
-            + (BigInt::from(limbs[2]) << 128)
-            + (BigInt::from(limbs[3]) << 192)
+        BigInt::from_bits(biguint_from_limbs(limbs))
     }
 
     /// Construct BigInt from I256 limbs using two's complement (little-endian)
