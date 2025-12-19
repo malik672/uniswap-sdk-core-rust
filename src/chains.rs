@@ -35,13 +35,15 @@ pub enum ChainId {
     UNICHAIN = 130,
     MONAD_TESTNET = 10143,
     SONEIUM = 1868,
+    MONAD = 143,
+    XLAYER = 196,
 }
 
 /// A list of `ChainId` constants representing the blockchain networks supported by the Uniswap SDK.
 ///
 /// This array includes all the `ChainId` variants that are supported by the SDK, making it easy to
 /// iterate over or check for supported chains.
-pub const SUPPORTED_CHAINS: [ChainId; 28] = [
+pub const SUPPORTED_CHAINS: [ChainId; 30] = [
     ChainId::MAINNET,
     ChainId::OPTIMISM,
     ChainId::OPTIMISM_GOERLI,
@@ -70,4 +72,6 @@ pub const SUPPORTED_CHAINS: [ChainId; 28] = [
     ChainId::UNICHAIN,
     ChainId::MONAD_TESTNET,
     ChainId::SONEIUM,
+    ChainId::MONAD,
+    ChainId::XLAYER,
 ];
