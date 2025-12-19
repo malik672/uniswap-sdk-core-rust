@@ -31,7 +31,7 @@ When updating this, also update:
 - .github/workflows/rust.yml
 -->
 
-The current MSRV (minimum supported rust version) is 1.89.
+The current MSRV (minimum supported rust version) is 1.88.
 
 ## Note on `no_std`
 
