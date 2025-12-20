@@ -113,6 +113,14 @@ lazy_static! {
                 ChainId::SONEIUM as u64,
                 address!("0x97febbc2adbd5644ba22736e962564b23f5828ce"),
             ),
+            (
+                ChainId::MONAD as u64,
+                address!("0x182a927119d56008d921126764bf884221b10f59"),
+            ),
+            (
+                ChainId::XLAYER as u64,
+                address!("0xdf38f24fe153761634be942f9d859f3dba857e95"),
+            ),
         ])
     };
 }
@@ -158,7 +166,7 @@ lazy_static! {
             ),
             (
                 ChainId::WORLDCHAIN as u64,
-                address!("0xf164fC0Ec4E93095b804a4795bBe1e041497b92a"),
+                address!("0x541aB7c31A119441eF3575F6973277DE0eF460bd"),
             ),
             (
                 ChainId::UNICHAIN_SEPOLIA as u64,
@@ -175,6 +183,14 @@ lazy_static! {
             (
                 ChainId::SONEIUM as u64,
                 address!("0x273f68c234fa55b550b40e563c4a488e0d334320"),
+            ),
+            (
+                ChainId::MONAD as u64,
+                address!("0x4b2ab38dbf28d31d467aa8993f6c2585981d6804"),
+            ),
+            (
+                ChainId::XLAYER as u64,
+                address!("0x182a927119d56008d921126764bf884221b10f59"),
             ),
         ])
     };
@@ -552,6 +568,39 @@ const SONEIUM_ADDRESSES: ChainAddresses = ChainAddresses {
     ..ChainAddresses::default()
 };
 
+const MONAD_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0x204faca1764b154221e35c0d20abb3c525710498"),
+    multicall: address!("0xd1b797d92d87b688193a2b976efc8d577d204343"),
+    quoter: address!("0x2d01411773c8c24805306e89a41f7855c3c4fe65"),
+    v3_migrator: Some(address!("0x7078c4537c04c2b2e52ddba06074dbdacf23ca15")),
+    nonfungible_position_manager: address!("0x7197e214c0b767cfb76fb734ab638e2c192f4e53"),
+    tick_lens: Some(address!("0xf025e0fe9e331a0ef05c2ad3c4e9c64b625cda6f")),
+    swap_router02: Some(address!("0xfe31f71c1b106eac32f1a19239c9a9a72ddfb900")),
+
+    v4_pool_manager: Some(address!("0x188d586ddcf52439676ca21a244753fa19f9ea8e")),
+    v4_position_manager: Some(address!("0x5b7ec4a94ff9bedb700fb82ab09d5846972f4016")),
+    v4_state_view: Some(address!("0x77395f3b2e73ae90843717371294fa97cc419d64")),
+    v4_quoter: Some(address!("0xa222dd357a9076d1091ed6aa2e16c9742dd26891")),
+    ..ChainAddresses::default()
+};
+
+const XLAYER_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0x4b2ab38dbf28d31d467aa8993f6c2585981d6804"),
+    multicall: address!("0xe2023f3fa515cf070e07fd9d51c1d236e07843f4"),
+    quoter: address!("0x976183ac3d09840d243a88c0268badb3b3e3259f"),
+    v3_migrator: Some(address!("0x7197e214c0b767cfb76fb734ab638e2c192f4e53")),
+    nonfungible_position_manager: address!("0x315e413a11ab0df498ef83873012430ca36638ae"),
+    tick_lens: Some(address!("0x661e93cca42afacb172121ef892830ca3b70f08d")),
+    swap_router02: Some(address!("0x4f0c28f5926afda16bf2506d5d9e57ea190f9bca")),
+    mixed_route_quoter_v2: Some(address!("0x2d01411773c8c24805306e89a41f7855c3c4fe65")),
+
+    v4_pool_manager: Some(address!("0x360e68faccca8ca495c1b759fd9eee466db9fb32")),
+    v4_position_manager: Some(address!("0xbc9f3a5d767dd46e040f1ca48ab17f29f59dc806")),
+    v4_state_view: Some(address!("0x76fd297e2d437cd7f76d50f01afe6160f86e9990")),
+    v4_quoter: Some(address!("0x8928074ca1b241d8ec02815881c1af11e8bc5219")),
+    ..ChainAddresses::default()
+};
+
 lazy_static! {
     /// A map of chain IDs to their corresponding Uniswap contract addresses.
     ///
@@ -588,6 +637,8 @@ lazy_static! {
             (ChainId::UNICHAIN as u64, UNICHAIN_ADDRESSES),
             (ChainId::MONAD_TESTNET as u64, MONAD_TESTNET_ADDRESSES),
             (ChainId::SONEIUM as u64, SONEIUM_ADDRESSES),
+            (ChainId::MONAD as u64, MONAD_ADDRESSES),
+            (ChainId::XLAYER as u64, XLAYER_ADDRESSES),
         ])
     };
 }
