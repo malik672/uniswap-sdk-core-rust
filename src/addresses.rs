@@ -121,6 +121,30 @@ lazy_static! {
                 ChainId::XLAYER as u64,
                 address!("0xdf38f24fe153761634be942f9d859f3dba857e95"),
             ),
+            (
+                ChainId::LINEA as u64,
+                address!("0x114A43DF6C5f54EBB8A9d70Cd1951D3dD68004c7"),
+            ),
+            (
+                ChainId::TEMPO as u64,
+                address!("0xf9ec577a4e45b5278bb7cf60fcbc20c3acaef68f"),
+            ),
+            (
+                ChainId::MEGAETH as u64,
+                address!("0xbf56488c857a881ae7e3bed27cf99c10a7ab7e50"),
+            ),
+            (
+                ChainId::ARC as u64,
+                address!("0x89e5db8b5aa49aa85ac63f691524311aeb649eba"),
+            ),
+            (
+                ChainId::ROBINHOOD as u64,
+                address!("0x8bceaa40b9acdfaedf85adf4ff01f5ad6517937f"),
+            ),
+            (
+                ChainId::INK as u64,
+                address!("0xfe57a6ba1951f69ae2ed4abe23e0f095df500c04"),
+            ),
         ])
     };
 }
@@ -191,6 +215,26 @@ lazy_static! {
             (
                 ChainId::XLAYER as u64,
                 address!("0x182a927119d56008d921126764bf884221b10f59"),
+            ),
+            (
+                ChainId::LINEA as u64,
+                address!("0x8702463e73f74d0b6765abceb314ef07acb92650"),
+            ),
+            (
+                ChainId::TEMPO as u64,
+                address!("0x0fbac3c46f6f83b44c7fb4ea986d7309c701d73e"),
+            ),
+            (
+                ChainId::MEGAETH as u64,
+                address!("0xb73055db2b3a3eae87a331dd88e4a80b43602690"),
+            ),
+            (
+                ChainId::ARC as u64,
+                address!("0x1f7d7550b1b028f7571e69a784071f0205fd2efa"),
+            ),
+            (
+                ChainId::ROBINHOOD as u64,
+                address!("0x89e5db8b5aa49aa85ac63f691524311aeb649eba"),
             ),
         ])
     };
@@ -595,9 +639,109 @@ const XLAYER_ADDRESSES: ChainAddresses = ChainAddresses {
     mixed_route_quoter_v2: Some(address!("0x2d01411773c8c24805306e89a41f7855c3c4fe65")),
 
     v4_pool_manager: Some(address!("0x360e68faccca8ca495c1b759fd9eee466db9fb32")),
-    v4_position_manager: Some(address!("0xbc9f3a5d767dd46e040f1ca48ab17f29f59dc806")),
+    v4_position_manager: Some(address!("0xcF1EAFC6928dC385A342E7C6491d371d2871458b")),
     v4_state_view: Some(address!("0x76fd297e2d437cd7f76d50f01afe6160f86e9990")),
     v4_quoter: Some(address!("0x8928074ca1b241d8ec02815881c1af11e8bc5219")),
+    ..ChainAddresses::default()
+};
+
+const LINEA_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9"),
+    multicall: address!("0x93e253D101519578A8DF0BCe2A43D8292BFb3A1F"),
+    quoter: address!("0x58ead433ea99708604c4dd7c9b7e80c70976e202"),
+    quoter_v2: address!("0x58ead433ea99708604c4dd7c9b7e80c70976e202"),
+    v3_migrator: Some(address!("0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1")),
+    nonfungible_position_manager: address!("0x4615C383F85D0a2BbED973d83ccecf5CB7121463"),
+    tick_lens: Some(address!("0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9")),
+    swap_router02: Some(address!("0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a")),
+    mixed_route_quoter_v2: Some(address!("0xe2023f3fa515cf070e07fd9d51c1d236e07843f4")),
+    v4_pool_manager: Some(address!("0x248083fb965359d82b06c1f5322480dcfc1ad857")),
+    v4_position_manager: Some(address!("0xddcad5775b2816a87495f207731b3571d7ee3c76")),
+    v4_state_view: Some(address!("0xe861de206e460a8b936b05ad3816520b58ccdf9b")),
+    v4_quoter: Some(address!("0x2c125569c0bee20a66e33e5491c552b37ebd9934")),
+    ..ChainAddresses::default()
+};
+
+const TEMPO_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0x24a3d4757e330890a8b8978028c9e58e04611fd6"),
+    multicall: address!("0x64eb6294fd6072b2c20d31a54e39d5d3bf69d982"),
+    quoter: address!("0x53ab5d7a69db158f621b43ee70423da1e1403c2a"),
+    quoter_v2: address!("0x53ab5d7a69db158f621b43ee70423da1e1403c2a"),
+    v3_migrator: Some(address!("0x2352328bd3313549d6d908646c82c2b7136901a9")),
+    nonfungible_position_manager: address!("0xb71c33f096ceabdc0229110e0d76a6382d01c633"),
+    tick_lens: Some(address!("0x95cb27f323a03b03528096a527ee75704db28ef5")),
+    swap_router02: Some(address!("0x7e9d53081e961201837336bcd81f52ae92691a8f")),
+    mixed_route_quoter_v2: Some(address!("0x741abcaeb95da1b0766c8db7819bb6c4fed27e3d")),
+    v4_pool_manager: Some(address!("0x33620f62c5b9b2086dd6b62f4a297a9f30347029")),
+    v4_position_manager: Some(address!("0x3fc79444f8eacc1894775493ff3fa41f1e35ce11")),
+    v4_state_view: Some(address!("0x21b954fba3f5ddebe77ef2d47a3100c066908b2a")),
+    v4_quoter: Some(address!("0x20e6487c371a2086f841ef453f85378223df4f4e")),
+    ..ChainAddresses::default()
+};
+
+const MEGAETH_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0x3a5f0cd7d62452b7f899b2a5758bfa57be0de478"),
+    multicall: address!("0x61f3272a3619d9f20788c6822fed2e5471bfc477"),
+    quoter: address!("0x5affda77bc34d945f9632bd080ebfcf24133b90e"),
+    quoter_v2: address!("0x5affda77bc34d945f9632bd080ebfcf24133b90e"),
+    v3_migrator: Some(address!("0xed30f6c25fe915dc710f168fa3ab66199ee84454")),
+    nonfungible_position_manager: address!("0xcdc86e98184e96436f733a8bf31bd4f0214e6d7d"),
+    tick_lens: Some(address!("0xe7a2d824722addcb21e7a203ae7b372bf3a29ec5")),
+    swap_router02: Some(address!("0x48020de9208bafc183f5cad5118ffbe8f0f913f5")),
+    mixed_route_quoter_v2: Some(address!("0x1768d0b0f8ee6638986aab8f775ceb87c45f8730")),
+    v4_pool_manager: Some(address!("0xacb7e78fa05d562e0a5d3089ec896d57d057d38e")),
+    v4_position_manager: Some(address!("0x9ae0921e981aaa7308f176f8d4f9129b9247c89d")),
+    v4_state_view: Some(address!("0x726f84e1dfb8d375a365e0808282f40d52d3e4e8")),
+    v4_quoter: Some(address!("0x94bdc671f0c35f44a1daa53143fd1f868d1623b9")),
+    ..ChainAddresses::default()
+};
+
+const ARC_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0xf0db7b58379503491d857db50ac9ece64c653918"),
+    multicall: address!("0x33e885ed0ec9bf04ecfb19341582aadcb4c8a9e7"),
+    quoter: address!("0x7dfd4f31be6814d2906bde155c3e1b146eac1468"),
+    quoter_v2: address!("0x7dfd4f31be6814d2906bde155c3e1b146eac1468"),
+    v3_migrator: None,
+    nonfungible_position_manager: address!("0x39654a85a4c05127f5fd6ed22caec077a0fb1377"),
+    tick_lens: Some(address!("0x9eb8600665b55d10c1eb2316ca5127a9ca6e2e76")),
+    swap_router02: Some(address!("0x53bf6b0684ec7ef91e1387da3d1a1769bc5a6f77")),
+    v4_pool_manager: Some(address!("0x8366a39cc670b4001a1121b8f6a443a643e40951")),
+    v4_position_manager: Some(address!("0x6049c9a0e26405c0985f9e3685c87d0ae917f82b")),
+    v4_state_view: Some(address!("0xf3334192d15450cdd385c8b70e03f9a6bd9e673b")),
+    v4_quoter: Some(address!("0x8dc178efb8111bb0973dd9d722ebeff267c98f94")),
+    ..ChainAddresses::default()
+};
+
+const ROBINHOOD_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0x1f7d7550b1b028f7571e69a784071f0205fd2efa"),
+    multicall: address!("0x282a3c4d320cc7f0d5eaf56b8029e4b88338f0a3"),
+    quoter: address!("0x33e885ed0ec9bf04ecfb19341582aadcb4c8a9e7"),
+    quoter_v2: address!("0x33e885ed0ec9bf04ecfb19341582aadcb4c8a9e7"),
+    v3_migrator: None,
+    nonfungible_position_manager: address!("0x73991a25c818bf1f1128deaab1492d45638de0d3"),
+    tick_lens: Some(address!("0x7dfd4f31be6814d2906bde155c3e1b146eac1468")),
+    swap_router02: Some(address!("0xcaf681a66d020601342297493863e78c959e5cb2")),
+    v4_pool_manager: Some(address!("0x8366a39cc670b4001a1121b8f6a443a643e40951")),
+    v4_position_manager: Some(address!("0x58daec3116aae6d93017baaea7749052e8a04fa7")),
+    v4_state_view: Some(address!("0xf3334192d15450cdd385c8b70e03f9a6bd9e673b")),
+    v4_quoter: Some(address!("0x8dc178efb8111bb0973dd9d722ebeff267c98f94")),
+    ..ChainAddresses::default()
+};
+
+const INK_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0x640887a9ba3a9c53ed27d0f7e8246a4f933f3424"),
+    multicall: address!("0xa0fcec583aee6176527c07b198e5561722332014"),
+    quoter: address!("0x96b572d2d880cf2fa2563651bd23ade6f5516652"),
+    quoter_v2: address!("0x96b572d2d880cf2fa2563651bd23ade6f5516652"),
+    v3_migrator: None,
+    nonfungible_position_manager: address!("0xc0836e5b058bbe22ae2266e1ac488a1a0fd8dce8"),
+    tick_lens: Some(address!("0x3e6dba802d62aba2361dd632fbc9f547aa6789ae")),
+    swap_router02: Some(address!("0x177778f19e89dd1012bdbe603f144088a95c4b53")),
+    mixed_route_quoter_v2: Some(address!("0x1f7d7550b1b028f7571e69a784071f0205fd2efa")),
+    v4_pool_manager: Some(address!("0x360e68faccca8ca495c1b759fd9eee466db9fb32")),
+    v4_position_manager: Some(address!("0x1b35d13a2e2528f192637f14b05f0dc0e7deb566")),
+    v4_state_view: Some(address!("0x76fd297e2d437cd7f76d50f01afe6160f86e9990")),
+    v4_quoter: Some(address!("0x3972c00f7ed4885e145823eb7c655375d275a1c5")),
     ..ChainAddresses::default()
 };
 
@@ -639,6 +783,12 @@ lazy_static! {
             (ChainId::SONEIUM as u64, SONEIUM_ADDRESSES),
             (ChainId::MONAD as u64, MONAD_ADDRESSES),
             (ChainId::XLAYER as u64, XLAYER_ADDRESSES),
+            (ChainId::LINEA as u64, LINEA_ADDRESSES),
+            (ChainId::TEMPO as u64, TEMPO_ADDRESSES),
+            (ChainId::MEGAETH as u64, MEGAETH_ADDRESSES),
+            (ChainId::ARC as u64, ARC_ADDRESSES),
+            (ChainId::ROBINHOOD as u64, ROBINHOOD_ADDRESSES),
+            (ChainId::INK as u64, INK_ADDRESSES),
         ])
     };
 }
@@ -859,5 +1009,37 @@ mod tests {
             address,
             address!("0x549FEB8c9bd4c12Ad2AB27022dA12492aC452B66")
         );
+    }
+
+    #[test]
+    fn test_swap_router_02_addresses_new_chains() {
+        for (chain_id, expected) in [
+            (
+                ChainId::LINEA,
+                address!("0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a"),
+            ),
+            (
+                ChainId::TEMPO,
+                address!("0x7e9d53081e961201837336bcd81f52ae92691a8f"),
+            ),
+            (
+                ChainId::MEGAETH,
+                address!("0x48020de9208bafc183f5cad5118ffbe8f0f913f5"),
+            ),
+            (
+                ChainId::ARC,
+                address!("0x53bf6b0684ec7ef91e1387da3d1a1769bc5a6f77"),
+            ),
+            (
+                ChainId::ROBINHOOD,
+                address!("0xcaf681a66d020601342297493863e78c959e5cb2"),
+            ),
+            (
+                ChainId::INK,
+                address!("0x177778f19e89dd1012bdbe603f144088a95c4b53"),
+            ),
+        ] {
+            assert_eq!(SWAP_ROUTER_02_ADDRESSES[&(chain_id as u64)], expected);
+        }
     }
 }

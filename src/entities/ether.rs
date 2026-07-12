@@ -53,6 +53,7 @@ impl Ether {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloy_primitives::address;
 
     #[test]
     fn test_static_constructor_uses_cache() {
@@ -72,5 +73,19 @@ mod tests {
     #[test]
     fn test_equals_returns_true_for_same_chains() {
         assert!(Ether::on_chain(1).equals(&Ether::on_chain(1)));
+    }
+
+    #[test]
+    fn test_wrapped_returns_robinhood_weth() {
+        assert_eq!(
+            Ether::on_chain(4663).wrapped().address,
+            address!("0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73")
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "WRAPPED")]
+    fn test_wrapped_panics_for_arc() {
+        Ether::on_chain(5042).wrapped();
     }
 }
