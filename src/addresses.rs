@@ -8,7 +8,7 @@ pub type AddressMap = HashMap<u64, Address>;
 pub struct ChainAddresses {
     pub v3_core_factory: Address,
     pub multicall: Address,
-    pub quoter: Address,
+    pub quoter: Option<Address>,
     pub quoter_v2: Address,
     pub v3_migrator: Option<Address>,
     pub nonfungible_position_manager: Address,
@@ -158,6 +158,10 @@ lazy_static! {
             (ChainId::MAINNET as u64, V2_ROUTER_ADDRESS),
             (ChainId::GOERLI as u64, V2_ROUTER_ADDRESS),
             (
+                ChainId::SEPOLIA as u64,
+                address!("0xeE567Fe1712Faf6149d80dA1E6934E354124CfE3"),
+            ),
+            (
                 ChainId::ARBITRUM_ONE as u64,
                 address!("0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24"),
             ),
@@ -252,7 +256,7 @@ impl ChainAddresses {
         Self {
             v3_core_factory: address!("0x1F98431c8aD98523631AE4a59f267346ea31F984"),
             multicall: address!("0x1F98415757620B543A52E61c46B32eB19261F984"),
-            quoter: address!("0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6"),
+            quoter: None,
             quoter_v2: address!("0x61fFE014bA17989E743c5F6cB21bF9697530B21e"),
             v3_migrator: Some(address!("0xA5644E29708357803b5A882D272c41cC0dF92B34")),
             nonfungible_position_manager: address!("0xC36442b4a4522E871399CD717aBDD847Ab11FE88"),
@@ -270,6 +274,7 @@ impl ChainAddresses {
 }
 
 const MAINNET_ADDRESSES: ChainAddresses = ChainAddresses {
+    quoter: Some(address!("0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6")),
     mixed_route_quoter_v1: Some(address!("0x84E44095eeBfEC7793Cd7d5b57B7e401D7f1cA2E")),
 
     v4_pool_manager: Some(address!("0x000000000004444c5dc75cB358380D2e3dE08A90")),
@@ -281,11 +286,14 @@ const MAINNET_ADDRESSES: ChainAddresses = ChainAddresses {
 };
 
 const GOERLI_ADDRESSES: ChainAddresses = ChainAddresses {
+    quoter: Some(address!("0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6")),
     mixed_route_quoter_v1: Some(address!("0xBa60b6e6fF25488308789E6e0A65D838be34194e")),
     ..ChainAddresses::default()
 };
 
 const OPTIMISM_ADDRESSES: ChainAddresses = ChainAddresses {
+    quoter: Some(address!("0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6")),
+    v3_migrator: None,
     v4_pool_manager: Some(address!("0x9a13f98cb987694c9f086b1f5eb990eea8264ec3")),
     v4_position_manager: Some(address!("0x3c3ea4b57a46241e54610e5f022e5c45859a1017")),
     v4_state_view: Some(address!("0xc18a3169788f4f75a170290584eca6395c75ecdb")),
@@ -293,8 +301,9 @@ const OPTIMISM_ADDRESSES: ChainAddresses = ChainAddresses {
     ..ChainAddresses::default()
 };
 
-const ARBITUM_ONE_ADDRESSES: ChainAddresses = ChainAddresses {
+const ARBITRUM_ONE_ADDRESSES: ChainAddresses = ChainAddresses {
     multicall: address!("0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB"),
+    quoter: Some(address!("0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6")),
 
     v4_pool_manager: Some(address!("0x360e68faccca8ca495c1b759fd9eee466db9fb32")),
     v4_position_manager: Some(address!("0xd88f38f930b7952f2db2432cb002e7abbf3dd869")),
@@ -304,6 +313,7 @@ const ARBITUM_ONE_ADDRESSES: ChainAddresses = ChainAddresses {
 };
 
 const POLYGON_ADDRESSES: ChainAddresses = ChainAddresses {
+    quoter: Some(address!("0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6")),
     v4_pool_manager: Some(address!("0x67366782805870060151383f4bbff9dab53e5cd6")),
     v4_position_manager: Some(address!("0x1ec2ebf4f37e7363fdfe3551602425af0b3ceef9")),
     v4_state_view: Some(address!("0x5ea1bd7974c8a611cbab0bdcafcb1d9cc9b3ba5a")),
@@ -314,19 +324,35 @@ const POLYGON_ADDRESSES: ChainAddresses = ChainAddresses {
 const CELO_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0xAfE208a311B21f13EF87E33A90049fC17A7acDEc"),
     multicall: address!("0x633987602DE5C4F337e3DbF265303A1080324204"),
-    quoter: address!("0x82825d0554fA07f7FC52Ab63c961F330fdEFa8E8"),
+    quoter: Some(address!("0x5e55C9e631FAE526cd4B0526C4818D6e0a9eF0e3")),
     quoter_v2: address!("0x82825d0554fA07f7FC52Ab63c961F330fdEFa8E8"),
     v3_migrator: Some(address!("0x3cFd4d48EDfDCC53D3f173F596f621064614C582")),
     nonfungible_position_manager: address!("0x3d79EdAaBC0EaB6F08ED885C05Fc0B014290D95A"),
     tick_lens: Some(address!("0x5f115D9113F88e0a0Db1b5033D90D4a9690AcD3D")),
     swap_router02: Some(address!("0x5615CDAb10dc425a742d643d949a7F474C01abc4")),
+
+    v4_pool_manager: Some(address!("0x288dc841A52FCA2707c6947B3A777c5E56cd87BC")),
+    v4_position_manager: Some(address!("0xf7965f3981e4d5bc383bfbcb61501763e9068ca9")),
+    v4_state_view: Some(address!("0xbc21f8720babf4b20d195ee5c6e99c52b76f2bfb")),
+    v4_quoter: Some(address!("0x28566da1093609182dff2cb2a91cfd72e61d66cd")),
+    ..ChainAddresses::default()
+};
+
+const CELO_ALFAJORES_ADDRESSES: ChainAddresses = ChainAddresses {
+    v3_core_factory: address!("0x229Fd76DA9062C1a10eb4193768E192bdEA99572"),
+    multicall: address!("0x692A12C7C167c44e54c3d381CA3EE91F058Dc404"),
+    quoter_v2: address!("0x3c1FCF8D6f3A579E98F4AE75EB0adA6de70f5673"),
+    v3_migrator: Some(address!("0x245d3F47F55c532dbE9340368855Be631B162cfd")),
+    nonfungible_position_manager: address!("0x0eC9d3C06Bc0A472A80085244d897bb604548824"),
+    tick_lens: Some(address!("0xFdACaEfB0f85C9BE9d319023453cC85C812d7e1E")),
+    swap_router02: Some(address!("0x8C456F41A3883bA0ba99f810F7A2Da54D9Ea3EF0")),
     ..ChainAddresses::default()
 };
 
 const BNB_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0xdB1d10011AD0Ff90774D0C6Bb92e5C5c8b4461F7"),
     multicall: address!("0x963Df249eD09c358A4819E39d9Cd5736c3087184"),
-    quoter: address!("0x78D78E420Da98ad378D7799bE8f4AF69033EB077"),
+    quoter: Some(address!("0x5e55C9e631FAE526cd4B0526C4818D6e0a9eF0e3")),
     quoter_v2: address!("0x78D78E420Da98ad378D7799bE8f4AF69033EB077"),
     v3_migrator: Some(address!("0x32681814957e0C13117ddc0c2aba232b5c9e760f")),
     nonfungible_position_manager: address!("0x7b8A01B39D58278b5DE7e48c8449c9f4F5170613"),
@@ -343,7 +369,7 @@ const BNB_ADDRESSES: ChainAddresses = ChainAddresses {
 const OPTIMISM_GOERLI_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0xB656dA17129e7EB733A557f4EBc57B76CFbB5d10"),
     multicall: address!("0x07F2D8a2a02251B62af965f22fC4744A5f96BCCd"),
-    quoter: address!("0x9569CbA925c8ca2248772A9A4976A516743A246F"),
+    quoter: Some(address!("0x9569CbA925c8ca2248772A9A4976A516743A246F")),
     v3_migrator: Some(address!("0xf6c55fBe84B1C8c3283533c53F51bC32F5C7Aba8")),
     nonfungible_position_manager: address!("0x39Ca85Af2F383190cBf7d7c41ED9202D27426EF6"),
     tick_lens: Some(address!("0xe6140Bd164b63E8BfCfc40D5dF952f83e171758e")),
@@ -353,7 +379,6 @@ const OPTIMISM_GOERLI_ADDRESSES: ChainAddresses = ChainAddresses {
 const OPTIMISM_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x8CE191193D15ea94e11d327b4c7ad8bbE520f6aF"),
     multicall: address!("0x80e4e06841bb76AA9735E0448cB8d003C0EF009a"),
-    quoter: address!("0x0FBEa6cf957d95ee9313490050F6A0DA68039404"),
     quoter_v2: address!("0x0FBEa6cf957d95ee9313490050F6A0DA68039404"),
     v3_migrator: Some(address!("0xE7EcbAAaA54D007A00dbb6c1d2f150066D69dA07")),
     nonfungible_position_manager: address!("0xdA75cEf1C93078e8b736FCA5D5a30adb97C8957d"),
@@ -365,7 +390,7 @@ const OPTIMISM_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
 const ARBITRUM_GOERLI_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x4893376342d5D7b3e31d4184c08b265e5aB2A3f6"),
     multicall: address!("0x8260CB40247290317a4c062F3542622367F206Ee"),
-    quoter: address!("0x1dd92b83591781D0C6d98d07391eea4b9a6008FA"),
+    quoter: Some(address!("0x1dd92b83591781D0C6d98d07391eea4b9a6008FA")),
     v3_migrator: Some(address!("0xA815919D2584Ac3F76ea9CB62E6Fd40a43BCe0C3")),
     nonfungible_position_manager: address!("0x622e4726a167799826d1E1D150b076A7725f5D81"),
     tick_lens: Some(address!("0xb52429333da969a0C79a60930a4Bf0020E5D1DE8")),
@@ -375,7 +400,6 @@ const ARBITRUM_GOERLI_ADDRESSES: ChainAddresses = ChainAddresses {
 const ARBITRUM_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x248AB79Bbb9bC29bB72f7Cd42F17e054Fc40188e"),
     multicall: address!("0x2B718b475e385eD29F56775a66aAB1F5cC6B2A0A"),
-    quoter: address!("0x2779a0CC1c3e0E44D2542EC3e79e3864Ae93Ef0B"),
     quoter_v2: address!("0x2779a0CC1c3e0E44D2542EC3e79e3864Ae93Ef0B"),
     v3_migrator: Some(address!("0x398f43ef2c67B941147157DA1c5a868E906E043D")),
     nonfungible_position_manager: address!("0x6b2937Bde17889EDCf8fbD8dE31C3C2a70Bc4d65"),
@@ -392,7 +416,6 @@ const ARBITRUM_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
 const SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x0227628f3F023bb0B980b67D528571c95c6DaC1c"),
     multicall: address!("0xD7F33bCdb21b359c8ee6F0251d30E94832baAd07"),
-    quoter: address!("0xEd1f6473345F45b75F8179591dd5bA1888cf2FB3"),
     quoter_v2: address!("0xEd1f6473345F45b75F8179591dd5bA1888cf2FB3"),
     v3_migrator: Some(address!("0x729004182cF005CEC8Bd85df140094b6aCbe8b15")),
     nonfungible_position_manager: address!("0x1238536071E1c677A632429e3655c799b22cDA52"),
@@ -411,7 +434,6 @@ const SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
 const AVALANCHE_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD"),
     multicall: address!("0x0139141Cd4Ee88dF3Cdb65881D411bAE271Ef0C2"),
-    quoter: address!("0xbe0F5544EC67e9B3b2D979aaA43f18Fd87E6257F"),
     quoter_v2: address!("0xbe0F5544EC67e9B3b2D979aaA43f18Fd87E6257F"),
     v3_migrator: Some(address!("0x44f5f1f5E452ea8d29C890E8F6e893fC0f1f0f97")),
     nonfungible_position_manager: address!("0x655C406EBFa14EE2006250925e54ec43AD184f8B"),
@@ -428,7 +450,7 @@ const AVALANCHE_ADDRESSES: ChainAddresses = ChainAddresses {
 const BASE_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x33128a8fC17869897dcE68Ed026d694621f6FDfD"),
     multicall: address!("0x091e99cb1C49331a94dD62755D168E941AbD0693"),
-    quoter: address!("0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a"),
+    quoter: Some(address!("0x222cA98F00eD15B1faE10B61c277703a194cf5d2")),
     quoter_v2: address!("0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a"),
     v3_migrator: Some(address!("0x23cF10b1ee3AdfCA73B0eF17C07F7577e7ACd2d7")),
     nonfungible_position_manager: address!("0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1"),
@@ -446,7 +468,7 @@ const BASE_ADDRESSES: ChainAddresses = ChainAddresses {
 const BASE_GOERLI_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x9323c1d6D800ed51Bd7C6B216cfBec678B7d0BC2"),
     multicall: address!("0xB206027a9E0E13F05eBEFa5D2402Bab3eA716439"),
-    quoter: address!("0xedf539058e28E5937dAef3f69cEd0b25fbE66Ae9"),
+    quoter: Some(address!("0xedf539058e28E5937dAef3f69cEd0b25fbE66Ae9")),
     v3_migrator: Some(address!("0x3efe5d02a04b7351D671Db7008ec6eBA9AD9e3aE")),
     nonfungible_position_manager: address!("0x3c61369ef0D1D2AFa70d8feC2F31C5D6Ce134F30"),
     tick_lens: Some(address!("0x1acB873Ee909D0c98adB18e4474943249F931b92")),
@@ -457,7 +479,6 @@ const BASE_GOERLI_ADDRESSES: ChainAddresses = ChainAddresses {
 const BASE_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24"),
     multicall: address!("0xd867e273eAbD6c853fCd0Ca0bFB6a3aE6491d2C1"),
-    quoter: address!("0xC5290058841028F1614F3A6F0F5816cAd0df5E27"),
     quoter_v2: address!("0xC5290058841028F1614F3A6F0F5816cAd0df5E27"),
     v3_migrator: Some(address!("0xCbf8b7f80800bd4888Fbc7bf1713B80FE4E23E10")),
     nonfungible_position_manager: address!("0x27F971cb582BF9E50F397e4d29a5C7A34f11faA2"),
@@ -474,7 +495,6 @@ const BASE_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
 const ZORA_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x7145F8aeef1f6510E92164038E1B6F8cB2c42Cbb"),
     multicall: address!("0xA51c76bEE6746cB487a7e9312E43e2b8f4A37C15"),
-    quoter: address!("0x11867e1b3348F3ce4FcC170BC5af3d23E07E64Df"),
     quoter_v2: address!("0x11867e1b3348F3ce4FcC170BC5af3d23E07E64Df"),
     v3_migrator: Some(address!("0x048352d8dCF13686982C799da63fA6426a9D0b60")),
     nonfungible_position_manager: address!("0xbC91e8DfA3fF18De43853372A3d7dfe585137D78"),
@@ -491,17 +511,18 @@ const ZORA_ADDRESSES: ChainAddresses = ChainAddresses {
 const ZORA_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x4324A677D74764f46f33ED447964252441aA8Db6"),
     multicall: address!("0xA1E7e3A69671C4494EC59Dbd442de930a93F911A"),
-    quoter: address!("0xC195976fEF0985886E37036E2DF62bF371E12Df0"),
+    quoter_v2: address!("0xC195976fEF0985886E37036E2DF62bF371E12Df0"),
     v3_migrator: Some(address!("0x65ef259b31bf1d977c37e9434658694267674897")),
     nonfungible_position_manager: address!("0xB8458EaAe43292e3c1F7994EFd016bd653d23c20"),
     tick_lens: Some(address!("0x23C0F71877a1Fc4e20A78018f9831365c85f3064")),
+    swap_router02: Some(address!("0x6B36d761981d82B1e07cF3c4daF4cB4615c4850a")),
     ..ChainAddresses::default()
 };
 
 const ROOTSTOCK_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0xaF37EC98A00FD63689CF3060BF3B6784E00caD82"),
     multicall: address!("0x996a9858cDfa45Ad68E47c9A30a7201E29c6a386"),
-    quoter: address!("0xb51727c996C68E60F598A923a5006853cd2fEB31"),
+    quoter_v2: address!("0xb51727c996C68E60F598A923a5006853cd2fEB31"),
     v3_migrator: Some(address!("0x16678977CA4ec3DAD5efc7b15780295FE5f56162")),
     nonfungible_position_manager: address!("0x9d9386c042F194B460Ec424a1e57ACDE25f5C4b1"),
     tick_lens: Some(address!("0x55B9dF5bF68ADe972191a91980459f48ecA16afC")),
@@ -512,7 +533,7 @@ const ROOTSTOCK_ADDRESSES: ChainAddresses = ChainAddresses {
 const BLAST_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x792edAdE80af5fC680d96a2eD80A44247D2Cf6Fd"),
     multicall: address!("0xdC7f370de7631cE9e2c2e1DCDA6B3B5744Cf4705"),
-    quoter: address!("0x6Cdcd65e03c1CEc3730AeeCd45bc140D57A25C77"),
+    quoter: Some(address!("0x9D0F15f2cf58655fDDcD1EE6129C547fDaeD01b1")),
     quoter_v2: address!("0x6Cdcd65e03c1CEc3730AeeCd45bc140D57A25C77"),
     v3_migrator: Some(address!("0x15CA7043CD84C5D21Ae76Ba0A1A967d42c40ecE0")),
     nonfungible_position_manager: address!("0xB218e4f7cF0533d4696fDfC419A0023D33345F28"),
@@ -529,7 +550,6 @@ const BLAST_ADDRESSES: ChainAddresses = ChainAddresses {
 const ZKSYNC_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x8FdA5a7a8dCA67BBcDd10F02Fa0649A937215422"),
     multicall: address!("0x0c68a7C72f074d1c45C16d41fa74eEbC6D16a65C"),
-    quoter: address!("0x8Cb537fc92E26d8EBBb760E632c95484b6Ea3e28"),
     quoter_v2: address!("0x8Cb537fc92E26d8EBBb760E632c95484b6Ea3e28"),
     v3_migrator: Some(address!("0x611841b24E43C4ACfd290B427a3D6cf1A59dac8E")),
     nonfungible_position_manager: address!("0x0616e5762c1E7Dc3723c50663dF10a162D690a86"),
@@ -541,7 +561,6 @@ const ZKSYNC_ADDRESSES: ChainAddresses = ChainAddresses {
 const WORLDCHAIN_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x7a5028BDa40e7B173C278C5342087826455ea25a"),
     multicall: address!("0x0a22c04215c97E3F532F4eF30e0aD9458792dAB9"),
-    quoter: address!("0x10158D43e6cc414deE1Bd1eB0EfC6a5cBCfF244c"),
     quoter_v2: address!("0x10158D43e6cc414deE1Bd1eB0EfC6a5cBCfF244c"),
     v3_migrator: Some(address!("0x9EBDdCBa71C9027E1eB45135672a30bcFEec9de3")),
     nonfungible_position_manager: address!("0xec12a9F9a09f50550686363766Cc153D03c27b5e"),
@@ -558,7 +577,7 @@ const WORLDCHAIN_ADDRESSES: ChainAddresses = ChainAddresses {
 const UNICHAIN_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x1F98431c8aD98523631AE4a59f267346ea31F984"),
     multicall: address!("0x9D0F15f2cf58655fDDcD1EE6129C547fDaeD01b1"),
-    quoter: address!("0x6Dd37329A1A225a6Fca658265D460423DCafBF89"),
+    quoter: Some(address!("0x81efdb2af4fb1a556c33a5dd4ecfeedb970fc034")),
     quoter_v2: address!("0x6Dd37329A1A225a6Fca658265D460423DCafBF89"),
     v3_migrator: Some(address!("0xb5FA244C9d6D04B2FBac84418b3c4910ED1Ae5f2")),
     nonfungible_position_manager: address!("0xB7F724d6dDDFd008eFf5cc2834edDE5F9eF0d075"),
@@ -575,8 +594,8 @@ const UNICHAIN_SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
 const UNICHAIN_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x1f98400000000000000000000000000000000003"),
     multicall: address!("0xb7610f9b733e7d45184be3a1bc966960ccc54f0b"),
-    quoter: address!("0x565ac8c7863d9bb16d07e809ff49fe5cd467634c"),
-    quoter_v2: address!("0x565ac8c7863d9bb16d07e809ff49fe5cd467634c"),
+    quoter: Some(address!("0x565ac8c7863d9bb16d07e809ff49fe5cd467634c")),
+    quoter_v2: address!("0x385a5cf5f83e99f7bb2852b6a19c3538b9fa7658"),
     v3_migrator: Some(address!("0xb9d0c246f306b1aaf02ae6ba112d5ef25e5b60dc")),
     nonfungible_position_manager: address!("0x943e6e07a7e8e791dafc44083e54041d743c46e9"),
     tick_lens: Some(address!("0xd5d76fa166ab8d8ad4c9f61aaa81457b66cbe443")),
@@ -592,7 +611,8 @@ const UNICHAIN_ADDRESSES: ChainAddresses = ChainAddresses {
 const MONAD_TESTNET_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x961235a9020b05c44df1026d956d1f4d78014276"),
     multicall: address!("0xa707ceb989cc3728551ed0e6e44b718dd114cf44"),
-    quoter: address!("0x1ba215c17565de7b0cb7ecab971bcf540c24a862"),
+    quoter: Some(address!("0x1ba215c17565de7b0cb7ecab971bcf540c24a862")),
+    quoter_v2: address!("0x1b4e313fef15630af3e6f2de550dbf4cc9d3081d"),
     v3_migrator: Some(address!("0x0a78348b71f8ae8caff2f8f9d4d74a2f36516661")),
     nonfungible_position_manager: address!("0x3dcc735c74f10fe2b9db2bb55c40fbbbf24490f7"),
     tick_lens: Some(address!("0x337478eb6058455ecb3696184b30dd6a29e3a893")),
@@ -603,7 +623,8 @@ const MONAD_TESTNET_ADDRESSES: ChainAddresses = ChainAddresses {
 const SONEIUM_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x42ae7ec7ff020412639d443e245d936429fbe717"),
     multicall: address!("0x8ad5ef2f2508288d2de66f04dd883ad5f4ef62b2"),
-    quoter: address!("0x3e6c707d0125226ff60f291b6bd1404634f00aba"),
+    quoter: Some(address!("0x78fc99f50fc8d83bd921d8b33dbaa0672687198a")),
+    quoter_v2: address!("0x3e6c707d0125226ff60f291b6bd1404634f00aba"),
     v3_migrator: Some(address!("0xa107580f73bd797bd8b87ff24e98346d99f93ddb")),
     nonfungible_position_manager: address!("0x56c1205b0244332011c1e866f4ea5384eb6bfa2c"),
     tick_lens: Some(address!("0xcd08eefb928c86499e6235ac155906bb7c4dc41a")),
@@ -619,7 +640,8 @@ const SONEIUM_ADDRESSES: ChainAddresses = ChainAddresses {
 const MONAD_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x204faca1764b154221e35c0d20abb3c525710498"),
     multicall: address!("0xd1b797d92d87b688193a2b976efc8d577d204343"),
-    quoter: address!("0x2d01411773c8c24805306e89a41f7855c3c4fe65"),
+    quoter: Some(address!("0x2d01411773c8c24805306e89a41f7855c3c4fe65")),
+    quoter_v2: address!("0x661e93cca42afacb172121ef892830ca3b70f08d"),
     v3_migrator: Some(address!("0x7078c4537c04c2b2e52ddba06074dbdacf23ca15")),
     nonfungible_position_manager: address!("0x7197e214c0b767cfb76fb734ab638e2c192f4e53"),
     tick_lens: Some(address!("0xf025e0fe9e331a0ef05c2ad3c4e9c64b625cda6f")),
@@ -635,7 +657,8 @@ const MONAD_ADDRESSES: ChainAddresses = ChainAddresses {
 const XLAYER_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x4b2ab38dbf28d31d467aa8993f6c2585981d6804"),
     multicall: address!("0xe2023f3fa515cf070e07fd9d51c1d236e07843f4"),
-    quoter: address!("0x976183ac3d09840d243a88c0268badb3b3e3259f"),
+    quoter: Some(address!("0x976183ac3d09840d243a88c0268badb3b3e3259f")),
+    quoter_v2: address!("0xd1b797d92d87b688193a2b976efc8d577d204343"),
     v3_migrator: Some(address!("0x7197e214c0b767cfb76fb734ab638e2c192f4e53")),
     nonfungible_position_manager: address!("0x315e413a11ab0df498ef83873012430ca36638ae"),
     tick_lens: Some(address!("0x661e93cca42afacb172121ef892830ca3b70f08d")),
@@ -652,8 +675,8 @@ const XLAYER_ADDRESSES: ChainAddresses = ChainAddresses {
 const LINEA_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9"),
     multicall: address!("0x93e253D101519578A8DF0BCe2A43D8292BFb3A1F"),
-    quoter: address!("0x58ead433ea99708604c4dd7c9b7e80c70976e202"),
-    quoter_v2: address!("0x58ead433ea99708604c4dd7c9b7e80c70976e202"),
+    quoter: Some(address!("0x58ead433ea99708604c4dd7c9b7e80c70976e202")),
+    quoter_v2: address!("0x42bE4D6527829FeFA1493e1fb9F3676d2425C3C1"),
     v3_migrator: Some(address!("0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1")),
     nonfungible_position_manager: address!("0x4615C383F85D0a2BbED973d83ccecf5CB7121463"),
     tick_lens: Some(address!("0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9")),
@@ -669,7 +692,7 @@ const LINEA_ADDRESSES: ChainAddresses = ChainAddresses {
 const TEMPO_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x24a3d4757e330890a8b8978028c9e58e04611fd6"),
     multicall: address!("0x64eb6294fd6072b2c20d31a54e39d5d3bf69d982"),
-    quoter: address!("0x53ab5d7a69db158f621b43ee70423da1e1403c2a"),
+    quoter: Some(address!("0x9a0dd5fda50d8df9dd6fa4b4be33b6b1e241b408")),
     quoter_v2: address!("0x53ab5d7a69db158f621b43ee70423da1e1403c2a"),
     v3_migrator: Some(address!("0x2352328bd3313549d6d908646c82c2b7136901a9")),
     nonfungible_position_manager: address!("0xb71c33f096ceabdc0229110e0d76a6382d01c633"),
@@ -686,8 +709,8 @@ const TEMPO_ADDRESSES: ChainAddresses = ChainAddresses {
 const MEGAETH_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x3a5f0cd7d62452b7f899b2a5758bfa57be0de478"),
     multicall: address!("0x61f3272a3619d9f20788c6822fed2e5471bfc477"),
-    quoter: address!("0x5affda77bc34d945f9632bd080ebfcf24133b90e"),
-    quoter_v2: address!("0x5affda77bc34d945f9632bd080ebfcf24133b90e"),
+    quoter: Some(address!("0x5affda77bc34d945f9632bd080ebfcf24133b90e")),
+    quoter_v2: address!("0x31db60c6a4c71909674094b404597762df424ae7"),
     v3_migrator: Some(address!("0xed30f6c25fe915dc710f168fa3ab66199ee84454")),
     nonfungible_position_manager: address!("0xcdc86e98184e96436f733a8bf31bd4f0214e6d7d"),
     tick_lens: Some(address!("0xe7a2d824722addcb21e7a203ae7b372bf3a29ec5")),
@@ -703,7 +726,6 @@ const MEGAETH_ADDRESSES: ChainAddresses = ChainAddresses {
 const ARC_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0xf0db7b58379503491d857db50ac9ece64c653918"),
     multicall: address!("0x33e885ed0ec9bf04ecfb19341582aadcb4c8a9e7"),
-    quoter: address!("0x7dfd4f31be6814d2906bde155c3e1b146eac1468"),
     quoter_v2: address!("0x7dfd4f31be6814d2906bde155c3e1b146eac1468"),
     v3_migrator: None,
     nonfungible_position_manager: address!("0x39654a85a4c05127f5fd6ed22caec077a0fb1377"),
@@ -719,7 +741,6 @@ const ARC_ADDRESSES: ChainAddresses = ChainAddresses {
 const ROBINHOOD_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x1f7d7550b1b028f7571e69a784071f0205fd2efa"),
     multicall: address!("0x282a3c4d320cc7f0d5eaf56b8029e4b88338f0a3"),
-    quoter: address!("0x33e885ed0ec9bf04ecfb19341582aadcb4c8a9e7"),
     quoter_v2: address!("0x33e885ed0ec9bf04ecfb19341582aadcb4c8a9e7"),
     v3_migrator: None,
     nonfungible_position_manager: address!("0x73991a25c818bf1f1128deaab1492d45638de0d3"),
@@ -735,7 +756,6 @@ const ROBINHOOD_ADDRESSES: ChainAddresses = ChainAddresses {
 const INK_ADDRESSES: ChainAddresses = ChainAddresses {
     v3_core_factory: address!("0x640887a9ba3a9c53ed27d0f7e8246a4f933f3424"),
     multicall: address!("0xa0fcec583aee6176527c07b198e5561722332014"),
-    quoter: address!("0x96b572d2d880cf2fa2563651bd23ade6f5516652"),
     quoter_v2: address!("0x96b572d2d880cf2fa2563651bd23ade6f5516652"),
     v3_migrator: None,
     nonfungible_position_manager: address!("0xc0836e5b058bbe22ae2266e1ac488a1a0fd8dce8"),
@@ -759,12 +779,15 @@ lazy_static! {
         HashMap::from_iter([
             (ChainId::MAINNET as u64, MAINNET_ADDRESSES),
             (ChainId::OPTIMISM as u64, OPTIMISM_ADDRESSES),
-            (ChainId::ARBITRUM_ONE as u64, ARBITUM_ONE_ADDRESSES),
+            (ChainId::ARBITRUM_ONE as u64, ARBITRUM_ONE_ADDRESSES),
             (ChainId::POLYGON as u64, POLYGON_ADDRESSES),
             (ChainId::POLYGON_MUMBAI as u64, POLYGON_ADDRESSES),
             (ChainId::GOERLI as u64, GOERLI_ADDRESSES),
             (ChainId::CELO as u64, CELO_ADDRESSES),
-            (ChainId::CELO_ALFAJORES as u64, CELO_ADDRESSES),
+            (
+                ChainId::CELO_ALFAJORES as u64,
+                CELO_ALFAJORES_ADDRESSES,
+            ),
             (ChainId::BNB as u64, BNB_ADDRESSES),
             (ChainId::OPTIMISM_GOERLI as u64, OPTIMISM_GOERLI_ADDRESSES),
             (ChainId::OPTIMISM_SEPOLIA as u64, OPTIMISM_SEPOLIA_ADDRESSES),
@@ -869,11 +892,10 @@ lazy_static! {
 
 lazy_static! {
     pub static ref QUOTER_ADDRESSES: AddressMap =
-        AddressMap::from_iter(SUPPORTED_CHAINS.map(|chain_id| {
-            (
-                chain_id as u64,
-                CHAIN_TO_ADDRESSES_MAP[&(chain_id as u64)].quoter,
-            )
+        AddressMap::from_iter(SUPPORTED_CHAINS.into_iter().filter_map(|chain_id| {
+            CHAIN_TO_ADDRESSES_MAP[&(chain_id as u64)]
+                .quoter
+                .map(|address| (chain_id as u64, address))
         }));
 }
 
