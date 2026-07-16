@@ -31,9 +31,10 @@ impl WETH9 {
     #[inline]
     #[must_use]
     pub fn new() -> Self {
-        const CHAIN_IDS: [u64; 26] = [
+        const CHAIN_IDS: [u64; 30] = [
             1, 11155111, 3, 4, 5, 42, 10, 69, 11155420, 42161, 421611, 421614, 8453, 84532, 56,
-            137, 43114, 7777777, 81457, 324, 480, 1301, 130, 10143, 1868, 143,
+            137, 43114, 7777777, 81457, 324, 480, 1301, 130, 10143, 1868, 143, 59144, 4326, 4663,
+            57073,
         ];
         let tokens = HashMap::from_iter(
             CHAIN_IDS
@@ -235,6 +236,34 @@ impl WETH9 {
                 18,
                 "WMON",
                 "Wrapped Monad"
+            )),
+            59144 => Some(token!(
+                59144,
+                "0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            4326 => Some(token!(
+                4326,
+                "0x4200000000000000000000000000000000000006",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            4663 => Some(token!(
+                4663,
+                "0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73",
+                18,
+                "WETH",
+                "Wrapped Ether"
+            )),
+            57073 => Some(token!(
+                57073,
+                "0x4200000000000000000000000000000000000006",
+                18,
+                "WETH",
+                "Wrapped Ether"
             )),
             _ => None,
         }
