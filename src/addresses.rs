@@ -21,6 +21,7 @@ pub struct ChainAddresses {
     pub v4_position_manager: Option<Address>,
     pub v4_state_view: Option<Address>,
     pub v4_quoter: Option<Address>,
+    pub permissioned_v4_position_manager: Option<Address>,
 }
 
 pub const DEFAULT_NETWORKS: [ChainId; 3] = [ChainId::MAINNET, ChainId::GOERLI, ChainId::SEPOLIA];
@@ -263,6 +264,7 @@ impl ChainAddresses {
             v4_position_manager: None,
             v4_state_view: None,
             v4_quoter: None,
+            permissioned_v4_position_manager: None,
         }
     }
 }
@@ -274,6 +276,7 @@ const MAINNET_ADDRESSES: ChainAddresses = ChainAddresses {
     v4_position_manager: Some(address!("0xbd216513d74c8cf14cf4747e6aaa6420ff64ee9e")),
     v4_state_view: Some(address!("0x7ffe42c4a5deea5b0fec41c94c136cf115597227")),
     v4_quoter: Some(address!("0x52f0e24d1c21c8a0cb1e5a5dd6198556bd9e1203")),
+    permissioned_v4_position_manager: Some(address!("0x89628C9B4CE81951a9BC1F36F0688Fad6A6ee248")),
     ..ChainAddresses::default()
 };
 
@@ -401,6 +404,7 @@ const SEPOLIA_ADDRESSES: ChainAddresses = ChainAddresses {
     v4_position_manager: Some(address!("0x429ba70129df741B2Ca2a85BC3A2a3328e5c09b4")),
     v4_state_view: Some(address!("0xE1Dd9c3fA50EDB962E442f60DfBc432e24537E4C")),
     v4_quoter: Some(address!("0x61B3f2011A92d183C7dbaDBdA940a7555Ccf9227")),
+    permissioned_v4_position_manager: Some(address!("0x68fC145BB20b388965bED184Df5ef912215bb3C7")),
     ..ChainAddresses::default()
 };
 
