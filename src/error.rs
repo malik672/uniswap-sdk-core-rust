@@ -20,6 +20,10 @@ pub enum Error {
     /// Triggers when the value is invalid.
     #[error("{0}")]
     Invalid(&'static str),
+
+    /// Triggers when a chain has no registered metadata for an operation.
+    #[error("unsupported chain ID: {0}")]
+    UnsupportedChain(u64),
 }
 
 #[cfg(all(feature = "std", test))]
